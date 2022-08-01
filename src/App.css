@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: grey;
 }
 
 .App-logo {
@@ -35,4 +36,25 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.title {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 100px;
+  /* height: 100vh; */
+}
+.header {
+  align-items: center;
+  justify-content: center;
+  color: #73a4e4;
+  display: flex;
+  background-image: url('/src/assets/f.webp');
+  /* min-height: 20vh; */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.footer {
+  background-color: white;
 }
