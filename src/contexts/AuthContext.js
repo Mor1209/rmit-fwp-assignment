@@ -1,24 +1,27 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useEffect, useReducer } from 'react';
 
 const defaultAuthState = {
   isAuth: false,
-  user: null,
+  user: {},
 };
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({
+  ...defaultAuthState,
+  register: user => {},
+  login: user => {},
+  logout: () => {},
+});
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case 'REGISTER':
-      state = { ...state, isAuth: true, user: action.user };
-      localStorage.setItem('user-auth', JSON.stringify(state));
-      return state;
+      localStorage.setItem('user', JSON.stringify(action.user));
+      return { isAuth: true, user: action.user };
     case 'LOGIN':
-      state = { ...state, isAuth: true, user: action.user };
-      localStorage.setItem('user-auth', JSON.stringify(state));
-      return state;
+      localStorage.setItem('user', JSON.stringify(action.user));
+      return { isAuth: true, user: action.user };
     case 'LOGOUT':
-      localStorage.setItem('user-auth', JSON.stringify(defaultAuthState));
+      localStorage.setItem('user', JSON.stringify(defaultAuthState.user));
       return defaultAuthState;
     default:
       return state;
@@ -30,8 +33,34 @@ export const AuthContextProvider = ({ children }) => {
 
   console.log(authState);
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    user && dispatchAuth({ type: 'LOGIN', user });
+  }, []);
+
+  const register = user => {
+    dispatchAuth({
+      type: 'REGISTER',
+      user,
+    });
+  };
+
+  const login = user => {
+    dispatchAuth({
+      type: 'LOGIN',
+      user,
+    });
+  };
+
+  const logout = () => {
+    dispatchAuth({
+      type: 'LOGOUT',
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ ...authState, dispatchAuth }}>
+    <AuthContext.Provider value={{ ...authState, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

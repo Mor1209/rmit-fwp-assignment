@@ -13,18 +13,18 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 const Register = () => {
   const [firstName, setFirstName] = useState('');
+  const [nameIsTouched, setNameIsTouched] = useState(false);
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { dispatchAuth, isAuth, user } = useAuthContext();
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [formIsValid, setFormIsValid] = useState(false);
+  const { register, isAuth, user } = useAuthContext();
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    dispatchAuth({
-      type: 'REGISTER',
-      user: { firstName, lastName, email, password },
-    });
+    formIsValid && register({ firstName, lastName, email, password });
   };
 
   return (
