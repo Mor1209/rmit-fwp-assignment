@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   FormControl,
   InputLabel,
@@ -6,25 +5,43 @@ import {
   Box,
   Typography,
   Button,
+  FormHelperText,
 } from '@mui/material';
 import { Container } from '@mui/system';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useAuthContext } from '../hooks/useAuthContext';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+// ES6
+import * as yup from 'yup';
+import YupPassword from 'yup-password';
+YupPassword(yup); // extend yup
+
+const schema = yup
+  .object({
+    name: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().password().required(),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('password'), null], 'passwords must match'),
+  })
+  .required();
 
 const Register = () => {
-  const [firstName, setFirstName] = useState('');
-  const [nameIsTouched, setNameIsTouched] = useState(false);
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
-  const [formIsValid, setFormIsValid] = useState(false);
-  const { register, isAuth, user } = useAuthContext();
+  const authCtx = useAuthContext();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    formIsValid && register({ firstName, lastName, email, password });
+  const onSubmit = data => {
+    console.log(data);
+    authCtx.register(data);
   };
 
   return (
@@ -41,58 +58,83 @@ const Register = () => {
           padding: 6,
         }}
       >
-        <Typography component="h1" variant="h4">
+        <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
           Register
         </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-            }}
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+          <FormControl
+            error={errors.name ? true : false}
+            fullWidth
+            sx={{ mt: 1 }}
           >
-            <FormControl fullWidth sx={{ mt: 1, pr: 1 }}>
-              <InputLabel htmlFor="user-first-name">First Name</InputLabel>
-              <OutlinedInput
-                id="user-first-name"
-                label="First Name"
-                value={firstName}
-                required
-                onChange={e => setFirstName(e.target.value)}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ mt: 1 }}>
-              <InputLabel htmlFor="user-last-name">Last Name</InputLabel>
-              <OutlinedInput
-                id="user-last-name"
-                label="Last Name"
-                value={lastName}
-                required
-                onChange={e => setLastName(e.target.value)}
-              />
-            </FormControl>
-          </Box>
-          <FormControl fullWidth sx={{ mt: 1 }}>
-            <InputLabel htmlFor="user-email">Email Address</InputLabel>
+            <InputLabel htmlFor="user">Name</InputLabel>
             <OutlinedInput
-              id="user-email"
-              label="Email Address"
-              value={email}
-              type="email"
-              required
-              onChange={e => setEmail(e.target.value)}
+              id="name"
+              name="name"
+              label="Name"
+              {...register('name')}
             />
+            <FormHelperText>
+              {errors.name?.message &&
+                errors.name?.message.charAt(0).toUpperCase() +
+                  errors.name?.message.slice(1)}
+            </FormHelperText>
           </FormControl>
-          <FormControl fullWidth sx={{ mt: 1 }}>
-            <InputLabel htmlFor="user-password">Password</InputLabel>
+          <FormControl
+            error={errors.email ? true : false}
+            fullWidth
+            sx={{ mt: 1 }}
+          >
+            <InputLabel htmlFor="email">Email Address</InputLabel>
             <OutlinedInput
-              id="user-password"
-              label="Password"
-              value={password}
-              type="password"
-              required
-              onChange={e => setPassword(e.target.value)}
+              id="email"
+              name="email"
+              label="Email Address"
+              {...register('email')}
             />
+            <FormHelperText>
+              {errors.email?.message &&
+                errors.email?.message.charAt(0).toUpperCase() +
+                  errors.email?.message.slice(1)}
+            </FormHelperText>
+          </FormControl>
+          <FormControl
+            error={errors.password ? true : false}
+            fullWidth
+            sx={{ mt: 1 }}
+          >
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <OutlinedInput
+              id="password"
+              name="password"
+              label="Password"
+              type="password"
+              {...register('password')}
+            />
+            <FormHelperText>
+              {errors.password?.message &&
+                errors.password?.message.charAt(0).toUpperCase() +
+                  errors.password?.message.slice(1)}
+            </FormHelperText>
+          </FormControl>
+          <FormControl
+            fullWidth
+            error={errors.confirmPassword ? true : false}
+            sx={{ mt: 1 }}
+          >
+            <InputLabel htmlFor="confirmPassword">Confirm Password</InputLabel>
+            <OutlinedInput
+              id="confirmPassword"
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              {...register('confirmPassword')}
+            />
+            <FormHelperText>
+              {errors.confirmPassword?.message &&
+                errors.confirmPassword?.message.charAt(0).toUpperCase() +
+                  errors.confirmPassword?.message.slice(1)}
+            </FormHelperText>
           </FormControl>
           <Button
             type="submit"
@@ -104,7 +146,7 @@ const Register = () => {
           </Button>
         </Box>
       </Box>
-      {isAuth && `Hello ${user.firstName}`}
+      {authCtx.isAuth && `Hello ${authCtx.user.name}`}
     </Container>
   );
 };

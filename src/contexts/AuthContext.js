@@ -42,7 +42,11 @@ export const AuthContextProvider = ({ children }) => {
   const register = user => {
     dispatchAuth({
       type: 'REGISTER',
-      user,
+      user: {
+        name: user.name,
+        email: user.email,
+        password: user.password,
+      },
     });
   };
 
