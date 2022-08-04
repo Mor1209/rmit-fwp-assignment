@@ -1,6 +1,5 @@
 .App {
   text-align: center;
-  background-color: grey;
 }
 
 .App-logo {
@@ -44,17 +43,37 @@
   /* height: 100vh; */
 }
 .header {
+  background-color: black;
+  /* margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 10px; */
+  border-radius: 10px;
   align-items: center;
   justify-content: center;
   color: #73a4e4;
   display: flex;
   background-image: url('/src/assets/f.webp');
-  /* min-height: 20vh; */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  box-sizing: border-box;
+  /* background-position-y; */
 }
 
 .footer {
   background-color: white;
+}
+
+.welcome {
+  background-image: url('/src/assets/t.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* color: white; */
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
