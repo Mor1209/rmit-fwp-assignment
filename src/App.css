@@ -1,5 +1,10 @@
 .App {
   text-align: center;
+  background-image: url('/src/assets/t.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-sizing: border-box;
 }
 
 .App-logo {
@@ -44,10 +49,6 @@
 }
 .header {
   background-color: black;
-  /* margin-left: 20%;
-  margin-right: 20%;
-  margin-top: 10px; */
-  border-radius: 10px;
   align-items: center;
   justify-content: center;
   color: #73a4e4;
@@ -56,21 +57,30 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  box-sizing: border-box;
-  /* background-position-y; */
+}
+
+.bottomLinks {
+  width: 30%;
 }
 
 .footer {
-  background-color: white;
+  background-color: lightslategrey;
+  padding: 10px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-top: 10vh;
+  padding: 1%;
 }
 
 .welcome {
-  background-image: url('/src/assets/t.webp');
+  /* background-image: url('/src/assets/t.webp'); */
+  color: white;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   /* color: white; */
-  height: 40vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;

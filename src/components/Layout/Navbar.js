@@ -1,17 +1,8 @@
-import {
-  AppBar,
-  Container,
-  Toolbar,
-  Menu,
-  MenuItem,
-  Typography,
-  Button,
-  Box,
-} from '@mui/material';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import '../../App.css';
-import { makeStyles } from '@mui/material/styles';
 
 const userPages = ['Signup', 'Login'];
+const menuButtons = ['Home', 'Posts'];
 
 function NavBar() {
   return (
@@ -25,7 +16,6 @@ function NavBar() {
           variant="h6"
           noWrap
           component="a"
-          href="/"
           sx={{
             mr: 2,
             display: { xs: 'none', md: 'flex' },
@@ -35,16 +25,14 @@ function NavBar() {
             textDecoration: 'None',
           }}
         >
-          Loop Agile
+          Loop Agile Now
         </Typography>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Button sx={{ my: 2, ml: 0.5, color: 'white', display: 'block' }}>
-            Posts
+        {menuButtons.map(page => (
+          <Button key={page} sx={{ color: 'white', display: 'block' }}>
+            {page}
           </Button>
-          <Button sx={{ my: 2, ml: 0.5, color: 'white', display: 'block' }}>
-            #
-          </Button>
-        </Box>
+        ))}
+        <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} />
         {userPages.map(page => (
           <Button key={page} sx={{ color: 'white', display: 'block' }}>
             {page}

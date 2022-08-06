@@ -1,12 +1,25 @@
-import { Container, Box } from '@mui/material';
+import { Button, Container, Grid, Typography } from '@mui/material';
 function Footer() {
+  const links = ['Terms', 'Privacy Policy', 'Contact'];
   return (
     <footer className="footer">
-      <Box sx={{ border: 1, bottom: 0 }}>
-        <Container>
-          Copyright &copy; 2022 <b> Loop Agile </b> RMIT
-        </Container>
-      </Box>
+      <Typography
+        sx={{
+          marginLeft: '10%',
+          fontWeight: 'bold',
+          fontSize: '1rem',
+          marginRight: '5%',
+        }}
+      >
+        &copy; Copyright By Loop Agile Now
+      </Typography>
+      {/* <div className="bottomLinks"> */}
+      {links.map(page => (
+        <Button key={page} sx={{ color: 'black', marginRight: '30px' }}>
+          {page}
+        </Button>
+      ))}
+      {/* </div> */}
     </footer>
   );
 }
