@@ -1,38 +1,52 @@
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { verifyUser, getUser, removeUser } from '../data/users'
 
 const defaultAuthState = {
   isAuth: false,
-  user: null,
-};
+  user: {},
+}
 
-export const AuthContext = createContext();
+export const AuthContext = createContext({
+  ...defaultAuthState,
+  register: user => {},
+  login: user => {},
+  logout: () => {},
+})
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case 'REGISTER':
-      state = { ...state, isAuth: true, user: action.user };
-      localStorage.setItem('user-auth', JSON.stringify(state));
-      return state;
+      return { isAuth: true, user: action.user }
     case 'LOGIN':
-      state = { ...state, isAuth: true, user: action.user };
-      localStorage.setItem('user-auth', JSON.stringify(state));
-      return state;
+      return { isAuth: true, user: action.user }
     case 'LOGOUT':
-      localStorage.setItem('user-auth', JSON.stringify(defaultAuthState));
-      return defaultAuthState;
+      return defaultAuthState
     default:
-      return state;
+      return state
   }
-};
+}
 
 export const AuthContextProvider = ({ children }) => {
-  const [authState, dispatchAuth] = useReducer(authReducer, defaultAuthState);
+  const user = getUser()
+  const initialState =
+    user && verifyUser(user.email, user.password)
+      ? { isAuth: true, user }
+      : defaultAuthState
+  const [authState, dispatchAuth] = useReducer(authReducer, initialState)
+  const navigate = useNavigate()
 
-  console.log(authState);
+  const logout = () => {
+    removeUser()
+    dispatchAuth({
+      type: 'LOGOUT',
+    })
+    navigate('/')
+  }
 
   return (
-    <AuthContext.Provider value={{ ...authState, dispatchAuth }}>
+    <AuthContext.Provider value={{ ...authState, dispatchAuth, logout }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
