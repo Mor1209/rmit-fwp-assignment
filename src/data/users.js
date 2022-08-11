@@ -33,7 +33,8 @@ const addUser = (name, email, password) => {
 
   if (userExists(email)) return
 
-  const user = { name, email, password }
+  const created = new Date()
+  const user = { name, email, password, created }
   const users = getUsers()
   users.push(user)
 
@@ -52,7 +53,7 @@ const verifyUser = (email, password) => {
   const verifiedUser = users.find(
     user => email === user.email && password === user.password
   )
-  verifiedUser && setUser({ email, password })
+  verifiedUser && setUser(verifiedUser)
 
   return verifiedUser
 }
