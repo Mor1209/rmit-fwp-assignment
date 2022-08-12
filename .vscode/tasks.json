@@ -8,7 +8,7 @@
       "label": "npm: start",
       "detail": "react-scripts start",
       "group": {
-        // "kind": "build",
+        "kind": "build",
         "isDefault": true
       }
     }
