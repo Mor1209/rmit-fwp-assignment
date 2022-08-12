@@ -1,6 +1,6 @@
-import { Button, Container, Grid, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material'
 function Footer() {
-  const links = ['Terms', 'Privacy Policy', 'Contact'];
+  const links = ['Terms', 'Privacy Policy', 'Contact']
   return (
     <footer className="footer">
       <Typography
@@ -21,7 +21,7 @@ function Footer() {
       ))}
       {/* </div> */}
     </footer>
-  );
+  )
 }
 
-export default Footer;
+export default Footer

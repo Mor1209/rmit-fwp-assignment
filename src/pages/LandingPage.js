@@ -8,12 +8,14 @@ import {
   CardMedia,
   CardContent,
   CardActions,
-} from '@mui/material';
-// import MainImage from '../../assets/t.webp';
-import ThumbImage from '../../assets/r.webp';
+} from '@mui/material'
+import ThumbImage from '../assets/r.webp'
+import { useNavigate } from 'react-router'
 
 function LandingPage() {
-  const items = ['P1', 'P2', 'P3'];
+  const items = ['P1', 'P2', 'P3']
+  const navigate = useNavigate()
+
   return (
     <Container>
       <div className="welcome">
@@ -28,8 +30,14 @@ function LandingPage() {
         </Typography>
         <p>Loop Agile Now</p>
         <Box>
-          <Button variant="contained" sx={{ margin: '2px' }}>
-            Sign Up
+          <Button
+            variant="contained"
+            sx={{ margin: '2px' }}
+            onClick={() => {
+              navigate('/register')
+            }}
+          >
+            Sign Up Now
           </Button>
           <Button
             variant="outlined"
@@ -38,6 +46,9 @@ function LandingPage() {
               '&:hover': {
                 background: 'white',
               },
+            }}
+            onClick={() => {
+              navigate('#')
             }}
           >
             More Info
@@ -86,7 +97,7 @@ function LandingPage() {
         ))}
       </Grid>
     </Container>
-  );
+  )
 }
 
-export default LandingPage;
+export default LandingPage

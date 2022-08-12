@@ -1,10 +1,36 @@
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import '../../App.css';
+import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
+import '../../App.css'
+import { useAuthContext } from '../../hooks/useAuthContext'
+import { useNavigate } from 'react-router-dom'
 
-const userPages = ['Signup', 'Login'];
-const menuButtons = ['Home', 'Posts'];
+const menuButtons = ['home', 'posts']
 
-function NavBar() {
+function Navbar() {
+  const authCtx = useAuthContext()
+  const navigate = useNavigate()
+  const authButtons = !authCtx.isAuth ? (
+    <>
+      <Button
+        sx={{ color: 'white', display: 'block' }}
+        onClick={() => navigate('/register')}
+      >
+        Register
+      </Button>
+      <Button
+        sx={{ color: 'white', display: 'block' }}
+        onClick={() => navigate('/login')}
+      >
+        Login
+      </Button>
+    </>
+  ) : (
+    <Button
+      onClick={() => authCtx.logout()}
+      sx={{ color: 'white', display: 'block' }}
+    >
+      Logout
+    </Button>
+  )
   return (
     <AppBar
       position="static"
@@ -28,19 +54,21 @@ function NavBar() {
           Loop Agile Now
         </Typography>
         {menuButtons.map(page => (
-          <Button key={page} sx={{ color: 'white', display: 'block' }}>
+          <Button
+            key={page}
+            sx={{ color: 'white', display: 'block' }}
+            onClick={() => {
+              navigate(`/${page}`)
+            }}
+          >
             {page}
           </Button>
         ))}
         <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} />
-        {userPages.map(page => (
-          <Button key={page} sx={{ color: 'white', display: 'block' }}>
-            {page}
-          </Button>
-        ))}
+        {authButtons}
       </Toolbar>
     </AppBar>
-  );
+  )
 }
 
-export default NavBar;
+export default Navbar
