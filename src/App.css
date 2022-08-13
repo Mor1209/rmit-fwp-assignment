@@ -80,6 +80,16 @@
   align-items: center;
 }
 
+.posts {
+  height: 100%;
+  background-color: white;
+  margin-left: 20%;
+  margin-right: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .welcome {
   color: white;
   background-position: center;

@@ -10,6 +10,7 @@ import LandingPage from './pages/LandingPage'
 import Navbar from './components/Layout/Navbar'
 import Notification from './components/UI/Notification'
 import Footer from './components/Layout/Footer'
+import Posts from './pages/Posts'
 
 function App() {
   const { isAuth } = useAuthContext()
@@ -24,6 +25,7 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/posts" element={<Posts />} />
         {isAuth ? (
           <Route path="/profile" element={<Profile />} />
         ) : (
