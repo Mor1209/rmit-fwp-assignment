@@ -4,10 +4,12 @@ import RegisterForm from '../components/Forms/RegisterForm'
 
 const Register = () => {
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <RegisterForm />
-    </Container>
+    <div className="form">
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <RegisterForm />
+      </Container>
+    </div>
   )
 }
 

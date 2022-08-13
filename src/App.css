@@ -5,6 +5,10 @@
   background-repeat: no-repeat;
   background-size: cover;
   box-sizing: border-box;
+  display: flex;
+  min-height: 100vh;
+  height: 100vh;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -42,13 +46,8 @@
   }
 }
 
-.title {
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  font-size: 100px;
-  /* height: 100vh; */
-}
+/* 
 .header {
-  background-color: black;
   align-items: center;
   justify-content: center;
   color: #73a4e4;
@@ -57,7 +56,9 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-}
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 50px;
+} */
 
 .bottomLinks {
   width: 30%;
@@ -65,25 +66,28 @@
 
 .footer {
   background-color: lightslategrey;
-  padding: 10px;
+  padding: 15px;
+  margin-top: 50px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 10vh;
-  padding: 1%;
+}
+
+.form {
+  height: 100%;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
 .welcome {
-  /* background-image: url('/src/assets/t.webp'); */
   color: white;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  /* color: white; */
-  height: 80vh;
+  min-height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
 }

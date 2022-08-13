@@ -1,5 +1,5 @@
 import './App.css'
-import Header from './components/Layout/Header'
+// import Header from './components/Layout/Header'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
@@ -15,23 +15,22 @@ function App() {
   const { isAuth } = useAuthContext()
   return (
     <div className="App">
-      <Header />
+      {/* <Header /> */}
       <Navbar />
       <Notification />
-      <main>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<LandingPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          {isAuth ? (
-            <Route path="/profile" element={<Profile />} />
-          ) : (
-            <Route path="/profile" element={<Navigate to="/login" />} />
-          )}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </main>
+
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<LandingPage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        {isAuth ? (
+          <Route path="/profile" element={<Profile />} />
+        ) : (
+          <Route path="/profile" element={<Navigate to="/login" />} />
+        )}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <Footer />
     </div>
   )

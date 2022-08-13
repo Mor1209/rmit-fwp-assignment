@@ -13,7 +13,23 @@ import ThumbImage from '../assets/r.webp'
 import { useNavigate } from 'react-router'
 
 function LandingPage() {
-  const items = ['P1', 'P2', 'P3']
+  const items = [
+    {
+      title: 'Loop Agile',
+      content:
+        'Loop Agile (LA) is a fast-growing firm with offices in major metropolitan cities in Australia... ',
+    },
+    {
+      title: 'More Info',
+      content:
+        'Loop Agile Now is a social meida webiste that is used by the IT Consultancy firm ',
+    },
+    {
+      title: 'Posts Tutorial',
+      content: 'You need register for an account before making a posts',
+    },
+  ]
+
   const navigate = useNavigate()
 
   return (
@@ -24,6 +40,7 @@ function LandingPage() {
           sx={{
             fontFamily: 'Georgia',
             color: 'white',
+            fontSize: '10rem',
           }}
         >
           Welcome
@@ -32,7 +49,7 @@ function LandingPage() {
         <Box>
           <Button
             variant="contained"
-            sx={{ margin: '2px' }}
+            sx={{ margin: '4px' }}
             onClick={() => {
               navigate('/register')
             }}
@@ -42,7 +59,7 @@ function LandingPage() {
           <Button
             variant="outlined"
             sx={{
-              margin: '2px',
+              margin: '4px',
               '&:hover': {
                 background: 'white',
               },
@@ -57,7 +74,13 @@ function LandingPage() {
       </div>
       <Typography
         variant="h5"
-        sx={{ color: 'white', fontWeight: 'bold', fontSize: '2rem' }}
+        sx={{
+          color: 'black',
+          fontWeight: 'bold',
+          fontSize: '2rem',
+          marginTop: '70px',
+          marginBottom: '20px',
+        }}
       >
         Popular Posts
       </Typography>
@@ -72,19 +95,14 @@ function LandingPage() {
       >
         {items.map(page => (
           <Grid>
-            <Card sx={{ width: 350, alignItems: 'center' }}>
+            <Card sx={{ width: 350, alignItems: 'center', minHeight: '350px' }}>
               <CardMedia component="img" height="140" image={ThumbImage} />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  {page}
+                  {page.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Mauris porttitor quis nisi et interdum. Aliquam erat volutpat.
-                  Quisque vulputate condimentum tempor. Nullam ut faucibus ante.
-                  Quisque in dolor nec tellus hendrerit convallis ac non leo.
-                  Suspendisse nec leo ut quam gravida mollis a ac mauris.
-                  Quisque nec vehicula metus,
+                  {page.content}
                 </Typography>
               </CardContent>
               <CardActions>
