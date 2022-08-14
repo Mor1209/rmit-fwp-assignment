@@ -3,7 +3,12 @@ import { useRegisterValidation } from '../../hooks/useUserValidation'
 import BasicForm from './BasicForm'
 
 export const RegisterForm = () => {
-  const inputFieldLabels = ['Name', 'Email', 'Password', 'Confirm Password']
+  const inputFields = [
+    { label: 'Name', defaultValue: '' },
+    { label: 'Email', defaultValue: '' },
+    { label: 'Password', defaultValue: '' },
+    { label: 'Confirm Password', defaultValue: '' },
+  ]
   const { register } = useRegister()
   const onSubmit = data => register(data.name, data.email, data.password)
   const validation = useRegisterValidation(onSubmit)
@@ -11,7 +16,7 @@ export const RegisterForm = () => {
   return (
     <BasicForm
       validation={validation}
-      inputFieldLabels={inputFieldLabels}
+      inputFieldLabels={inputFields}
       formName={'Register'}
     />
   )

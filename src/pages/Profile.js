@@ -8,9 +8,8 @@ import {
   IconButton,
 } from '@mui/material'
 import { useAuthContext } from '../hooks/useAuthContext'
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
 import UserAvatar from '../components/UI/UserAvatar'
+import EditUser from '../components/EditUser'
 
 const Profile = () => {
   const authCtx = useAuthContext()
@@ -45,14 +44,7 @@ const Profile = () => {
             sx={{ position: 'relative', top: 47, pl: 3, pr: 1 }}
           >
             <UserAvatar size={140} border={3} />
-            <Stack direction="row">
-              <IconButton aria-label="edit">
-                <EditIcon color="primary" />
-              </IconButton>
-              <IconButton aria-label="delete">
-                <DeleteIcon color="error" />
-              </IconButton>
-            </Stack>
+            <EditUser />
           </Stack>
         </Paper>
         <Stack

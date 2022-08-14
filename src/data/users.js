@@ -39,7 +39,6 @@ const addUser = (name, email, password) => {
   const user = { name, email, password, created }
   const users = getUsers()
   users.push(user)
-
   setUsers(users)
 
   return setUser(user)
@@ -79,6 +78,40 @@ const setUser = user => {
 
 const getUser = () => JSON.parse(localStorage.getItem(USER_KEY))
 
+const updateUser = (name, email, password) => {
+  name = name.toLowerCase()
+  email = email.toLowerCase()
+  const user = getUser()
+
+  if (userExists(email) && user.email !== email) return
+
+  deleteUser()
+
+  const userUpdate = { ...user, name, email, password }
+  const users = getUsers()
+  users.push(userUpdate)
+  setUsers(users)
+
+  return setUser(userUpdate)
+}
+
+const deleteUser = () => {
+  const { email } = getUser()
+  const users = getUsers()
+
+  const usersUpdate = users.filter(user => user.email !== email)
+
+  setUsers(usersUpdate)
+}
+
 const removeUser = () => localStorage.removeItem(USER_KEY)
 
-export { initUsers, addUser, verifyUser, getUser, removeUser }
+export {
+  initUsers,
+  addUser,
+  verifyUser,
+  getUser,
+  updateUser,
+  removeUser,
+  deleteUser,
+}

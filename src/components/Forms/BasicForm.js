@@ -16,7 +16,6 @@ const BasicForm = props => {
   return (
     <Box
       sx={{
-        marginTop: 8,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -29,15 +28,16 @@ const BasicForm = props => {
         {props.formName}
       </Typography>
       <Box component="form" onSubmit={submitHandler}>
-        {props.inputFieldLabels.map(label => {
-          const id = toCamelCase(label)
+        {props.inputFieldLabels.map(inputField => {
+          const id = toCamelCase(inputField.label)
           return (
             <FormInputField
               errors={errors[id]}
               register={register}
               id={id}
               key={id}
-              label={label}
+              label={inputField.label}
+              defaultValue={inputField.defaultValue}
             />
           )
         })}
