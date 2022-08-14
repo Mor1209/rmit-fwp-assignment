@@ -4,18 +4,16 @@ import {
   Typography,
   Paper,
   CssBaseline,
-  Avatar,
   Stack,
   IconButton,
-  Box,
 } from '@mui/material'
 import { useAuthContext } from '../hooks/useAuthContext'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import UserAvatar from '../components/UI/UserAvatar'
 
 const Profile = () => {
   const authCtx = useAuthContext()
-  console.log(authCtx.user.name)
 
   const capitalize = str =>
     str
@@ -37,55 +35,51 @@ const Profile = () => {
             width: '100%',
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
-            mb: 14,
+            mb: 8,
           }}
         >
           <Stack
             direction="row"
+            alignItems="flex-end"
             justifyContent="space-between"
-            alignItems="flex-start"
+            sx={{ position: 'relative', top: 47, pl: 3, pr: 1 }}
           >
-            <Stack
-              direction="row"
-              alignItems="center"
-              spacing={2}
-              justifyContent="flex-start"
-              sx={{ position: 'relative', top: 70, pl: 3 }}
-            >
-              <Avatar
-                sx={{
-                  width: 140,
-                  height: 140,
-                  border: 3,
-                }}
-              />
-              <Typography textAlign={'left'} variant="h6" sx={{ pt: 8 }}>
-                {name}
-              </Typography>
+            <UserAvatar size={140} border={3} />
+            <Stack direction="row">
+              <IconButton aria-label="edit">
+                <EditIcon color="primary" />
+              </IconButton>
+              <IconButton aria-label="delete">
+                <DeleteIcon color="error" />
+              </IconButton>
             </Stack>
           </Stack>
         </Paper>
-        <Stack>
-          <Typography variant="body1" color="dimgray">
-            {authCtx.user.email}
-          </Typography>
-
-          <Typography variant="body1" color="dimgray">
-            Joined:{' '}
-            {/* {new Intl.DateTimeFormat('EN-AU').format(authCtx.user.created)} */}
-          </Typography>
-        </Stack>
         <Stack
           direction="row"
-          justifyContent="flex-end"
-          sx={{ mb: 1, mr: 1, pt: 4 }}
+          justifyContent="flex-start"
+          sx={{ pl: 3, pr: 3, pb: 3 }}
         >
-          <IconButton aria-label="edit">
-            <EditIcon color="primary" />
-          </IconButton>
-          <IconButton aria-label="delete">
-            <DeleteIcon color="error" />
-          </IconButton>
+          <Stack>
+            <Typography
+              textAlign="left"
+              variant="h5"
+              fontWeight="Medium"
+              sx={{ pb: 1 }}
+            >
+              {name}
+            </Typography>
+            <Typography textAlign="left" variant="body1" color="dimgray">
+              {authCtx.user.email}
+            </Typography>
+
+            <Typography textAlign="left" variant="body1" color="dimgray">
+              Joined:{' '}
+              {new Intl.DateTimeFormat('EN-AU').format(
+                new Date(authCtx.user.created)
+              )}
+            </Typography>
+          </Stack>
         </Stack>
       </Paper>
     </Container>

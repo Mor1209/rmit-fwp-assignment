@@ -15,11 +15,13 @@ const initUsers = () => {
       name: 'moritz',
       email: 'mohauptmann@gmail.com',
       password: '!Pp123456789',
+      created: '2022-08-14T01:29:24.478Z',
     },
     {
       name: 'mingang',
       email: 'minggang@gmail.com',
       password: '!Pp123456789',
+      created: '2022-08-14T01:29:24.478Z',
     },
   ]
 
@@ -33,7 +35,7 @@ const addUser = (name, email, password) => {
 
   if (userExists(email)) return
 
-  const created = new Date()
+  const created = new Date().toISOString()
   const user = { name, email, password, created }
   const users = getUsers()
   users.push(user)
@@ -43,7 +45,13 @@ const addUser = (name, email, password) => {
   return setUser(user)
 }
 
-const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY))
+const getUsers = () => {
+  let users = JSON.parse(localStorage.getItem(USERS_KEY))
+
+  if (!users) return []
+
+  return users
+}
 
 const setUsers = users => localStorage.setItem(USERS_KEY, JSON.stringify(users))
 
