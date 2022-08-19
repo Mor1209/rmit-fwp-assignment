@@ -7,7 +7,7 @@
   box-sizing: border-box;
   display: flex;
   min-height: 100vh;
-  height: 100vh;
+  height: auto;
   flex-direction: column;
 }
 
@@ -71,7 +71,14 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-top: auto;
 }
+
+/* html,
+body,
+#root {
+  height: 100%;
+} */
 
 .form {
   height: 100%;
@@ -100,4 +107,5 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  /* margin-bottom: 50px; */
 }

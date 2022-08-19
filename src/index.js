@@ -7,8 +7,9 @@ import { AuthContextProvider } from './contexts/AuthContext'
 import { BrowserRouter } from 'react-router-dom'
 import { initUsers } from './data/users'
 import { NotificationContextProvider } from './contexts/NotificationContext'
-
+import { initPosts } from './data/posts'
 initUsers()
+initPosts()
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(

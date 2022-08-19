@@ -49,7 +49,9 @@ function Navbar() {
         margin: '10px',
         fontSize: '1rem',
       }}
-    ></Button>
+    >
+      Logout
+    </Button>
   )
   return (
     <AppBar

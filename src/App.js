@@ -10,7 +10,10 @@ import LandingPage from './pages/LandingPage'
 import Navbar from './components/Layout/Navbar'
 import Notification from './components/UI/Notification'
 import Footer from './components/Layout/Footer'
-import Posts from './pages/Posts'
+import AllPosts from './pages/posts/AllPosts'
+import CreatePost from './pages/posts/CreatePost'
+import UserPosts from './pages/posts/UserPosts'
+import Post from './pages/posts/Post'
 
 function App() {
   const { isAuth } = useAuthContext()
@@ -25,7 +28,10 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/posts" element={<Posts />} />
+        <Route path="/posts" element={<AllPosts />} />
+        <Route path="/posts/new" element={<CreatePost />} />
+        <Route path="/post/:id" element={<Post />} />
+        <Route path="/posts/:user" element={<UserPosts />} />
         {isAuth ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

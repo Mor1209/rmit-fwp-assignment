@@ -18,15 +18,18 @@ function LandingPage() {
       title: 'Loop Agile',
       content:
         'Loop Agile (LA) is a fast-growing firm with offices in major metropolitan cities in Australia... ',
+      id: 1,
     },
     {
       title: 'More Info',
       content:
         'Loop Agile Now is a social meida webiste that is used by the IT Consultancy firm ',
+      id: 2,
     },
     {
       title: 'Posts Tutorial',
       content: 'You need register for an account before making a posts',
+      id: 3,
     },
   ]
 
@@ -91,10 +94,10 @@ function LandingPage() {
         justifyContent={'space-between'}
         spacing={0}
         marginTop={1}
-        marginBottom={1}
+        marginBottom={10}
       >
         {items.map(page => (
-          <Grid>
+          <Grid key={page.id}>
             <Card sx={{ width: 350, alignItems: 'center', minHeight: '350px' }}>
               <CardMedia component="img" height="140" image={ThumbImage} />
               <CardContent>
