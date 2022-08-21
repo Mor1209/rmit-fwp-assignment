@@ -10,28 +10,26 @@ import LandingPage from './pages/LandingPage'
 import Navbar from './components/Layout/Navbar'
 import Notification from './components/UI/Notification'
 import Footer from './components/Layout/Footer'
+import Layout from './components/Layout/Layout'
 
 function App() {
   const { isAuth } = useAuthContext()
   return (
     <div className="App">
-      {/* <Header /> */}
-      <Navbar />
-      <Notification />
-
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<LandingPage />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        {isAuth ? (
-          <Route path="/profile" element={<Profile />} />
-        ) : (
-          <Route path="/profile" element={<Navigate to="/login" />} />
-        )}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<LandingPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          {isAuth ? (
+            <Route path="/profile" element={<Profile />} />
+          ) : (
+            <Route path="/profile" element={<Navigate to="/login" />} />
+          )}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Layout>
     </div>
   )
 }

@@ -4,12 +4,12 @@ import LoginForm from '../components/Forms/LoginForm'
 
 const Login = () => {
   return (
-    <div className="form">
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <LoginForm />
-      </Container>
-    </div>
+    // <div className="form">
+    <Container component="main" maxWidth="xs">
+      {/* <CssBaseline /> */}
+      <LoginForm />
+    </Container>
+    // </div>
   )
 }
 
