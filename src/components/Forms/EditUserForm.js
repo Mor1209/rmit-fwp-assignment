@@ -19,7 +19,7 @@ const EditUserForm = props => {
   const { updateUserDetails } = useUpdateUser()
   const onSubmit = data => {
     if (updateUserDetails(data.name, data.email, data.password)) {
-      props.onSuccess()
+      props.handleToggle()
     }
   }
   const validation = useRegisterValidation(onSubmit)

@@ -7,7 +7,7 @@ const USER_KEY = 'user'
 // Initialise local storage "users" with data, if the data is already set this function returns immediately.
 const initUsers = () => {
   // Stop if data is already initialised.
-  if (getUsers() !== null) return
+  if (getUsers()) return
 
   // User data is hard-coded, passwords are in plain-text.
   const users = [
@@ -44,13 +44,7 @@ const addUser = (name, email, password) => {
   return setUser(user)
 }
 
-const getUsers = () => {
-  let users = JSON.parse(localStorage.getItem(USERS_KEY))
-
-  if (!users) return []
-
-  return users
-}
+const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY))
 
 const setUsers = users => localStorage.setItem(USERS_KEY, JSON.stringify(users))
 

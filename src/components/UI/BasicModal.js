@@ -1,4 +1,4 @@
-import { Box, Modal, Paper, Stack } from '@mui/material'
+import { Box, Modal } from '@mui/material'
 import { Container } from '@mui/system'
 import React from 'react'
 
