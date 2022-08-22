@@ -1,14 +1,14 @@
-import { Box, Container, CssBaseline } from '@mui/material'
+import { Box, CssBaseline } from '@mui/material'
 import React from 'react'
 import Footer from './Footer'
-import Navbar from './Navbar'
+import Header from './Header'
 
 const Layout = props => {
   return (
     <>
       <Box sx={{ minHeight: '100vh' }}>
-        <Navbar />
         <CssBaseline />
+        <Header />
         {props.children}
       </Box>
       <Footer />

@@ -7,9 +7,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Profile from './pages/Profile'
 import { useAuthContext } from './hooks/useAuthContext'
 import LandingPage from './pages/LandingPage'
-import Navbar from './components/Layout/Navbar'
-import Notification from './components/UI/Notification'
-import Footer from './components/Layout/Footer'
 import Layout from './components/Layout/Layout'
 
 function App() {

@@ -3,11 +3,9 @@ import Typography from '@mui/material/Typography'
 
 const NotFound = () => {
   return (
-    <div style={{ height: '100%' }}>
-      <Typography variant="h3" sx={{ mt: 5 }}>
-        Page Not Found
-      </Typography>
-    </div>
+    <Typography variant="h3" color="white" sx={{ mt: 5 }}>
+      Page Not Found
+    </Typography>
   )
 }
 
