@@ -37,11 +37,7 @@ function LandingPage() {
 
   return (
     <Container>
-      <Stack
-        sx={{ color: 'white', height: '90vh' }}
-        alignItems="center"
-        // justifyContent="center"
-      >
+      <Stack sx={{ color: 'white', height: '90vh' }} alignItems="center">
         <Typography
           variant="h1"
           sx={{
@@ -55,7 +51,6 @@ function LandingPage() {
               sm: 120,
               xs: 65,
             },
-            // fontSize: '10rem',
           }}
         >
           Welcome
