@@ -14,7 +14,7 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { Container } from '@mui/system'
 
-const NavBar = () => {
+const Navbar = () => {
   const authCtx = useAuthContext()
   const navigate = useNavigate()
   const [userMenuAnchor, setUserMenuAnchor] = useState(null)
@@ -100,4 +100,4 @@ const NavBar = () => {
   )
 }
 
-export default NavBar
+export default Navbar
