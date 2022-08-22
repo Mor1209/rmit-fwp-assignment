@@ -16,13 +16,13 @@ const BasicForm = props => {
   return (
     <Box
       sx={{
-        marginTop: 8,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         borderRadius: '8px',
         border: '1px solid #dadce0',
         padding: 6,
+        backgroundColor: 'white',
       }}
     >
       <Typography component="h1" variant="h4" sx={{ mb: 2 }}>

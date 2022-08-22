@@ -1,13 +1,12 @@
-import React from 'react'
 import Notification from '../UI/Notification'
-import NavBar from './NavBar'
+import Navbar from './Navbar'
 
 const Header = () => {
   return (
-    <header>
-      <NavBar />
+    <>
+      <Navbar />
       <Notification />
-    </header>
+    </>
   )
 }
 
