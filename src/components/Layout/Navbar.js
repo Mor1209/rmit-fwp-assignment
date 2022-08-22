@@ -1,9 +1,14 @@
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material'
+import { AppBar, Toolbar, Typography, Button, Box, Stack } from '@mui/material'
 import '../../App.css'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useNavigate, NavLink } from 'react-router-dom'
+import { useState } from 'react'
+import { Container } from '@mui/system'
 
-const menuButtons = ['home', 'posts']
+const menuButtons = [
+  { name: 'home', url: '' },
+  { name: 'posts', url: 'posts' },
+]
 
 function Navbar() {
   let activeStyle = {
@@ -15,9 +20,21 @@ function Navbar() {
 
   const authCtx = useAuthContext()
   const navigate = useNavigate()
+  const [background, setBackground] = useState(false)
+
+  const handleBackgroundChange = () => {
+    if (window.scrollY > 50) {
+      setBackground(true)
+    } else {
+      setBackground(false)
+    }
+  }
+
+  window.addEventListener('scroll', handleBackgroundChange)
   const authButtons = !authCtx.isAuth ? (
     <>
       <Button
+        label="Register"
         sx={{
           color: 'white',
           display: 'block',
@@ -26,7 +43,7 @@ function Navbar() {
         }}
         onClick={() => navigate('/register')}
       >
-        Register
+        <Typography> Register </Typography>
       </Button>
       <Button
         sx={{
@@ -53,60 +70,62 @@ function Navbar() {
   )
   return (
     <AppBar
-      position="static"
-      style={{
-        paddingLeft: '10%',
-        paddingRight: '20%',
-        paddingTop: '2%',
-        paddingBottom: '2%',
-        backgroundColor: 'transparent',
-        boxShadow: 'none',
+      position="sticky"
+      sx={{
+        paddingTop: 2,
+        paddingBottom: 2,
+        mb: 10,
+        backgroundColor: background ? '' : 'Transparent',
+        boxShadow: background ? '' : 'none',
+        height: 90,
       }}
       title="Loop Agile"
     >
-      <Toolbar>
-        <Typography
-          variant="h6"
-          noWrap
-          component="a"
-          sx={{
-            mr: 2,
-            display: { xs: 'none', md: 'flex' },
-            fontFamily: 'monospace',
-            fontWeight: 'bolder',
-            color: 'inherit',
-            textDecoration: 'None',
-            paddingRight: '35px',
-            fontSize: '2rem',
-          }}
-        >
-          Loop Agile Now
-        </Typography>
-        {menuButtons.map(page => (
-          <Button
-            key={page}
-            sx={{
-              color: 'white',
-              display: 'block',
-              margin: '10px',
-              fontSize: '1rem',
-            }}
-          >
-            <NavLink
-              to={`/${page}`}
-              style={({ isActive }) =>
-                isActive
-                  ? activeStyle
-                  : { color: 'white', textDecoration: 'none' }
-              }
+      <Container maxWidth="xl">
+        <Toolbar>
+          <Stack direction="row">
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 'bolder',
+                color: 'inherit',
+                textDecoration: 'None',
+                paddingRight: '35px',
+                fontSize: '2rem',
+              }}
             >
-              {page}
-            </NavLink>
-          </Button>
-        ))}
-        <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} />
-        {authButtons}
-      </Toolbar>
+              Loop Agile Now
+            </Typography>
+            {menuButtons.map(page => (
+              <Button
+                key={page.name}
+                component={NavLink}
+                to={`/${page.url}`}
+                sx={{
+                  color: 'white',
+                  display: 'block',
+                  margin: '10px',
+                  fontSize: '1rem',
+                }}
+                style={({ isActive }) =>
+                  isActive
+                    ? activeStyle
+                    : { color: 'white', textDecoration: 'none' }
+                }
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Stack>
+
+          <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} />
+          {authButtons}
+        </Toolbar>
+      </Container>
     </AppBar>
   )
 }
