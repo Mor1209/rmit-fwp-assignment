@@ -1,9 +1,19 @@
-import { AppBar, Toolbar, Typography, Button, Box, Stack } from '@mui/material'
-import '../../App.css'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Stack,
+  Tooltip,
+  Menu,
+  MenuItem,
+} from '@mui/material'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useNavigate, NavLink } from 'react-router-dom'
 import { useState } from 'react'
 import { Container } from '@mui/system'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const menuButtons = [
   { name: 'home', url: '' },
@@ -11,6 +21,11 @@ const menuButtons = [
 ]
 
 function Navbar() {
+  const authCtx = useAuthContext()
+  const navigate = useNavigate()
+  const [background, setBackground] = useState(false)
+  const [userMenuAnchor, setUserMenuAnchor] = useState(null)
+
   let activeStyle = {
     color: 'currentColor',
     cursor: 'not-allowed',
@@ -18,9 +33,17 @@ function Navbar() {
     textDecoration: 'underline',
   }
 
-  const authCtx = useAuthContext()
-  const navigate = useNavigate()
-  const [background, setBackground] = useState(false)
+  const handleOpenUserMenu = event => {
+    setUserMenuAnchor(event.currentTarget)
+  }
+
+  const handleCloseUserMenu = e => {
+    setUserMenuAnchor(null)
+
+    if (e.target.id === 'logout') {
+      authCtx.logout()
+    }
+  }
 
   const handleBackgroundChange = () => {
     if (window.scrollY > 50) {
@@ -31,6 +54,7 @@ function Navbar() {
   }
 
   window.addEventListener('scroll', handleBackgroundChange)
+
   const authButtons = !authCtx.isAuth ? (
     <>
       <Button
@@ -58,15 +82,45 @@ function Navbar() {
       </Button>
     </>
   ) : (
-    <Button
-      onClick={() => authCtx.logout()}
-      sx={{
-        color: 'white',
-        display: 'block',
-        margin: '10px',
-        fontSize: '1rem',
-      }}
-    ></Button>
+    <>
+      <Box sx={{ flexGrow: 1 }}></Box>
+      <Box>
+        <Tooltip title="User Menu" placement="bottom-end">
+          <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Typography color="white">{authCtx.user.name}</Typography>
+            <ExpandMoreIcon sx={{ color: 'white' }} />
+          </Button>
+        </Tooltip>
+        <Menu
+          open={!!userMenuAnchor}
+          onClose={handleCloseUserMenu}
+          id="user-menu"
+          keepMounted
+          anchorEl={userMenuAnchor}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          sx={{ mt: 4 }}
+        >
+          <MenuItem
+            id="profile"
+            component={NavLink}
+            to={'/profile'}
+            onClick={handleCloseUserMenu}
+          >
+            <Typography textAlign="center">Profile</Typography>
+          </MenuItem>
+          <MenuItem id="logout" onClick={handleCloseUserMenu}>
+            Logout
+          </MenuItem>
+        </Menu>
+      </Box>
+    </>
   )
   return (
     <AppBar

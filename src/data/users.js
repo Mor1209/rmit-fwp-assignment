@@ -7,7 +7,7 @@ const USER_KEY = 'user'
 // Initialise local storage "users" with data, if the data is already set this function returns immediately.
 const initUsers = () => {
   // Stop if data is already initialised.
-  if (getUsers() !== null) return
+  if (getUsers()) return
 
   // User data is hard-coded, passwords are in plain-text.
   const users = [
@@ -15,11 +15,13 @@ const initUsers = () => {
       name: 'moritz',
       email: 'mohauptmann@gmail.com',
       password: '!Pp123456789',
+      created: '2022-08-14T01:29:24.478Z',
     },
     {
       name: 'mingang',
       email: 'minggang@gmail.com',
       password: '!Pp123456789',
+      created: '2022-08-14T01:29:24.478Z',
     },
   ]
 
@@ -33,10 +35,10 @@ const addUser = (name, email, password) => {
 
   if (userExists(email)) return
 
-  const user = { name, email, password }
+  const created = new Date().toISOString()
+  const user = { name, email, password, created }
   const users = getUsers()
   users.push(user)
-
   setUsers(users)
 
   return setUser(user)
@@ -52,7 +54,7 @@ const verifyUser = (email, password) => {
   const verifiedUser = users.find(
     user => email === user.email && password === user.password
   )
-  verifiedUser && setUser({ email, password })
+  verifiedUser && setUser(verifiedUser)
 
   return verifiedUser
 }
@@ -70,6 +72,40 @@ const setUser = user => {
 
 const getUser = () => JSON.parse(localStorage.getItem(USER_KEY))
 
+const updateUser = (name, email, password) => {
+  name = name.toLowerCase()
+  email = email.toLowerCase()
+  const user = getUser()
+
+  if (userExists(email) && user.email !== email) return
+
+  deleteUser()
+
+  const userUpdate = { ...user, name, email, password }
+  const users = getUsers()
+  users.push(userUpdate)
+  setUsers(users)
+
+  return setUser(userUpdate)
+}
+
+const deleteUser = () => {
+  const { email } = getUser()
+  const users = getUsers()
+
+  const usersUpdate = users.filter(user => user.email !== email)
+
+  setUsers(usersUpdate)
+}
+
 const removeUser = () => localStorage.removeItem(USER_KEY)
 
-export { initUsers, addUser, verifyUser, getUser, removeUser }
+export {
+  initUsers,
+  addUser,
+  verifyUser,
+  getUser,
+  updateUser,
+  removeUser,
+  deleteUser,
+}

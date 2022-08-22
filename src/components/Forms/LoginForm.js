@@ -3,7 +3,10 @@ import BasicForm from './BasicForm'
 import { useLoginValidation } from '../../hooks/useUserValidation'
 
 export const LoginForm = () => {
-  const inputFieldLabels = ['Email', 'Password']
+  const inputFields = [
+    { label: 'Email', defaultValue: '' },
+    { label: 'Password', defaultValue: '' },
+  ]
   const { login } = useLogin()
   const onSubmit = data => login(data.email, data.password)
   const validation = useLoginValidation(onSubmit)
@@ -11,7 +14,7 @@ export const LoginForm = () => {
   return (
     <BasicForm
       validation={validation}
-      inputFieldLabels={inputFieldLabels}
+      inputFieldLabels={inputFields}
       formName={'Login'}
     />
   )
