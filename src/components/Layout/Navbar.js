@@ -1,23 +1,37 @@
 import {
   AppBar,
-  Box,
+  Toolbar,
+  Typography,
   Button,
+  Box,
+  Stack,
+  Tooltip,
   Menu,
   MenuItem,
-  Toolbar,
-  Tooltip,
-  Typography,
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import React, { useState } from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate, NavLink } from 'react-router-dom'
+import { useState } from 'react'
 import { Container } from '@mui/system'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const Navbar = () => {
+const menuButtons = [
+  { name: 'home', url: '' },
+  { name: 'posts', url: 'posts' },
+]
+
+function Navbar() {
   const authCtx = useAuthContext()
   const navigate = useNavigate()
+  const [background, setBackground] = useState(false)
   const [userMenuAnchor, setUserMenuAnchor] = useState(null)
+
+  let activeStyle = {
+    color: 'currentColor',
+    cursor: 'not-allowed',
+    opacity: '0.5',
+    textDecoration: 'underline',
+  }
 
   const handleOpenUserMenu = event => {
     setUserMenuAnchor(event.currentTarget)
@@ -31,19 +45,37 @@ const Navbar = () => {
     }
   }
 
+  const handleBackgroundChange = () => {
+    if (window.scrollY > 50) {
+      setBackground(true)
+    } else {
+      setBackground(false)
+    }
+  }
+
+  window.addEventListener('scroll', handleBackgroundChange)
+
   const authButtons = !authCtx.isAuth ? (
     <>
       <Button
-        color={'secondary'}
-        variant="contained"
+        label="Register"
+        sx={{
+          color: 'white',
+          display: 'block',
+          margin: '10px',
+          fontSize: '1rem',
+        }}
         onClick={() => navigate('/register')}
-        sx={{ mr: 1 }}
       >
-        Register
+        <Typography> Register </Typography>
       </Button>
       <Button
-        color={'secondary'}
-        variant="contained"
+        sx={{
+          color: 'white',
+          display: 'block',
+          margin: '10px',
+          fontSize: '1rem',
+        }}
         onClick={() => navigate('/login')}
       >
         Login
@@ -90,11 +122,63 @@ const Navbar = () => {
       </Box>
     </>
   )
-
   return (
-    <AppBar position="static">
-      <Container maxWidth="lg">
-        <Toolbar disableGutters>{authButtons}</Toolbar>
+    <AppBar
+      position="sticky"
+      sx={{
+        paddingTop: 2,
+        paddingBottom: 2,
+        mb: 10,
+        backgroundColor: background ? '' : 'Transparent',
+        boxShadow: background ? '' : 'none',
+        height: 90,
+      }}
+      title="Loop Agile"
+    >
+      <Container maxWidth="xl">
+        <Toolbar>
+          <Stack direction="row">
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 'bolder',
+                color: 'inherit',
+                textDecoration: 'None',
+                paddingRight: '35px',
+                fontSize: '2rem',
+              }}
+            >
+              Loop Agile Now
+            </Typography>
+            {menuButtons.map(page => (
+              <Button
+                key={page.name}
+                component={NavLink}
+                to={`/${page.url}`}
+                sx={{
+                  color: 'white',
+                  display: 'block',
+                  margin: '10px',
+                  fontSize: '1rem',
+                }}
+                style={({ isActive }) =>
+                  isActive
+                    ? activeStyle
+                    : { color: 'white', textDecoration: 'none' }
+                }
+              >
+                {page.name}
+              </Button>
+            ))}
+          </Stack>
+
+          <Box sx={{ flexGrow: 1, display: { md: 'flex' } }} />
+          {authButtons}
+        </Toolbar>
       </Container>
     </AppBar>
   )

@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAuthContext } from './useAuthContext'
 import { useNotificationContext } from './useNotificationContext'
 import { updateUser } from '../data/users'
