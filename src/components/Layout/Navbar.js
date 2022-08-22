@@ -74,6 +74,7 @@ function Navbar() {
       sx={{
         paddingTop: 2,
         paddingBottom: 2,
+        mb: 10,
         backgroundColor: background ? '' : 'Transparent',
         boxShadow: background ? '' : 'none',
         height: 90,
@@ -102,23 +103,21 @@ function Navbar() {
             {menuButtons.map(page => (
               <Button
                 key={page.name}
+                component={NavLink}
+                to={`/${page.url}`}
                 sx={{
                   color: 'white',
                   display: 'block',
                   margin: '10px',
                   fontSize: '1rem',
                 }}
+                style={({ isActive }) =>
+                  isActive
+                    ? activeStyle
+                    : { color: 'white', textDecoration: 'none' }
+                }
               >
-                <NavLink
-                  to={`/${page.url}`}
-                  style={({ isActive }) =>
-                    isActive
-                      ? activeStyle
-                      : { color: 'white', textDecoration: 'none' }
-                  }
-                >
-                  {page.name}
-                </NavLink>
+                {page.name}
               </Button>
             ))}
           </Stack>

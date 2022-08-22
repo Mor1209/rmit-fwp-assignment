@@ -12,22 +12,20 @@ import Layout from './components/Layout/Layout'
 function App() {
   const { isAuth } = useAuthContext()
   return (
-    <div className="App">
-      <Layout>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<LandingPage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          {isAuth ? (
-            <Route path="/profile" element={<Profile />} />
-          ) : (
-            <Route path="/profile" element={<Navigate to="/login" />} />
-          )}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Layout>
-    </div>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<LandingPage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        {isAuth ? (
+          <Route path="/profile" element={<Profile />} />
+        ) : (
+          <Route path="/profile" element={<Navigate to="/login" />} />
+        )}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Layout>
   )
 }
 

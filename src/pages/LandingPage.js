@@ -47,7 +47,7 @@ function LandingPage() {
           sx={{
             fontFamily: 'Georgia',
             color: 'white',
-            mt: '20vh',
+            mt: '10vh',
             pb: 5,
             fontSize: {
               lg: 200,

@@ -2,16 +2,28 @@ import { Box, CssBaseline } from '@mui/material'
 import React from 'react'
 import Footer from './Footer'
 import Header from './Header'
+import HeroImg from '../../assets/t.webp'
 
 const Layout = props => {
   return (
     <>
-      <Box sx={{ minHeight: '100vh' }}>
-        <CssBaseline />
-        <Header />
-        {props.children}
+      <CssBaseline />
+      <Box
+        sx={{
+          textAlign: 'center',
+          height: '100vh',
+          backgroundImage: `url(${HeroImg})`,
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+        }}
+      >
+        <Box sx={{ minHeight: '100vh' }}>
+          <Header />
+          {props.children}
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
     </>
   )
 }

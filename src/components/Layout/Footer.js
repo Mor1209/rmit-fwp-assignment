@@ -4,7 +4,6 @@ import { Link as RouterLink } from 'react-router-dom'
 function Footer() {
   const links = ['Terms', 'Privacy Policy', 'Contact']
   return (
-    // <footer className="footer">
     <footer>
       <Paper
         square
@@ -12,7 +11,6 @@ function Footer() {
           position: 'sticky',
           bottom: 0,
           margin: 'auto',
-          // width: '100%',
           backgroundColor: '#95A6B7',
           padding: 2,
         }}
@@ -28,11 +26,8 @@ function Footer() {
             <Grid item>
               <Typography
                 sx={{
-                  // marginLeft: '10%',
                   fontWeight: 'bold',
                   fontSize: '1rem',
-                  mr: 4,
-                  // marginRight: '5%',
                 }}
               >
                 &copy; Copyright By Loop Agile Now
