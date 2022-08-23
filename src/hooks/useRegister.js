@@ -1,4 +1,4 @@
-import { addUser } from '../data/users'
+import { addUser, userExists } from '../data/users'
 import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
@@ -8,8 +8,11 @@ export const useRegister = () => {
   const { dispatchAuth } = useAuthContext()
   const navigate = useNavigate()
 
-  const register = (name, email, password) => {
-    const user = addUser(name, email, password)
+  const register = (name, email, password, secretkey) => {
+    console.log('register')
+    console.log(name)
+    console.log(email)
+    const user = addUser(name, email, password, secretkey.ascii)
 
     if (!user) {
       sendNotification('error', 'User with email already exists !')
@@ -28,5 +31,16 @@ export const useRegister = () => {
     navigate('/profile')
   }
 
-  return { register }
+  const validate = (name, email, password) => {
+    const user = userExists(email)
+
+    if (user) {
+      sendNotification('error', 'User with email already exists !')
+      return
+    }
+
+    return true
+  }
+
+  return { register, validate }
 }

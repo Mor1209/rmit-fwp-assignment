@@ -28,6 +28,7 @@ const BasicForm = props => {
       <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
         {props.formName}
       </Typography>
+      {props.children}
       <Box component="form" onSubmit={submitHandler}>
         {props.inputFieldLabels.map(inputField => {
           const id = toCamelCase(inputField.label)
