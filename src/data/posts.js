@@ -11,7 +11,8 @@ const allPosts = () => {
 const getPostById = id => {
   const posts = allPosts()
   // posts.inlcude
-  return posts.find(post => post.id === id)
+
+  return posts.find(post => post.id === parseInt(id))
 }
 
 const createPost = post => {
