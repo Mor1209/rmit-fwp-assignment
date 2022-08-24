@@ -16,11 +16,6 @@ module.exports = function override(config, env) {
       Buffer: ['buffer', 'Buffer'],
     }),
   ]
-  // let loaders = config.resolve
-  // loaders.fallback = {
-  //   stream: require.resolve('stream-browserify'),
-  //   buffer: require.resolve('buffer/'),
-  // }
 
   return config
 }

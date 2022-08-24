@@ -57,7 +57,10 @@ const verifyUser = (email, password) => {
   const verifiedUser = users.find(
     user => email === user.email && password === user.password
   )
-  verifiedUser && setUser(verifiedUser)
+
+  if (!verifiedUser) return
+
+  setUser(verifiedUser)
 
   return verifiedUser
 }

@@ -2,17 +2,54 @@ import { addUser, userExists } from '../data/users'
 import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
+import capitalize from '../helpers/capitalize'
+import { useEffect, useMemo, useState } from 'react'
+import * as qrcode from 'qrcode'
+const speakeasy = require('speakeasy')
 
 export const useRegister = () => {
   const { sendNotification } = useNotificationContext()
   const { dispatchAuth } = useAuthContext()
   const navigate = useNavigate()
 
-  const register = (name, email, password, secretkey) => {
-    console.log('register')
-    console.log(name)
-    console.log(email)
-    const user = addUser(name, email, password, secretkey.ascii)
+  const [registerDetails, setRegisterDetails] = useState({})
+  const [qr, setQr] = useState('')
+  const [secret, setSecret] = useState({})
+
+  useEffect(() => {
+    const getQr = async () => {
+      try {
+        const newSecret = speakeasy.generateSecret({ name: 'LoopAgileNow' })
+        setSecret(newSecret)
+        const qrDataURL = await qrcode.toDataURL(newSecret.otpauth_url)
+        console.log(qrDataURL)
+        setQr(qrDataURL)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    getQr()
+  }, [])
+
+  const register = token => {
+    const verified = speakeasy.totp.verify({
+      secret: secret.ascii,
+      encoding: 'ascii',
+      token,
+    })
+
+    if (!verified) {
+      sendNotification('error', 'Token is not valid !')
+      return
+    }
+
+    const user = addUser(
+      registerDetails.name,
+      registerDetails.email,
+      registerDetails.password,
+      secret.ascii
+    )
 
     if (!user) {
       sendNotification('error', 'User with email already exists !')
@@ -23,11 +60,7 @@ export const useRegister = () => {
       type: 'REGISTER',
       user,
     })
-    sendNotification(
-      'success',
-      `Welcome ${user.name.charAt(0).toUpperCase() + user.name.slice(1)} !`,
-      false
-    )
+    sendNotification('success', `Welcome ${capitalize(user.name)} !`, false)
     navigate('/profile')
   }
 
@@ -39,8 +72,14 @@ export const useRegister = () => {
       return
     }
 
+    setRegisterDetails({
+      name,
+      email,
+      password,
+    })
+
     return true
   }
 
-  return { register, validate }
+  return { register, validate, qr, setRegisterDetails }
 }

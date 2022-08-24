@@ -1,51 +1,59 @@
+import { ArrowBack } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 import { useState } from 'react'
 import { useRegister } from '../../hooks/useRegister'
-import { useRegisterValidation } from '../../hooks/useUserValidation'
+import {
+  useMfaValidation,
+  useRegisterValidation,
+} from '../../hooks/useUserValidation'
 import BasicForm from './BasicForm'
-import MfaForm from './MfaForm'
 
 export const RegisterForm = () => {
   const [step, setStep] = useState(1)
-  const { validate, register } = useRegister()
-  const [registerDetails, setRegisterDetails] = useState({})
+  const { validate, register, qr } = useRegister()
 
-  const onStep1 = data => {
-    if (validate(data.name, data.email, data.password)) {
-      setStep(2)
-      setRegisterDetails({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      })
-    }
-  }
-  const validationStep1 = useRegisterValidation(onStep1)
-  // const validationStep2 = data => {
-  //   register(...registerDetails, data.secretkey, data.token)
-  // }
-
-  const inputFields = [
+  const inputFields1 = [
     { label: 'Name', defaultValue: '' },
     { label: 'Email', defaultValue: '' },
     { label: 'Password', defaultValue: '' },
     { label: 'Confirm Password', defaultValue: '' },
   ]
+  const inputFields2 = [{ label: 'Token', defaultValue: '' }]
+
+  const onStep1 = data => {
+    if (validate(data.name, data.email, data.password)) {
+      setStep(2)
+    }
+  }
+  const onSubmit = data => {
+    register(data.token)
+  }
+
+  const formValidation1 = useRegisterValidation(onStep1)
+  const formValidation2 = useMfaValidation(onSubmit)
 
   return (
     <>
       {step === 1 && (
         <BasicForm
-          validation={validationStep1}
-          inputFieldLabels={inputFields}
+          validation={formValidation1}
+          inputFieldLabels={inputFields1}
           formName={'Register'}
+          submitButtonName={'Next'}
         />
       )}
       {step === 2 && (
-        <MfaForm
-          register={true}
-          registerDetails={registerDetails}
-          formName={'Add MFA'}
-        />
+        <>
+          <BasicForm
+            validation={formValidation2}
+            inputFieldLabels={inputFields2}
+            formName={'Add MFA'}
+            submitButtonName={'Register'}
+            stepBackHandler={() => setStep(1)}
+          >
+            {qr && <img src={qr} alt="QR Code for authenticator app" />}
+          </BasicForm>
+        </>
       )}
     </>
   )
