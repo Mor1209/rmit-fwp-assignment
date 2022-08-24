@@ -1,5 +1,3 @@
-import { ArrowBack } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
 import { useState } from 'react'
 import { useRegister } from '../../hooks/useRegister'
 import {
@@ -11,7 +9,6 @@ import BasicForm from './BasicForm'
 export const RegisterForm = () => {
   const [step, setStep] = useState(1)
   const { validate, register, qr } = useRegister()
-
   const inputFields1 = [
     { label: 'Name', defaultValue: '' },
     { label: 'Email', defaultValue: '' },

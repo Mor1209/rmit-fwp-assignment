@@ -3,17 +3,34 @@ import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
 import capitalize from '../helpers/capitalize'
+import { useState } from 'react'
+const speakeasy = require('speakeasy')
 
 export const useLogin = () => {
   const { sendNotification } = useNotificationContext()
   const { dispatchAuth } = useAuthContext()
   const navigate = useNavigate()
+  const [loginDetails, setLoginDetails] = useState({})
 
-  const login = (email, password, token) => {
-    const user = verifyUser(email, password, token)
+  const login = token => {
+    const user = verifyUser(loginDetails.email, loginDetails.password)
 
     if (!user) {
       sendNotification('error', 'Wrong credentials !')
+      return
+    }
+
+    console.log('user')
+    console.log(user)
+    console.log(token)
+    const verifiedToken = speakeasy.totp.verify({
+      secret: user.secretkey,
+      encoding: 'ascii',
+      token,
+    })
+
+    if (!verifiedToken) {
+      sendNotification('error', 'Token is not valid !')
       return
     }
 
@@ -29,5 +46,16 @@ export const useLogin = () => {
     navigate('/profile')
   }
 
-  return { login }
+  const validate = (email, password) => {
+    const user = verifyUser(email, password)
+
+    if (!user) {
+      sendNotification('error', 'Wrong credentials !')
+      return
+    }
+
+    setLoginDetails({ email, password })
+  }
+
+  return { login, validate }
 }
