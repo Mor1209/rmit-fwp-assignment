@@ -5,12 +5,12 @@ const initPosts = () => {
   localStorage.setItem('comments', JSON.stringify([]))
 }
 
-const allPosts = () => {
+const getAllPosts = () => {
   return JSON.parse(localStorage.getItem('posts'))
 }
 
 const getPostById = id => {
-  const posts = allPosts()
+  const posts = getAllPosts()
   const post = posts.find(post => post.id === parseInt(id))
   let comments = JSON.parse(localStorage.getItem('comments'))
 
@@ -24,7 +24,7 @@ const getPostById = id => {
 }
 
 const createPost = post => {
-  let posts = allPosts()
+  let posts = getAllPosts()
   if (posts !== null && posts.length > 0) {
     const lastPost = posts.at(-1)
     post['id'] = lastPost.id + 1
@@ -53,4 +53,27 @@ const createComment = (comment, postId, parentId) => {
   return comment
 }
 
-export { initPosts, allPosts, createPost, getPostById, createComment }
+const deletePost = id => {
+  let posts = JSON.parse(localStorage.getItem('posts'))
+  if (posts === null) return false
+
+  posts = posts.filter(post => post.id !== id)
+
+  const comments = JSON.parse(localStorage.getItem('comments')).filter(
+    comment => comment.postId !== id
+  )
+
+  console.log(comments)
+  localStorage.setItem('posts', JSON.stringify(posts))
+  localStorage.setItem('comments', JSON.stringify(comments))
+  return posts
+}
+
+export {
+  initPosts,
+  getAllPosts,
+  createPost,
+  getPostById,
+  createComment,
+  deletePost,
+}

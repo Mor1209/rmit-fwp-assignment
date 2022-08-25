@@ -1,4 +1,4 @@
-import { allPosts } from '../../data/posts'
+import { getAllPosts, deletePost } from '../../data/posts'
 import {
   Grid,
   Container,
@@ -12,10 +12,30 @@ import {
 } from '@mui/material'
 import { getUser } from '../../data/users'
 import { useNavigate } from 'react-router'
+import { useEffect, useState } from 'react'
+import { useNotificationContext } from '../../hooks/useNotificationContext'
+
 function AllPosts() {
-  const posts = allPosts()
+  const [posts, setPosts] = useState()
+
+  const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const user = getUser()
+
+  useEffect(() => {
+    setPosts(getAllPosts())
+  }, [])
+
+  const handleDeletePost = id => {
+    const remainPosts = deletePost(id)
+    if (remainPosts === null) {
+      sendNotification('error', 'Unable to Delete Post', false)
+      return
+    }
+    setPosts(remainPosts)
+    sendNotification('success', 'Post Delete', false)
+  }
+
   return (
     <Container sx={{ height: '100%', marginBottom: 10 }}>
       <Typography variant="h3" color={'white'} fontWeight={'bold'}>
@@ -56,7 +76,7 @@ function AllPosts() {
                   <CardMedia
                     component="img"
                     height="140"
-                    // image="/static/images/cards/contemplative-reptile.jpg"
+                    image={require('../../assets/r.webp')}
                     alt="image"
                   />
                   <CardContent>
@@ -78,9 +98,7 @@ function AllPosts() {
                       size="small"
                       variant="contained"
                       color="error"
-                      onClick={() => {
-                        console.log(post.title)
-                      }}
+                      onClick={() => handleDeletePost(post.id)}
                     >
                       Delete
                     </Button>

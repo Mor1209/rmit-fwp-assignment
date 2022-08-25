@@ -15,11 +15,13 @@ const initUsers = () => {
       name: 'moritz',
       email: 'mohauptmann@gmail.com',
       password: '!Pp123456789',
+      userId: 1,
     },
     {
-      name: 'mingang',
-      email: 'minggang@gmail.com',
-      password: '!Pp123456789',
+      name: 'm',
+      email: 'm@gmail.com',
+      password: 'Qq!12345678',
+      userId: 2,
     },
   ]
 
@@ -33,8 +35,9 @@ const addUser = (name, email, password) => {
 
   if (userExists(email)) return
 
-  const user = { name, email, password }
   const users = getUsers()
+  const userId = users.at(-1).userId + 1
+  const user = { name, email, password, userId }
   users.push(user)
 
   setUsers(users)
@@ -52,7 +55,8 @@ const verifyUser = (email, password) => {
   const verifiedUser = users.find(
     user => email === user.email && password === user.password
   )
-  verifiedUser && setUser({ email, password })
+
+  verifiedUser && setUser(verifiedUser)
 
   return verifiedUser
 }

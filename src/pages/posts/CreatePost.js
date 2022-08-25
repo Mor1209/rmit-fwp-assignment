@@ -27,13 +27,12 @@ function CreatePost() {
     const post = {
       title: data.title,
       content: data.content,
-      author: author.email,
+      author: author.name,
     }
     createPost(post)
     setLoading(false)
     sendNotification('success', 'Post created', false)
     navigate('/posts')
-    // e.target.reset()
   }
 
   const {
