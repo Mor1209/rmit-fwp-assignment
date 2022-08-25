@@ -1,9 +1,17 @@
 import { Paper, Avatar, Grid, Typography, Button } from '@mui/material'
-import { useState } from 'react'
 import CommentForm from '../Forms/CommentForm'
 
-function Comment({ comment, replies, selectedComment, setSelectedComment }) {
-  const reply = selectedComment && selectedComment.id === comment.id
+function Comment({
+  comment,
+  selectedComment,
+  setSelectedComment,
+  addComment,
+  postId,
+  getReplies,
+}) {
+  const replies = getReplies(comment.id)
+
+  const selected = selectedComment && selectedComment.id === comment.id
 
   return (
     <Paper sx={{ padding: '20px 25px', margin: 2 }} elevation={4}>
@@ -33,17 +41,27 @@ function Comment({ comment, replies, selectedComment, setSelectedComment }) {
             </Grid>
           </Grid>
         </Grid>
-        {reply ? <CommentForm /> : null}
+
+        {selected ? (
+          <CommentForm
+            submit={addComment}
+            parentId={comment.id}
+            postId={postId}
+          />
+        ) : null}
+
         <Grid item>
-          {replies &&
+          {replies !== null &&
             replies.map(replies => {
               return (
                 <Comment
                   key={replies.id}
                   comment={replies}
-                  replies={null}
+                  getReplies={getReplies}
                   selectedComment={selectedComment}
                   setSelectedComment={setSelectedComment}
+                  addComment={addComment}
+                  postId={postId}
                 />
               )
             })}

@@ -1,20 +1,21 @@
 import { FormControl, TextField, Button, Alert } from '@mui/material'
 import { useForm } from 'react-hook-form'
-function CommentForm({ type }) {
+function CommentForm({ type, submit, postId, parentId }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
+
   return (
-    <form onSubmit={handleSubmit()}>
+    <form onSubmit={handleSubmit(data => submit(data, postId, parentId))}>
       <FormControl fullWidth sx={{ marginTop: 1 }} variant="standard">
         <TextField
           placeholder="Write down the content"
           multiline
           rows={2}
           error={!!errors.content}
-          {...register('content', {
+          {...register('comment', {
             required: 'This field is required',
             maxLength: 250,
           })}

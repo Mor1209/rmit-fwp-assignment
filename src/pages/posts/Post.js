@@ -1,31 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from 'react-router'
-import { getPostById } from '../../data/posts'
 import { useEffect, useState } from 'react'
 // import BannerImage from '../../assets/r.webp'
-import { Container, Typography, Button, Box } from '@mui/material'
+import { Container, Typography } from '@mui/material'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
+import { createComment, getPostById } from '../../data/posts'
 
 function Post() {
   const params = useParams()
   const [post, setPost] = useState(null)
   const [selectedComment, setSelectedComment] = useState(null)
-
-  let comments = [
-    { id: 1, comment: 'test', parentId: null, user: 'someone' },
-    { id: 2, comment: 'test2', parentId: null, user: 'somoene' },
-  ]
-
-  let replies = [
-    { id: 3, comment: 'fsdf', parentId: 1, user: 'reply' },
-    // { id: 2, comment: 'ffest', parentId: 2, user: 'reply' },
-  ]
+  const [comments, setComments] = useState([])
 
   useEffect(() => {
-    setPost(getPostById(params.id))
+    const { post, comments } = getPostById(params.id)
+    setPost(post)
+    setComments(comments)
   }, [])
+
+  const addComment = (data, postId, parentId) => {
+    const newComment = createComment(data, postId, parentId)
+    setComments([...comments, newComment])
+    setSelectedComment(null)
+  }
+
+  const getCommentReplies = id => {
+    return comments.filter(comment => comment.parentId === id)
+  }
 
   return (
     <>
@@ -60,20 +63,29 @@ function Post() {
           Comments
         </Typography>
 
-        <CommentForm type={'comment'} />
+        <CommentForm
+          type={'comment'}
+          submit={addComment}
+          postId={post?.id}
+          parentId={null}
+        />
 
         <hr />
         {comments &&
           comments.map(comment => {
-            return (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                replies={replies}
-                selectedComment={selectedComment}
-                setSelectedComment={setSelectedComment}
-              />
-            )
+            if (comment.parentId === null)
+              return (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  selectedComment={selectedComment}
+                  setSelectedComment={setSelectedComment}
+                  addComment={addComment}
+                  postId={post?.id}
+                  getReplies={getCommentReplies}
+                />
+              )
+            return null
           })}
       </Container>
     </>
