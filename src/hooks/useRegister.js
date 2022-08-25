@@ -3,7 +3,7 @@ import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
 import capitalize from '../helpers/capitalize'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as qrcode from 'qrcode'
 const speakeasy = require('speakeasy')
 
@@ -17,6 +17,7 @@ export const useRegister = () => {
   const [secret, setSecret] = useState({})
 
   useEffect(() => {
+    console.log('useEffect')
     const getQr = async () => {
       try {
         const newSecret = speakeasy.generateSecret({ name: 'LoopAgileNow' })
@@ -48,7 +49,8 @@ export const useRegister = () => {
       registerDetails.name,
       registerDetails.email,
       registerDetails.password,
-      secret.ascii
+      secret.ascii,
+      token
     )
 
     if (!user) {
@@ -81,5 +83,5 @@ export const useRegister = () => {
     return true
   }
 
-  return { register, validate, qr, setRegisterDetails }
+  return { register, validate, qr, secret, setRegisterDetails }
 }

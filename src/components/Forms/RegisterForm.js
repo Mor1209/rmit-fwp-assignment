@@ -1,3 +1,4 @@
+import { Box, Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useRegister } from '../../hooks/useRegister'
 import {
@@ -5,10 +6,11 @@ import {
   useRegisterValidation,
 } from '../../hooks/useUserValidation'
 import BasicForm from './BasicForm'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
 export const RegisterForm = () => {
   const [step, setStep] = useState(1)
-  const { validate, register, qr } = useRegister()
+  const { validate, register, qr, secret } = useRegister()
   const inputFields1 = [
     { label: 'Name', defaultValue: '' },
     { label: 'Email', defaultValue: '' },
@@ -28,6 +30,8 @@ export const RegisterForm = () => {
 
   const formValidation1 = useRegisterValidation(onStep1)
   const formValidation2 = useMfaValidation(onSubmit)
+  console.log('secret recieved:')
+  console.log(secret)
 
   return (
     <>
@@ -48,7 +52,24 @@ export const RegisterForm = () => {
             submitButtonName={'Register'}
             stepBackHandler={() => setStep(1)}
           >
-            {qr && <img src={qr} alt="QR Code for authenticator app" />}
+            {qr && (
+              <Box sx={{ pt: 2, pb: 3 }}>
+                <Typography variant="h6">Please scan QR code</Typography>
+                <img src={qr} alt="QR Code for authenticator app" />
+                <Typography variant="h6" sx={{ pb: 1 }}>
+                  OR
+                </Typography>
+                <Button
+                  endIcon={<OpenInNewIcon />}
+                  onClick={() => {
+                    window.open(secret.otpauth_url)
+                  }}
+                  sx={{ textTransform: 'none', fontSize: 17 }}
+                >
+                  Click this link on your mobile
+                </Button>
+              </Box>
+            )}
           </BasicForm>
         </>
       )}

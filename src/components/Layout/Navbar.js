@@ -128,7 +128,7 @@ function Navbar() {
       sx={{
         paddingTop: 2,
         paddingBottom: 2,
-        mb: 10,
+        mb: 5,
         backgroundColor: background ? '' : 'Transparent',
         boxShadow: background ? '' : 'none',
         height: 90,

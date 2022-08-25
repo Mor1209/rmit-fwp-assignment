@@ -20,14 +20,13 @@ export const useLogin = () => {
       return
     }
 
-    console.log('user')
-    console.log(user)
-    console.log(token)
-    const verifiedToken = speakeasy.totp.verify({
-      secret: user.secretkey,
-      encoding: 'ascii',
-      token,
-    })
+    const verifiedToken = (user, token) => {
+      return speakeasy.totp.verify({
+        secret: user.secretkey,
+        encoding: 'ascii',
+        token,
+      })
+    }
 
     if (!verifiedToken) {
       sendNotification('error', 'Token is not valid !')
