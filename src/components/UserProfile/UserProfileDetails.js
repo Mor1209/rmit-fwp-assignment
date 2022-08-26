@@ -1,15 +1,10 @@
 import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import capitalize from '../../helpers/capitalize'
 
 const UserProfileDetails = () => {
   const authCtx = useAuthContext()
-
-  const capitalize = str =>
-    str
-      .split(' ')
-      .map(subStr => subStr.charAt(0).toUpperCase() + subStr.slice(1))
-      .join(' ')
 
   const name = capitalize(authCtx.user.name)
 

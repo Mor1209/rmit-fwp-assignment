@@ -29,14 +29,17 @@ const initUsers = () => {
   setUsers(users)
 }
 
-const addUser = (name, email, password) => {
+const addUser = (name, email, password, secretkey) => {
+  console.log('addUser')
+  console.log(name)
+  console.log(email)
   name = name.toLowerCase()
   email = email.toLowerCase()
 
   if (userExists(email)) return
 
   const created = new Date().toISOString()
-  const user = { name, email, password, created }
+  const user = { name, email, password, created, secretkey }
   const users = getUsers()
   users.push(user)
   setUsers(users)
@@ -54,7 +57,10 @@ const verifyUser = (email, password) => {
   const verifiedUser = users.find(
     user => email === user.email && password === user.password
   )
-  verifiedUser && setUser(verifiedUser)
+
+  if (!verifiedUser) return
+
+  setUser(verifiedUser)
 
   return verifiedUser
 }
@@ -108,4 +114,5 @@ export {
   updateUser,
   removeUser,
   deleteUser,
+  userExists,
 }
