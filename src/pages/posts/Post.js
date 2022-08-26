@@ -85,6 +85,7 @@ function Post() {
           minHeight: '200px',
           marginBottom: '3rem',
           borderRadius: '25px',
+          padding: '10px',
         }}
       >
         <Typography variant={'h5'} sx={{ padding: 2 }}>

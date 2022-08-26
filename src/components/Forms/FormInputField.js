@@ -6,7 +6,7 @@ import {
 } from '@mui/material'
 
 const FormInputField = props => {
-  const { id, label, register, errors } = props
+  const { id, label, register, errors, defaultValue } = props
 
   return (
     <FormControl error={errors ? true : false} fullWidth sx={{ mt: 1 }}>
@@ -15,6 +15,7 @@ const FormInputField = props => {
         id={id}
         name={id}
         label={label}
+        defaultValue={defaultValue}
         type={
           id === 'password' || id === 'confirmPassword' ? 'password' : undefined
         }

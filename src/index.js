@@ -7,6 +7,7 @@ import { AuthContextProvider } from './contexts/AuthContext'
 import { BrowserRouter } from 'react-router-dom'
 import { initUsers } from './data/users'
 import { NotificationContextProvider } from './contexts/NotificationContext'
+import ScrollToTop from './helpers/ScrollToTop'
 import { initPosts } from './data/posts'
 initUsers()
 initPosts()
@@ -17,6 +18,7 @@ root.render(
     <BrowserRouter>
       <AuthContextProvider>
         <NotificationContextProvider>
+          <ScrollToTop />
           <App />
         </NotificationContextProvider>
       </AuthContextProvider>

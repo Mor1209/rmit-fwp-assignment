@@ -24,6 +24,8 @@ const nameSchema = yup
 
 const registerSchema = loginSchema.concat(nameSchema)
 
+const mfaSchema = yup.object({ token: yup.string().required() }).required()
+
 export const useUserValidation = (schema, onSubmit) => {
   const {
     register,
@@ -41,3 +43,6 @@ export const useRegisterValidation = onSubmit =>
 
 export const useLoginValidation = onSubmit =>
   useUserValidation(loginSchema, onSubmit)
+
+export const useMfaValidation = onSubmit =>
+  useUserValidation(mfaSchema, onSubmit)

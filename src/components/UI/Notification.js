@@ -18,13 +18,13 @@ const Notification = () => {
   return (
     <Snackbar
       open={!!notification.message}
-      autoHideDuration={6000}
+      autoHideDuration={4000}
       onClose={resetNotification}
-      sx={{ mt: 4 }}
+      sx={{ mt: 8 }}
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       TransitionComponent={Fade}
     >
-      <Alert elevation={5} sx={{ width: '100%' }} {...alertProps}>
+      <Alert elevation={5} {...alertProps}>
         {notification.message}
       </Alert>
     </Snackbar>
