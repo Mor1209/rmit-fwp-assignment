@@ -1,22 +1,31 @@
 import { Container } from '@mui/material'
-import { createPost } from '../../data/posts'
-import { getUser } from '../../data/users'
+
+import { editPost, getPostById } from '../../data/posts'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { imageUpload } from '../../firebase'
-import CreatePostForm from '../../components/Forms/CreatePostForm'
+import EditPostForm from '../../components/Forms/EditPostForm'
+import { useParams } from 'react-router'
 
-function CreatePost() {
+function EditPost() {
+  const params = useParams()
+
   const { sendNotification } = useNotificationContext()
-
+  const [oldPost, setOldPost] = useState(null)
   const [isLoading, setLoading] = useState(false)
-  const author = getUser()
   const navigate = useNavigate()
 
+  useEffect(() => {
+    // get old post data
+    const { post } = getPostById(params.id)
+    setOldPost(post)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const onSubmit = async data => {
-    // save the inputed data
     setLoading(true)
+
     const url = await imageUpload(data.image[0])
 
     if (url === 'error') {
@@ -26,13 +35,13 @@ function CreatePost() {
 
     const post = {
       ...data,
+      id: oldPost.id,
       image: url,
-      author: author.name,
     }
 
-    createPost(post)
+    editPost(post)
     setLoading(false)
-    sendNotification('success', 'Post created', false)
+    sendNotification('success', 'Post Updated', false)
     navigate('/posts')
   }
 
@@ -47,10 +56,10 @@ function CreatePost() {
         width: '50%',
       }}
     >
-      <h1> Create a Post </h1>
-      <CreatePostForm onSubmit={onSubmit} loading={isLoading} />
+      <h1> Edit a Post </h1>
+      <EditPostForm loading={isLoading} onSubmit={onSubmit} oldData={oldPost} />
     </Container>
   )
 }
 
-export default CreatePost
+export default EditPost

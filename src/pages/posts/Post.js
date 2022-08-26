@@ -14,9 +14,10 @@ function Post() {
   const [selectedComment, setSelectedComment] = useState(null)
   const [comments, setComments] = useState([])
   const { sendNotification } = useNotificationContext()
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
   useEffect(() => {
+    // get both post and post's comments
     const { post, comments } = getPostById(params.id)
     setPost(post)
     setComments(comments)
@@ -51,6 +52,7 @@ function Post() {
           minHeight: '300px',
         }}
       >
+        {/* render out post data and display image if any */}
         {post && (
           <>
             <Typography m={2} variant={'h3'}>
@@ -74,6 +76,7 @@ function Post() {
           ></img>
         )}
       </Container>
+      {/* render the comment section */}
       <Container
         sx={{
           color: 'black',
@@ -93,7 +96,7 @@ function Post() {
           submit={addComment}
           postId={post?.id}
           parentId={null}
-          loading={loading}
+          loading={isLoading}
         />
 
         <hr />
@@ -109,6 +112,7 @@ function Post() {
                   addComment={addComment}
                   postId={post?.id}
                   getReplies={getCommentReplies}
+                  loading={isLoading}
                 />
               )
             return null

@@ -24,10 +24,12 @@ function AllPosts() {
   const user = getUser()
 
   useEffect(() => {
+    // fetching for all posts
     setPosts(getAllPosts())
   }, [])
 
   const handleDeletePost = id => {
+    // delete a post
     const remainPosts = deletePost(id)
     if (remainPosts === null) {
       sendNotification('error', 'Unable to Delete Post', false)
@@ -69,6 +71,7 @@ function AllPosts() {
         justify="flex-start"
         alignItems="flex-start"
       >
+        {/* redner all the posts that's in localstroage */}
         {posts &&
           posts.map(post => {
             return (
@@ -102,6 +105,13 @@ function AllPosts() {
                       onClick={() => handleDeletePost(post.id)}
                     >
                       Delete
+                    </Button>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => navigate(`/posts/edit/${post.id}`)}
+                    >
+                      Edit
                     </Button>
                     <Button
                       size="small"

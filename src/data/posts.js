@@ -1,76 +1,86 @@
 import { imageUpload } from '../firebase'
 
-const initPosts = () => {
-  if (localStorage.getItem('posts') !== null) return
+const POSTS_KEY = 'posts'
+const COMMENTS_KEY = 'comments'
 
-  localStorage.setItem('posts', JSON.stringify([]))
-  localStorage.setItem('comments', JSON.stringify([]))
+const initPosts = () => {
+  if (
+    localStorage.getItem(POSTS_KEY) !== null &&
+    localStorage.getItem(COMMENTS_KEY) !== null
+  )
+    return
+
+  localStorage.setItem(POSTS_KEY, JSON.stringify([]))
+  localStorage.setItem(COMMENTS_KEY, JSON.stringify([]))
 }
 
 const getAllPosts = () => {
-  return JSON.parse(localStorage.getItem('posts'))
+  return JSON.parse(localStorage.getItem(POSTS_KEY))
+}
+
+const getAllComments = () => {
+  return JSON.parse(localStorage.getItem(COMMENTS_KEY))
 }
 
 const getPostById = id => {
-  const posts = getAllPosts()
-  const post = posts.find(post => post.id === parseInt(id))
-  let comments = JSON.parse(localStorage.getItem('comments'))
-
-  if (comments === null) {
-    comments = []
-  } else {
-    comments = comments.filter(comment => comment.postId === parseInt(id))
-  }
+  const post = getAllPosts().find(post => post.id === parseInt(id))
+  const comments = getAllComments().filter(
+    comment => comment.postId === parseInt(id)
+  )
 
   return { post, comments }
 }
 
+const generateId = array => {
+  return array.length > 0 ? array.at(-1).id + 1 : 0
+}
+
 const createPost = post => {
   let posts = getAllPosts()
-  if (posts !== null && posts.length > 0) {
-    const lastPost = posts.at(-1)
-    post['id'] = lastPost.id + 1
-  } else {
-    post['id'] = 1
-  }
+  const id = generateId(posts)
+  post['id'] = id
   posts.push(post)
-  localStorage.setItem('posts', JSON.stringify(posts))
+  localStorage.setItem(POSTS_KEY, JSON.stringify(posts))
+}
+
+const editPost = newPost => {
+  // update old post data with new post
+  let posts = getAllPosts()
+  const i = posts.findIndex(post => post.id === parseInt(newPost.id))
+  posts[i] = newPost
+  localStorage.setItem(POSTS_KEY, JSON.stringify(posts))
 }
 
 const createComment = async (comment, postId, parentId) => {
-  let comments = JSON.parse(localStorage.getItem('comments'))
-  if (comments === null) comments = []
+  let comments = JSON.parse(localStorage.getItem(COMMENTS_KEY))
+  const id = generateId(comments)
 
   const url = await imageUpload(comment.image[0])
-
+  comment['id'] = id
   comment['parentId'] = parentId
   comment['postId'] = postId
   comment['image'] = url
 
-  if (comments.length > 0) {
-    const lastComment = comments.at(-1)
-    comment['id'] = lastComment.id + 1
-  } else {
-    comment['id'] = 1
-  }
   comments.push(comment)
-  localStorage.setItem('comments', JSON.stringify(comments))
+  localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments))
   return comment
 }
 
 const deletePost = id => {
-  let posts = JSON.parse(localStorage.getItem('posts'))
+  // delete post data and relevant comments
+
+  let posts = JSON.parse(localStorage.getItem(POSTS_KEY))
+  console.log(posts)
   if (posts === null) return false
 
-  posts = posts.filter(post => post.id !== id)
+  posts = posts.filter(post => post.id !== parseInt(id))
 
-  const comments = JSON.parse(localStorage.getItem('comments')).filter(
+  const comments = JSON.parse(localStorage.getItem(COMMENTS_KEY)).filter(
     comment => comment.postId !== id
   )
 
-  console.log(comments)
-  localStorage.setItem('posts', JSON.stringify(posts))
-  localStorage.setItem('comments', JSON.stringify(comments))
+  localStorage.setItem(POSTS_KEY, JSON.stringify(posts))
+  localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments))
   return posts
 }
 
@@ -81,4 +91,5 @@ export {
   getPostById,
   createComment,
   deletePost,
+  editPost,
 }

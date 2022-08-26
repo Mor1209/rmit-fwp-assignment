@@ -1,5 +1,6 @@
-import { FormControl, TextField, Button, Alert } from '@mui/material'
+import { Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import PostInputField from './PostInputField'
 
 function CommentForm({ type, submit, postId, parentId, loading }) {
   const {
@@ -13,24 +14,12 @@ function CommentForm({ type, submit, postId, parentId, loading }) {
     <form
       onSubmit={handleSubmit(data => submit(data, postId, parentId, reset))}
     >
-      <FormControl fullWidth sx={{ marginTop: 1 }} variant="standard">
-        <TextField
-          placeholder="Write down the content"
-          multiline
-          rows={2}
-          error={!!errors.content}
-          {...register('comment', {
-            required: 'This field is required',
-            maxLength: 250,
-          })}
-        />
-        {errors.comment && errors.comment.type === 'required' && (
-          <Alert severity="error">{errors.comment.message}</Alert>
-        )}
-        {errors.comment && errors.comment.type === 'maxLength' && (
-          <Alert severity="error">Max length of a comment reached</Alert>
-        )}
-      </FormControl>
+      <PostInputField
+        errors={errors}
+        register={register}
+        label={'comment'}
+        rows={2}
+      />
       <Button
         variant={'contained'}
         sx={{ width: '20%', margin: 2 }}

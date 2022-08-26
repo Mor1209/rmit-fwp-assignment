@@ -1,16 +1,18 @@
 import { Paper, Avatar, Grid, Typography, Button } from '@mui/material'
 import CommentForm from '../Forms/CommentForm'
 
-function Comment({
-  comment,
-  selectedComment,
-  setSelectedComment,
-  addComment,
-  postId,
-  getReplies,
-}) {
-  const replies = getReplies(comment.id)
+function Comment(props) {
+  const {
+    comment,
+    selectedComment,
+    setSelectedComment,
+    addComment,
+    postId,
+    getReplies,
+    loading,
+  } = props
 
+  const replies = getReplies(comment.id)
   const selected = selectedComment && selectedComment.id === comment.id
 
   return (
@@ -30,7 +32,7 @@ function Comment({
                   marginTop: '8px',
                 }}
               >
-                {comment?.image && (
+                {comment.image && (
                   <img
                     src={comment.image}
                     alt="uploadedImage"
@@ -50,28 +52,21 @@ function Comment({
           </Grid>
         </Grid>
 
+        {/* display reply form */}
         {selected ? (
           <CommentForm
             submit={addComment}
             parentId={comment.id}
             postId={postId}
+            loading={loading}
           />
         ) : null}
 
         <Grid item>
+          {/* redner all the comment replies */}
           {replies !== null &&
             replies.map(replies => {
-              return (
-                <Comment
-                  key={replies.id}
-                  comment={replies}
-                  getReplies={getReplies}
-                  selectedComment={selectedComment}
-                  setSelectedComment={setSelectedComment}
-                  addComment={addComment}
-                  postId={postId}
-                />
-              )
+              return <Comment {...props} key={replies.id} comment={replies} />
             })}
         </Grid>
       </Grid>
