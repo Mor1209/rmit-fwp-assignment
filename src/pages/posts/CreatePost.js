@@ -15,20 +15,33 @@ import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
+import { imageUpload } from '../../firebase'
 
 function CreatePost() {
   const { sendNotification } = useNotificationContext()
+  const [image, setImage] = useState(null)
+
   const [loading, setLoading] = useState(false)
   const author = getUser()
   const navigate = useNavigate()
 
-  const onSubmit = (data, e) => {
+  const onSubmit = async data => {
     setLoading(true)
+
+    const url = await imageUpload(data.image[0])
+
+    if (url === 'error') {
+      sendNotification('error', 'Failed to Upload Image', false)
+      return
+    }
+
     const post = {
       title: data.title,
       content: data.content,
       author: author.name,
+      image: url,
     }
+
     createPost(post)
     setLoading(false)
     sendNotification('success', 'Post created', false)
@@ -88,8 +101,30 @@ function CreatePost() {
             <Alert severity="error">Max length of a post reached</Alert>
           )}
         </FormControl>
+        {image && (
+          <img
+            src={URL.createObjectURL(image)}
+            alt="userimage"
+            style={{
+              height: 'auto',
+              maxWidth: '130px',
+              verticalAlign: 'middle',
+              width: '100%',
+              display: 'flex',
+              padding: 10,
+              margin: 10,
+              borderRadius: '25px',
+              backgroundColor: 'grey',
+            }}
+          />
+        )}
         <Box m={2} justifyContent={'space-between'} display={'flex'}>
-          <input type="file" id="myfile" name="myfile" />
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            {...register('image')}
+          />
           <Button
             variant={'contained'}
             sx={{ width: '20%' }}

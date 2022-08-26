@@ -1,3 +1,5 @@
+import { imageUpload } from '../firebase'
+
 const initPosts = () => {
   if (localStorage.getItem('posts') !== null) return
 
@@ -35,12 +37,15 @@ const createPost = post => {
   localStorage.setItem('posts', JSON.stringify(posts))
 }
 
-const createComment = (comment, postId, parentId) => {
+const createComment = async (comment, postId, parentId) => {
   let comments = JSON.parse(localStorage.getItem('comments'))
   if (comments === null) comments = []
 
+  const url = await imageUpload(comment.image[0])
+
   comment['parentId'] = parentId
   comment['postId'] = postId
+  comment['image'] = url
 
   if (comments.length > 0) {
     const lastComment = comments.at(-1)

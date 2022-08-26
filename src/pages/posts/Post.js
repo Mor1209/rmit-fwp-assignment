@@ -1,18 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from 'react-router'
 import { useEffect, useState } from 'react'
-// import BannerImage from '../../assets/r.webp'
 import { Container, Typography } from '@mui/material'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
 import { createComment, getPostById } from '../../data/posts'
+import { useNotificationContext } from '../../hooks/useNotificationContext'
 
 function Post() {
   const params = useParams()
   const [post, setPost] = useState(null)
   const [selectedComment, setSelectedComment] = useState(null)
   const [comments, setComments] = useState([])
+  const { sendNotification } = useNotificationContext()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const { post, comments } = getPostById(params.id)
@@ -20,10 +22,19 @@ function Post() {
     setComments(comments)
   }, [])
 
-  const addComment = (data, postId, parentId) => {
-    const newComment = createComment(data, postId, parentId)
+  const addComment = async (data, postId, parentId, reset) => {
+    setLoading(true)
+    const newComment = await createComment(data, postId, parentId)
+
+    if (newComment === 'error') {
+      sendNotification('error', 'Failed to Upload Image', false)
+      return
+    }
+
     setComments([...comments, newComment])
     setSelectedComment(null)
+    reset()
+    setLoading(false)
   }
 
   const getCommentReplies = id => {
@@ -48,6 +59,20 @@ function Post() {
             <p>{post.content}</p>
           </>
         )}
+
+        {post?.image && (
+          <img
+            src={post?.image}
+            alt="uploadedImage"
+            style={{
+              margin: 5,
+              padding: 10,
+              height: 160,
+              weidth: 160,
+              objectFit: 'fit',
+            }}
+          ></img>
+        )}
       </Container>
       <Container
         sx={{
@@ -68,6 +93,7 @@ function Post() {
           submit={addComment}
           postId={post?.id}
           parentId={null}
+          loading={loading}
         />
 
         <hr />

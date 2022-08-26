@@ -30,6 +30,14 @@ function Comment({
                   marginTop: '8px',
                 }}
               >
+                {comment?.image && (
+                  <img
+                    src={comment.image}
+                    alt="uploadedImage"
+                    style={{ display: 'block', height: 100, width: 100 }}
+                  />
+                )}
+
                 <Button
                   onClick={() => {
                     setSelectedComment({ id: comment.id })

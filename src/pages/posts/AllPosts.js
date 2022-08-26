@@ -14,6 +14,7 @@ import { getUser } from '../../data/users'
 import { useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
+import cardImage from '../../assets/r.webp'
 
 function AllPosts() {
   const [posts, setPosts] = useState()
@@ -76,7 +77,7 @@ function AllPosts() {
                   <CardMedia
                     component="img"
                     height="140"
-                    image={require('../../assets/r.webp')}
+                    image={post.image !== null ? post.image : cardImage}
                     alt="image"
                   />
                   <CardContent>
