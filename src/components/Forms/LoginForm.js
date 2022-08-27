@@ -41,12 +41,12 @@ export const LoginForm = () => {
           <BasicForm
             validation={formValidation2}
             inputFieldLabels={inputFields2}
-            formName={'Add MFA'}
-            submitButtonName={'Register'}
+            formName={'Identity Check'}
+            submitButtonName={'Login'}
             stepBackHandler={() => setStep(1)}
           >
-            <Typography>
-              Please open your authenticator and enter your token
+            <Typography variant="h6" pt={1} mb={6}>
+              Please open your authenticator app and enter your token
             </Typography>
           </BasicForm>
         </>

@@ -6,9 +6,11 @@ import {
   Input,
   Alert,
   Button,
+  Stack,
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import PostInputField from './PostInputField'
+import FormInputField from './FormInputField'
 
 export default function CreatePostForm({ onSubmit, loading }) {
   const {
@@ -21,7 +23,7 @@ export default function CreatePostForm({ onSubmit, loading }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl fullWidth sx={{ m: 1 }}>
+      {/* <FormControl fullWidth sx={{ m: 1 }}>
         <InputLabel htmlFor="standard-adornment-amount">Title</InputLabel>
         <Input
           error={!!errors.title}
@@ -34,14 +36,29 @@ export default function CreatePostForm({ onSubmit, loading }) {
           Title
         </Input>
         {errors.title && <Alert severity="error">{errors.title.message}</Alert>}
-      </FormControl>
+      </FormControl> */}
+      <FormInputField
+        id="2"
+        register={register}
+        errors={errors}
+        label="Title"
+        variant="standard"
+      />
+      <FormInputField
+        id="1"
+        register={register}
+        errors={errors}
+        placeholder="Write down the content"
+        multiline
+        rows={10}
+      />
 
-      <PostInputField
+      {/* <PostInputField
         errors={errors}
         label={'content'}
         rows={10}
         register={register}
-      />
+      /> */}
 
       {/* display uploaded image under the form */}
       {image && (
@@ -62,7 +79,7 @@ export default function CreatePostForm({ onSubmit, loading }) {
         />
       )}
 
-      <Box m={2} justifyContent={'space-between'} display={'flex'}>
+      <Stack m={2} direction="row" justifyContent="space-between">
         <input
           type="file"
           name="image"
@@ -79,7 +96,7 @@ export default function CreatePostForm({ onSubmit, loading }) {
         >
           Post
         </Button>
-      </Box>
+      </Stack>
     </form>
   )
 }

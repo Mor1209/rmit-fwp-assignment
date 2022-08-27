@@ -29,6 +29,7 @@ const EditUserForm = props => {
       validation={validation}
       inputFieldLabels={inputFields}
       formName={'Edit'}
+      submitButtonName="Edit"
     />
   )
 }

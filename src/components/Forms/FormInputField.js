@@ -3,23 +3,47 @@ import {
   InputLabel,
   OutlinedInput,
   FormHelperText,
+  TextField,
+  InputAdornment,
 } from '@mui/material'
 
 const FormInputField = props => {
-  const { id, label, register, errors, defaultValue } = props
+  const {
+    id,
+    label,
+    register,
+    errors,
+    defaultValue,
+    placeholder,
+    multiline,
+    rows,
+    variant,
+  } = props
 
   return (
     <FormControl error={errors ? true : false} fullWidth sx={{ mt: 1 }}>
-      <InputLabel htmlFor={id}>{label}</InputLabel>
-      <OutlinedInput
+      {/* {!label && !variant && <InputLabel htmlFor={id}>{label}</InputLabel>} */}
+      <TextField
         id={id}
         name={id}
         label={label}
         defaultValue={defaultValue}
+        placeholder={placeholder}
+        multiline={multiline}
+        rows={rows}
+        variant={variant ? variant : 'outlined'}
         type={
           id === 'password' || id === 'confirmPassword' ? 'password' : undefined
         }
         {...register(id)}
+        sx={{
+          '& label': {
+            marginLeft: variant && 1,
+            '&.Mui-focused': {
+              marginLeft: variant && 1,
+            },
+          },
+        }}
       />
       <FormHelperText>
         {errors?.message &&
