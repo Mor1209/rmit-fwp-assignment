@@ -2,6 +2,7 @@ import { Paper, Avatar, Grid, Typography, Button } from '@mui/material'
 import { getUserById } from '../../data/users'
 import CommentForm from '../Forms/CommentForm'
 import capitalize from '../../helpers/capitalize'
+import UserAvatar from '../UI/UserAvatar'
 
 function Comment(props) {
   const {
@@ -27,7 +28,7 @@ function Comment(props) {
         <Grid item>
           <Grid container wrap="nowrap" spacing={2} sx={{}}>
             <Grid item>
-              <Avatar alt="user" />
+              <UserAvatar name={user.name} />
             </Grid>
             <Grid item>
               <Typography variant="h6" sx={{ pb: 0.5 }}>

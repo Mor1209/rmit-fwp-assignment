@@ -4,11 +4,16 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 
 const UserAvatar = props => {
   const authCtx = useAuthContext()
-  const name = authCtx.user.name
+
+  let name = props.name
+  if (!name) {
+    name = authCtx.user.name
+  }
+
   const nameSplit = name.split(' ')
   let nameInitials = nameSplit.at(0).charAt(0).toUpperCase()
   nameInitials +=
-    nameSplit.length > 1 ? nameSplit?.at(1)?.charAt(0)?.toUpperCase() : 'H'
+    nameSplit.length > 1 ? nameSplit?.at(1)?.charAt(0)?.toUpperCase() : ''
 
   const avatarProps = {
     bgcolor: 'gold',
