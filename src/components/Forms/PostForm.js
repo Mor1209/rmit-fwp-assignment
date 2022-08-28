@@ -19,7 +19,7 @@ export default function CreatePostForm({
   formName,
   defaultValue,
 }) {
-  const { errors, submitHandler, register } = usePostValidation(onSubmit)
+  const { errors, submitHandler, register } = usePostValidation()
 
   const [image, setImage] = useState('')
 
@@ -27,7 +27,7 @@ export default function CreatePostForm({
     <Container maxWidth="md">
       <Paper sx={{ padding: 4 }}>
         <Typography variant="h3">{formName}</Typography>
-        <Box component="form" onSubmit={submitHandler}>
+        <Box component="form" onSubmit={submitHandler(onSubmit)}>
           <FormInputField
             id="title"
             name="title"
@@ -35,7 +35,7 @@ export default function CreatePostForm({
             errors={errors['title']}
             label="Title"
             variant="standard"
-            defaultValue={defaultValue.title}
+            defaultValue={defaultValue?.title}
           />
           <FormInputField
             id="content"
@@ -44,7 +44,7 @@ export default function CreatePostForm({
             errors={errors['content']}
             placeholder="Write down the content"
             multiline
-            defaultValue={defaultValue.content}
+            defaultValue={defaultValue?.content}
             rows={10}
           />
 

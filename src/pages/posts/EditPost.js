@@ -1,8 +1,6 @@
-import { Container } from '@mui/material'
-
 import { editPost, getPostById } from '../../data/posts'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { imageUpload } from '../../firebase'
 import PostForm from '../../components/Forms/PostForm'

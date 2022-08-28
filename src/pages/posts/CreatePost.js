@@ -1,4 +1,3 @@
-import { Container } from '@mui/material'
 import { createPost } from '../../data/posts'
 import { getUser } from '../../data/users'
 import { useNotificationContext } from '../../hooks/useNotificationContext'

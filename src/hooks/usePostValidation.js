@@ -5,10 +5,8 @@ import * as yup from 'yup'
 const MAX_FILE_SIZE = 55000000
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png']
 
-const postSchema = yup
+const imageSchema = yup
   .object({
-    title: yup.string().min(1).max(20).required(),
-    content: yup.string().min(10).max(250).required(),
     image: yup
       .mixed()
       .test(
@@ -25,14 +23,35 @@ const postSchema = yup
   })
   .required()
 
-export const usePostValidation = onSubmit => {
+const titleContentSchema = yup
+  .object({
+    title: yup.string().min(1).max(20).required(),
+    content: yup.string().min(10).max(250).required(),
+  })
+  .required()
+
+const commentString = yup
+  .object({
+    comment: yup.string().min(4).max(200).required(),
+  })
+  .required()
+
+const postSchema = imageSchema.concat(titleContentSchema)
+const commentSchema = imageSchema.concat(commentString)
+
+export const useValidation = schema => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
-    resolver: yupResolver(postSchema),
+    resolver: yupResolver(schema),
   })
 
-  return { submitHandler: handleSubmit(onSubmit), errors, register }
+  return { submitHandler: handleSubmit, errors, register, reset }
 }
+
+export const usePostValidation = () => useValidation(postSchema)
+
+export const useCommentValidation = () => useValidation(commentSchema)
