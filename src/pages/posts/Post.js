@@ -77,6 +77,7 @@ function Post() {
               spacing={5}
               p={5}
             >
+              {/* make the image on the left of the paragraph */}
               {post?.image && (
                 <img
                   src={post?.image}
@@ -106,6 +107,7 @@ function Post() {
           </>
         )}
       </Container>
+
       {/* render the comment section */}
       <Container
         sx={{
@@ -135,6 +137,7 @@ function Post() {
         <hr />
         {comments &&
           comments.map(comment => {
+            // only render the root comments not replies
             if (comment.parentId === null)
               return (
                 <Comment

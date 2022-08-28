@@ -42,6 +42,7 @@ function EditPost() {
   }
 
   return (
+    // allow user to edit post's information include, title, content, and image
     <PostForm
       loading={isLoading}
       onSubmit={onSubmit}

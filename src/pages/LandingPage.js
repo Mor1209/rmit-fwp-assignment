@@ -96,7 +96,7 @@ function LandingPage() {
       <Typography
         variant="h5"
         sx={{
-          color: 'black',
+          color: 'white',
           fontWeight: 'bold',
           fontSize: '2rem',
           marginTop: '70px',
@@ -115,9 +115,10 @@ function LandingPage() {
         marginTop={1}
         marginBottom={5}
       >
+        {/* sample popular posts for home page */}
         {items.map(page => (
           <Grid item key={page.title}>
-            <Card sx={{ width: 350, minHeight: '350px' }}>
+            <Card sx={{ width: 350, minHeight: '250px' }}>
               <CardMedia component="img" height="140" image={ThumbImage} />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">

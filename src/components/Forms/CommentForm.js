@@ -28,7 +28,6 @@ function CommentForm({ type, submit, postId, parentId, loading }) {
         errors={errors['comment']}
         placeholder="Write down your comment"
         multiline
-        // defaultValue={defaultValue.content}
         rows={5}
       />
 

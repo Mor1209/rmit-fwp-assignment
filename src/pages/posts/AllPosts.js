@@ -49,6 +49,7 @@ function AllPosts() {
         All Posts
       </Typography>
       <Box m={1} display={'flex'} justifyContent={'space-between'}>
+        {/* filter button that only displays posts made by the current logged in user */}
         {filteredPosts === allPosts ? (
           <Button
             variant="contained"
@@ -117,6 +118,7 @@ function AllPosts() {
                       padding: '10px',
                     }}
                   >
+                    {/* only the author of the post can delete and edit the post */}
                     {user.userId === post.userId ? (
                       <>
                         <Button

@@ -15,11 +15,6 @@ import { useState } from 'react'
 import { Container } from '@mui/system'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-const menuButtons = [
-  { name: 'home', url: '' },
-  { name: 'posts', url: 'posts' },
-]
-
 function Navbar() {
   const authCtx = useAuthContext()
   const navigate = useNavigate()
@@ -122,6 +117,14 @@ function Navbar() {
       </Box>
     </>
   )
+
+  const menuButtons = authCtx.isAuth
+    ? [
+        { name: 'home', url: '' },
+        { name: 'posts', url: 'posts' },
+      ]
+    : [{ name: 'home', url: '' }]
+
   return (
     <AppBar
       position="sticky"
