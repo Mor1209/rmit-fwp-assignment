@@ -10,6 +10,8 @@ const initUsers = () => {
   if (getUsers()) return
 
   // User data is hard-coded, passwords are in plain-text.
+  // cannot use at the moment without the registering
+  // the secret token
   const users = [
     {
       name: 'moritz',

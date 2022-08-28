@@ -11,6 +11,8 @@ function BannerImage({ url }) {
         backgroundSize: 'cover',
         minHeight: '30vh',
         height: '20rem',
+        borderTopLeftRadius: 4,
+        borderTopRightRadius: 4,
       }}
     />
   )
