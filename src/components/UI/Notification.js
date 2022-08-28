@@ -2,6 +2,10 @@ import { Alert, Fade, Snackbar } from '@mui/material'
 import React from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 
+// Notification popup component which renders inside the header
+// to display notifications with diffrent severity.
+// Display new notification by setting a new notification state
+// inside the notificationContext
 const Notification = () => {
   const { notification, resetNotification } = useNotificationContext()
 

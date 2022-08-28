@@ -2,7 +2,11 @@ import { Box, Typography, Button, IconButton } from '@mui/material'
 import FormInputField from './FormInputField'
 import { ArrowBack } from '@mui/icons-material'
 
+// A basic form with text input fields and form validation
+// requeries to be given the values of react hook form in props validation
+// and all details for every input field
 const BasicForm = props => {
+  // validation from react hook form
   const { errors, submitHandler, register } = props.validation
 
   const toCamelCase = str =>

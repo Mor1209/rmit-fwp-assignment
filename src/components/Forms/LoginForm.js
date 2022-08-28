@@ -7,6 +7,9 @@ import {
 import { useState } from 'react'
 import { Typography } from '@mui/material'
 
+// Multi-step form for user login
+// step1: getting user details
+// step2: verifying mfa token
 export const LoginForm = () => {
   const { validate, login } = useLogin()
   const [step, setStep] = useState(1)
@@ -21,6 +24,7 @@ export const LoginForm = () => {
     setStep(2)
   }
 
+  // Step2: Adding user to local storage and context upon success
   const onSubmit = data => login(data.token)
 
   const formValidation1 = useLoginValidation(onStep1)

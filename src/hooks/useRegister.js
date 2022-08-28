@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import * as qrcode from 'qrcode'
 const speakeasy = require('speakeasy')
 
+// register functionality invoked from the register form
 export const useRegister = () => {
   const { sendNotification } = useNotificationContext()
   const { dispatchAuth } = useAuthContext()
@@ -20,8 +21,11 @@ export const useRegister = () => {
     console.log('useEffect')
     const getQr = async () => {
       try {
+        // generating secret with speakeasy
         const newSecret = speakeasy.generateSecret({ name: 'LoopAgileNow' })
         setSecret(newSecret)
+        // translating mfa register link to qr code
+        // to be used in authenticator app to get token for user
         const qrDataURL = await qrcode.toDataURL(newSecret.otpauth_url)
         console.log(qrDataURL)
         setQr(qrDataURL)

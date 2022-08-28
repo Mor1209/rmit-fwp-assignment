@@ -1,5 +1,6 @@
 import banner from '../../assets/r.webp'
 
+// Banner image displayed at top of posts
 function BannerImage({ url }) {
   const image = url === null ? banner : url
   return (

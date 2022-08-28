@@ -40,6 +40,8 @@ function Navbar() {
     }
   }
 
+  // change backgound to solid color when scrolled
+  // for better visibllity
   const handleBackgroundChange = () => {
     if (window.scrollY > 50) {
       setBackground(true)

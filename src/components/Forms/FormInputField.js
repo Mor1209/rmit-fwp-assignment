@@ -1,5 +1,6 @@
 import { FormControl, FormHelperText, TextField } from '@mui/material'
 
+// FormInputField is a customizable mui text field to be used in forms
 const FormInputField = props => {
   const {
     id,
@@ -15,7 +16,6 @@ const FormInputField = props => {
 
   return (
     <FormControl error={errors ? true : false} fullWidth sx={{ mt: 1 }}>
-      {/* {!label && !variant && <InputLabel htmlFor={id}>{label}</InputLabel>} */}
       <TextField
         id={id}
         name={id}

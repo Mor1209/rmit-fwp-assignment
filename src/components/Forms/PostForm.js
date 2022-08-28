@@ -13,6 +13,7 @@ import FormInputField from './FormInputField'
 import { usePostValidation } from '../../hooks/usePostValidation'
 import { Container } from '@mui/system'
 
+// Multi-purpose form for creating posts and editing them
 export default function CreatePostForm({
   onSubmit,
   loading,

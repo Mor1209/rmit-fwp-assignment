@@ -1,3 +1,4 @@
+// Helper function to capitalize every word in a string
 const capitalize = str =>
   str
     ?.split(' ')

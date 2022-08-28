@@ -2,6 +2,7 @@ import { Avatar } from '@mui/material'
 import React from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 
+// User avater which displayes initials of the user name
 const UserAvatar = props => {
   const authCtx = useAuthContext()
 

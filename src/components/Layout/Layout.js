@@ -4,10 +4,12 @@ import Footer from './Footer'
 import Header from './Header'
 import HeroImg from '../../assets/t.webp'
 
+// Layout for the Application
 const Layout = props => {
   return (
     <>
       <CssBaseline />
+      {/* Hero image to be displayed as background on every page*/}
       <Box
         sx={{
           textAlign: 'center',

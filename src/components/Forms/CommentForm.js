@@ -11,9 +11,9 @@ import { useCommentValidation } from '../../hooks/usePostValidation'
 import FormInputField from './FormInputField'
 import { useAuthContext } from '../../hooks/useAuthContext'
 
+// Form for adding comments to posts
 function CommentForm({ type, submit, postId, parentId, loading }) {
   const { user } = useAuthContext()
-  console.log(user)
   const { errors, submitHandler, register, reset } = useCommentValidation()
 
   const onSubmit = data => {

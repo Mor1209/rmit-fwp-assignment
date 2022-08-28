@@ -17,10 +17,7 @@ function Comment(props) {
 
   const replies = getReplies(comment.id)
   const selected = selectedComment && selectedComment.id === comment.id
-
   const user = getUserById(comment.userId)
-
-  console.log(user)
 
   return (
     <Paper sx={{ padding: '20px 25px', margin: 2 }} elevation={4}>

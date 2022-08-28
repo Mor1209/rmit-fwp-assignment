@@ -3,6 +3,7 @@ import UserAvatar from '../UI/UserAvatar'
 import EditUser from './EditUser'
 import UserProfileDetails from './UserProfileDetails'
 
+// User Profile wrapper, which includes the edit user actions and user details
 const UserProfile = () => {
   return (
     <Paper elevation={5} sx={{ overflow: 'hidden' }}>

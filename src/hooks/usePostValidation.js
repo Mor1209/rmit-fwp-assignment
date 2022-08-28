@@ -5,6 +5,7 @@ import * as yup from 'yup'
 const MAX_FILE_SIZE = 55000000
 const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp']
 
+// Yup validation schemas for posts and comments
 const imageSchema = yup
   .object({
     image: yup
