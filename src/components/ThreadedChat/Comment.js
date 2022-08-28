@@ -1,4 +1,4 @@
-import { Paper, Avatar, Grid, Typography, Button } from '@mui/material'
+import { Paper, Grid, Typography, Button } from '@mui/material'
 import { getUserById } from '../../data/users'
 import CommentForm from '../Forms/CommentForm'
 import capitalize from '../../helpers/capitalize'
