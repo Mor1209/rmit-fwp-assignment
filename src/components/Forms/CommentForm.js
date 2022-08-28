@@ -1,6 +1,6 @@
 import { Button } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import PostInputField from './PostInputField'
+import FormInputField from './FormInputField'
 
 function CommentForm({ type, submit, postId, parentId, loading }) {
   const {
@@ -14,10 +14,13 @@ function CommentForm({ type, submit, postId, parentId, loading }) {
     <form
       onSubmit={handleSubmit(data => submit(data, postId, parentId, reset))}
     >
-      <PostInputField
-        errors={errors}
+      <FormInputField
+        id="comment"
+        name="comment"
         register={register}
-        label={'comment'}
+        errors={errors['comment']}
+        label="Comment"
+        multiline
         rows={2}
       />
       <Button

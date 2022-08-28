@@ -5,7 +5,7 @@ import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { imageUpload } from '../../firebase'
-import CreatePostForm from '../../components/Forms/CreatePostForm'
+import PostForm from '../../components/Forms/PostForm'
 
 function CreatePost() {
   const { sendNotification } = useNotificationContext()
@@ -16,6 +16,7 @@ function CreatePost() {
 
   const onSubmit = async data => {
     // save the inputed data
+    console.log(data)
     setLoading(true)
     const url = await imageUpload(data.image[0])
 
@@ -37,19 +38,11 @@ function CreatePost() {
   }
 
   return (
-    <Container
-      sx={{
-        height: '100%',
-        backgroundColor: 'white',
-        border: '2px',
-        borderRadius: '25px',
-        padding: '10px',
-        width: '50%',
-      }}
-    >
-      <h1> Create a Post </h1>
-      <CreatePostForm onSubmit={onSubmit} loading={isLoading} />
-    </Container>
+    <PostForm
+      onSubmit={onSubmit}
+      loading={isLoading}
+      formName="Create a Post"
+    />
   )
 }
 

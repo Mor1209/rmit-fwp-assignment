@@ -1,11 +1,4 @@
-import {
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  FormHelperText,
-  TextField,
-  InputAdornment,
-} from '@mui/material'
+import { FormControl, FormHelperText, TextField } from '@mui/material'
 
 const FormInputField = props => {
   const {
@@ -35,6 +28,7 @@ const FormInputField = props => {
         type={
           id === 'password' || id === 'confirmPassword' ? 'password' : undefined
         }
+        error={errors ? true : false}
         {...register(id)}
         sx={{
           '& label': {
