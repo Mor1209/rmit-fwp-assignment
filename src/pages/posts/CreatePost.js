@@ -15,7 +15,6 @@ function CreatePost() {
 
   const onSubmit = async data => {
     // save the inputed data
-    console.log(data)
     setLoading(true)
     const url = await imageUpload(data.image[0])
 

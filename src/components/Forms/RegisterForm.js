@@ -35,8 +35,6 @@ export const RegisterForm = () => {
 
   const formValidation1 = useRegisterValidation(onStep1)
   const formValidation2 = useMfaValidation(onSubmit)
-  console.log('secret recieved:')
-  console.log(secret)
 
   return (
     <>

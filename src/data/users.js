@@ -34,9 +34,6 @@ const initUsers = () => {
 }
 
 const addUser = (name, email, password, secretkey) => {
-  console.log('addUser')
-  console.log(name)
-  console.log(email)
   name = name.toLowerCase()
   email = email.toLowerCase()
 
@@ -85,7 +82,6 @@ const setUser = user => {
 const getUser = () => JSON.parse(localStorage.getItem(USER_KEY))
 
 const getUserById = userId => {
-  console.log(userId)
   const users = getUsers()
 
   return users.filter(user => user.userId === userId)[0]

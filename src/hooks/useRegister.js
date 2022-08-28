@@ -18,7 +18,6 @@ export const useRegister = () => {
   const [secret, setSecret] = useState({})
 
   useEffect(() => {
-    console.log('useEffect')
     const getQr = async () => {
       try {
         // generating secret with speakeasy
@@ -27,7 +26,6 @@ export const useRegister = () => {
         // translating mfa register link to qr code
         // to be used in authenticator app to get token for user
         const qrDataURL = await qrcode.toDataURL(newSecret.otpauth_url)
-        console.log(qrDataURL)
         setQr(qrDataURL)
       } catch (err) {
         console.error(err)
