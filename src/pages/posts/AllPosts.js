@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router'
 import { useEffect, useState } from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import cardImage from '../../assets/r.webp'
+import capitalize from '../../helpers/capitalize'
 
 function AllPosts() {
   const [posts, setPosts] = useState()
@@ -85,7 +86,7 @@ function AllPosts() {
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      {post.title} by {post.author}
+                      {capitalize(post.title)} by {capitalize(post.author)}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       {post.content}

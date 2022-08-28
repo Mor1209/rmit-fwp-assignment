@@ -1,10 +1,8 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-
-// ES6
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
-YupPassword(yup) // extend yup
+YupPassword(yup)
 
 const loginSchema = yup
   .object({
@@ -12,6 +10,7 @@ const loginSchema = yup
     password: yup.string().password().required(),
     confirmPassword: yup
       .string()
+      .required('Confirmation Password is required')
       .oneOf([yup.ref('password'), null], 'passwords must match'),
   })
   .required()
