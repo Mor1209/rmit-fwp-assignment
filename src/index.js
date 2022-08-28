@@ -8,8 +8,9 @@ import { BrowserRouter } from 'react-router-dom'
 import { initUsers } from './data/users'
 import { NotificationContextProvider } from './contexts/NotificationContext'
 import ScrollToTop from './helpers/ScrollToTop'
-
+import { initPosts } from './data/posts'
 initUsers()
+initPosts()
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(

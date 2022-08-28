@@ -7,6 +7,9 @@ import {
 import { useState } from 'react'
 import { Typography } from '@mui/material'
 
+// Multi-step form for user login
+// step1: getting user details
+// step2: verifying mfa token
 export const LoginForm = () => {
   const { validate, login } = useLogin()
   const [step, setStep] = useState(1)
@@ -21,6 +24,7 @@ export const LoginForm = () => {
     setStep(2)
   }
 
+  // Step2: Adding user to local storage and context upon success
   const onSubmit = data => login(data.token)
 
   const formValidation1 = useLoginValidation(onStep1)
@@ -41,12 +45,12 @@ export const LoginForm = () => {
           <BasicForm
             validation={formValidation2}
             inputFieldLabels={inputFields2}
-            formName={'Add MFA'}
-            submitButtonName={'Register'}
+            formName={'Identity Check'}
+            submitButtonName={'Login'}
             stepBackHandler={() => setStep(1)}
           >
-            <Typography>
-              Please open your authenticator and enter your token
+            <Typography variant="h6" pt={1} mb={6}>
+              Please open your authenticator app and enter your token
             </Typography>
           </BasicForm>
         </>

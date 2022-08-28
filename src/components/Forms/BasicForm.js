@@ -2,7 +2,11 @@ import { Box, Typography, Button, IconButton } from '@mui/material'
 import FormInputField from './FormInputField'
 import { ArrowBack } from '@mui/icons-material'
 
+// A basic form with text input fields and form validation
+// requeries to be given the values of react hook form in props validation
+// and all details for every input field
 const BasicForm = props => {
+  // validation from react hook form
   const { errors, submitHandler, register } = props.validation
 
   const toCamelCase = str =>
@@ -33,7 +37,7 @@ const BasicForm = props => {
         </IconButton>
       )}
       <Box sx={{ padding: 6 }}>
-        <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
+        <Typography component="h1" align="center" variant="h4" sx={{ mb: 2 }}>
           {props.formName}
         </Typography>
         {props.children}
@@ -51,6 +55,7 @@ const BasicForm = props => {
               />
             )
           })}
+          {props.inputFields}
           <Button
             type="submit"
             fullWidth

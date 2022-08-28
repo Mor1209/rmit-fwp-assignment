@@ -8,6 +8,10 @@ import Profile from './pages/Profile'
 import { useAuthContext } from './hooks/useAuthContext'
 import LandingPage from './pages/LandingPage'
 import Layout from './components/Layout/Layout'
+import AllPosts from './pages/posts/AllPosts'
+import CreatePost from './pages/posts/CreatePost'
+import Post from './pages/posts/Post'
+import EditPost from './pages/posts/EditPost'
 
 function App() {
   const { isAuth } = useAuthContext()
@@ -18,6 +22,10 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        {isAuth && <Route path="/posts" element={<AllPosts />} />}
+        {isAuth && <Route path="/posts/new" element={<CreatePost />} />}
+        {isAuth && <Route path="/post/:id" element={<Post />} />}
+        {isAuth && <Route path="/posts/edit/:id" element={<EditPost />} />}
         {isAuth ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

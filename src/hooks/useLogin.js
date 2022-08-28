@@ -6,6 +6,7 @@ import capitalize from '../helpers/capitalize'
 import { useState } from 'react'
 const speakeasy = require('speakeasy')
 
+// login functionality invoked from the login form
 export const useLogin = () => {
   const { sendNotification } = useNotificationContext()
   const { dispatchAuth } = useAuthContext()
@@ -20,6 +21,7 @@ export const useLogin = () => {
       return
     }
 
+    // use speakeasy to verify token
     const verifiedToken = (user, token) => {
       return speakeasy.totp.verify({
         secret: user.secretkey,

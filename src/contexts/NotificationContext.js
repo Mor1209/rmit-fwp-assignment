@@ -1,5 +1,6 @@
 import React, { createContext, useState } from 'react'
 
+// set notification context to display a new notification
 export const NotificationContext = createContext({
   notification: {
     severity: '',

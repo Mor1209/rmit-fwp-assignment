@@ -1,15 +1,15 @@
 import React from 'react'
+import capitalize from '../../helpers/capitalize'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useUpdateUser } from '../../hooks/useUpdateUser'
 import { useRegisterValidation } from '../../hooks/useUserValidation'
 import BasicForm from './BasicForm'
 
+// Form for editing user details
+// default values are set from the current user
 const EditUserForm = props => {
   const { user } = useAuthContext()
-  const userName = user.name
-    .split(' ')
-    .map(str => str.charAt(0).toUpperCase() + str.slice(1))
-    .join(' ')
+  const userName = capitalize(user.name)
   const inputFields = [
     { label: 'Name', defaultValue: userName },
     { label: 'Email', defaultValue: user.email },
@@ -29,6 +29,7 @@ const EditUserForm = props => {
       validation={validation}
       inputFieldLabels={inputFields}
       formName={'Edit'}
+      submitButtonName="Edit"
     />
   )
 }
