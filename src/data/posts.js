@@ -84,6 +84,11 @@ const deletePost = id => {
   return posts
 }
 
+const getUserPosts = userId => {
+  let posts = JSON.parse(localStorage.getItem(POSTS_KEY))
+  return posts.filter(post => post.userId === userId)
+}
+
 export {
   initPosts,
   getAllPosts,

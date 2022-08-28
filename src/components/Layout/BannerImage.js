@@ -1,20 +1,19 @@
 import banner from '../../assets/r.webp'
 
-function BannerImage() {
+function BannerImage({ url }) {
+  const image = url === null ? banner : url
   return (
     <div
       style={{
-        backgroundImage: `url(${banner})`,
+        backgroundImage: `url(${image})`,
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         backgroundSize: 'cover',
-        minHeight: '250px',
+        minHeight: '30vh',
         height: '20rem',
-        maxWidth: '100%',
+        // maxWidth: '100%',
       }}
-    >
-      {/* <div className="container" style={{ minHeight: '550px' }}></div> */}
-    </div>
+    />
   )
 }
 export default BannerImage

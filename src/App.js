@@ -27,7 +27,7 @@ function App() {
         <Route path="/posts/new" element={<CreatePost />} />
         <Route path="/post/:id" element={<Post />} />
         <Route path="/posts/edit/:id" element={<EditPost />} />
-        <Route path="/posts/:user" element={<UserPosts />} />
+        {/* <Route path="/posts/:userId" element={<UserPosts />} /> */}
         {isAuth ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

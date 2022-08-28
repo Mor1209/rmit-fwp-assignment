@@ -28,6 +28,7 @@ function CreatePost() {
       ...data,
       image: url,
       author: author.name,
+      userId: author.userId,
     }
 
     createPost(post)

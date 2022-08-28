@@ -44,21 +44,41 @@ function Post() {
 
   return (
     <>
-      <BannerImage />
+      <BannerImage url={post?.image} />
       <Container
         sx={{
-          color: 'white',
-          textAlign: 'start',
-          minHeight: '300px',
+          color: 'black',
+          textAlign: 'center',
+          minHeight: ' 40vh',
+          backgroundColor: 'white',
+          width: 'auto',
+          paddingLeft: 10,
+          // minWidth: '100vw',
         }}
       >
         {/* render out post data and display image if any */}
         {post && (
           <>
-            <Typography m={2} variant={'h3'}>
+            <Typography p={2} variant={'h3'}>
               {post.title}
             </Typography>
-            <p>{post.content}</p>
+            <Typography
+              sx={{ opacity: 0.7, fontStyle: 'italic' }}
+              variant={'h7'}
+            >
+              by <b>{post.author}</b>
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                textAlign: 'start',
+                width: '1000px',
+              }}
+            >
+              {post.content}
+            </Typography>
           </>
         )}
 
@@ -84,10 +104,10 @@ function Post() {
           backgroundColor: 'white',
           minHeight: '200px',
           marginBottom: '3rem',
-          borderRadius: '25px',
           padding: '10px',
         }}
       >
+        <hr />
         <Typography variant={'h5'} sx={{ padding: 2 }}>
           Comments
         </Typography>

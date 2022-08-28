@@ -17,15 +17,17 @@ import { useNotificationContext } from '../../hooks/useNotificationContext'
 import cardImage from '../../assets/r.webp'
 
 function AllPosts() {
-  const [posts, setPosts] = useState()
-
+  const [allPosts, setAllPosts] = useState()
+  const [filteredPosts, setFilterPosts] = useState()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const user = getUser()
 
   useEffect(() => {
     // fetching for all posts
-    setPosts(getAllPosts())
+    const posts = getAllPosts()
+    setAllPosts(posts)
+    setFilterPosts(posts)
   }, [])
 
   const handleDeletePost = id => {
@@ -35,7 +37,8 @@ function AllPosts() {
       sendNotification('error', 'Unable to Delete Post', false)
       return
     }
-    setPosts(remainPosts)
+    setAllPosts(remainPosts)
+    setFilterPosts(remainPosts)
     sendNotification('success', 'Post Delete', false)
   }
 
@@ -45,15 +48,30 @@ function AllPosts() {
         All Posts
       </Typography>
       <Box m={1} display={'flex'} justifyContent={'space-between'}>
-        <Button
-          variant="contained"
-          sx={{ margin: 2, float: 'right' }}
-          onClick={() => {
-            navigate(`/posts/${user.email}`)
-          }}
-        >
-          My posts
-        </Button>
+        {filteredPosts === allPosts ? (
+          <Button
+            variant="contained"
+            sx={{ margin: 2, float: 'right' }}
+            onClick={() => {
+              setFilterPosts(
+                allPosts.filter(post => post.userId === user.userId)
+              )
+            }}
+          >
+            My posts
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            sx={{ margin: 2, float: 'right' }}
+            onClick={() => {
+              setFilterPosts(allPosts)
+            }}
+          >
+            All Posts
+          </Button>
+        )}
+
         <Button
           variant="contained"
           sx={{ margin: 2, float: 'right' }}
@@ -72,8 +90,8 @@ function AllPosts() {
         alignItems="flex-start"
       >
         {/* redner all the posts that's in localstroage */}
-        {posts &&
-          posts.map(post => {
+        {filteredPosts &&
+          filteredPosts.map(post => {
             return (
               <Grid item xs={4} key={post.id}>
                 <Card sx={{ maxWidth: 350 }}>
