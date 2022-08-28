@@ -9,12 +9,15 @@ import { Box } from '@mui/system'
 import { useState } from 'react'
 import { useCommentValidation } from '../../hooks/usePostValidation'
 import FormInputField from './FormInputField'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 function CommentForm({ type, submit, postId, parentId, loading }) {
+  const { user } = useAuthContext()
+  console.log(user)
   const { errors, submitHandler, register, reset } = useCommentValidation()
 
   const onSubmit = data => {
-    submit(data, postId, parentId, reset)
+    submit(data, postId, parentId, user.userId, reset)
     setImage('')
   }
 

@@ -23,9 +23,9 @@ function Post() {
     setComments(comments)
   }, [])
 
-  const addComment = async (data, postId, parentId, reset) => {
+  const addComment = async (data, postId, parentId, userId, reset) => {
     setLoading(true)
-    const newComment = await createComment(data, postId, parentId)
+    const newComment = await createComment(data, postId, parentId, userId)
 
     if (newComment === 'error') {
       sendNotification('error', 'Failed to Upload Image', false)

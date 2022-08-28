@@ -1,5 +1,7 @@
 import { Paper, Avatar, Grid, Typography, Button } from '@mui/material'
+import { getUserById } from '../../data/users'
 import CommentForm from '../Forms/CommentForm'
+import capitalize from '../../helpers/capitalize'
 
 function Comment(props) {
   const {
@@ -15,6 +17,10 @@ function Comment(props) {
   const replies = getReplies(comment.id)
   const selected = selectedComment && selectedComment.id === comment.id
 
+  const user = getUserById(comment.userId)
+
+  console.log(user)
+
   return (
     <Paper sx={{ padding: '20px 25px', margin: 2 }} elevation={4}>
       <Grid container spacing={1} display="flex" direction="column">
@@ -24,8 +30,10 @@ function Comment(props) {
               <Avatar alt="user" />
             </Grid>
             <Grid item>
-              <Typography variant="h6">{comment.user}</Typography>
-              <p style={{ margin: 0 }}>{comment.comment}</p>
+              <Typography variant="h6" sx={{ pb: 0.5 }}>
+                {capitalize(user.name)}
+              </Typography>
+              <Typography varaint="body2">{comment.comment}</Typography>
               <div
                 style={{
                   cursor: 'pointer',

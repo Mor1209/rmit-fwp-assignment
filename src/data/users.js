@@ -84,6 +84,13 @@ const setUser = user => {
 
 const getUser = () => JSON.parse(localStorage.getItem(USER_KEY))
 
+const getUserById = userId => {
+  console.log(userId)
+  const users = getUsers()
+
+  return users.filter(user => user.userId === userId)[0]
+}
+
 const updateUser = (name, email, password) => {
   name = name.toLowerCase()
   email = email.toLowerCase()
@@ -117,6 +124,7 @@ export {
   addUser,
   verifyUser,
   getUser,
+  getUserById,
   updateUser,
   removeUser,
   deleteUser,

@@ -51,13 +51,14 @@ const editPost = newPost => {
   localStorage.setItem(POSTS_KEY, JSON.stringify(posts))
 }
 
-const createComment = async (comment, postId, parentId) => {
+const createComment = async (comment, postId, parentId, userId) => {
   let comments = JSON.parse(localStorage.getItem(COMMENTS_KEY))
   const id = generateId(comments)
 
   // using firestorage to storea images
   const url = await imageUpload(comment.image[0])
   comment['id'] = id
+  comment['userId'] = userId
   comment['parentId'] = parentId
   comment['postId'] = postId
   comment['image'] = url
