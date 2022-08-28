@@ -18,18 +18,22 @@ function EditPost() {
 
   const onSubmit = async data => {
     setLoading(true)
+    let image = oldPost.image
 
-    const url = await imageUpload(data.image[0])
+    if (data.image[0]) {
+      image = await imageUpload(data.image[0])
 
-    if (url === 'error') {
-      sendNotification('error', 'Failed to Upload Image', false)
-      return
+      if (image === 'error') {
+        sendNotification('error', 'Failed to Upload Image', false)
+        return
+      }
     }
 
     const post = {
       ...data,
       id: oldPost.id,
-      image: url,
+      author: oldPost.author,
+      image,
     }
 
     editPost(post)
