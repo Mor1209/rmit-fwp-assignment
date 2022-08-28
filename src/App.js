@@ -22,10 +22,10 @@ function App() {
         <Route path="/home" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/posts" element={<AllPosts />} />
-        <Route path="/posts/new" element={<CreatePost />} />
-        <Route path="/post/:id" element={<Post />} />
-        <Route path="/posts/edit/:id" element={<EditPost />} />
+        {isAuth && <Route path="/posts" element={<AllPosts />} />}
+        {isAuth && <Route path="/posts/new" element={<CreatePost />} />}
+        {isAuth && <Route path="/post/:id" element={<Post />} />}
+        {isAuth && <Route path="/posts/edit/:id" element={<EditPost />} />}
         {isAuth ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

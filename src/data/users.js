@@ -94,7 +94,7 @@ const updateUser = (name, email, password) => {
 
   if (userExists(email) && user.email !== email) return
 
-  deleteUser()
+  deleteUser(true)
 
   const userUpdate = { ...user, name, email, password }
   const users = getUsers()
@@ -104,12 +104,15 @@ const updateUser = (name, email, password) => {
   return setUser(userUpdate)
 }
 
-const deleteUser = () => {
+const deleteUser = postsRemain => {
   const { email, userId } = getUser()
   const users = getUsers()
 
   const usersUpdate = users.filter(user => user.email !== email)
-  if (!deletePostbyUserId(userId)) return
+
+  if (!postsRemain) {
+    if (!deletePostbyUserId(userId)) return
+  }
   setUsers(usersUpdate)
 }
 

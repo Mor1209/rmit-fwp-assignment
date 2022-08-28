@@ -13,7 +13,6 @@ const loginSchema = yup
     password: yup.string().password().required(),
     confirmPassword: yup
       .string()
-      .required('Confirmation Password is required')
       .oneOf([yup.ref('password'), null], 'passwords must match'),
   })
   .required()
