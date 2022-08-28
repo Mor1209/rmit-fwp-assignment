@@ -1,6 +1,6 @@
 // This idea and some of it's code has been taken from the Week03.Lectorial.code/example10
 ///////////////////////////////////////////////////////////////////////////////////////////
-
+import { deletePostbyUserId } from './posts'
 const USERS_KEY = 'users'
 const USER_KEY = 'user'
 
@@ -100,11 +100,11 @@ const updateUser = (name, email, password) => {
 }
 
 const deleteUser = () => {
-  const { email } = getUser()
+  const { email, userId } = getUser()
   const users = getUsers()
 
   const usersUpdate = users.filter(user => user.email !== email)
-
+  if (!deletePostbyUserId(userId)) return
   setUsers(usersUpdate)
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from 'react-router'
 import { useEffect, useState } from 'react'
-import { Container, Typography } from '@mui/material'
+import { Container, Typography, Stack } from '@mui/material'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
@@ -44,7 +44,6 @@ function Post() {
 
   return (
     <>
-      <BannerImage url={post?.image} />
       <Container
         sx={{
           color: 'black',
@@ -52,48 +51,57 @@ function Post() {
           minHeight: ' 40vh',
           backgroundColor: 'white',
           width: 'auto',
-          paddingLeft: 10,
-          // minWidth: '100vw',
         }}
+        disableGutters
       >
+        <BannerImage url={post?.image} />
         {/* render out post data and display image if any */}
         {post && (
           <>
             <Typography p={2} variant={'h3'}>
               {post.title}
             </Typography>
+
             <Typography
               sx={{ opacity: 0.7, fontStyle: 'italic' }}
               variant={'h7'}
             >
               by <b>{post.author}</b>
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                textAlign: 'start',
-                width: '1000px',
-              }}
+            <Stack
+              direction="row"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              spacing={2}
+              p={5}
             >
-              {post.content}
-            </Typography>
+              {post?.image && (
+                <img
+                  src={post?.image}
+                  alt="uploadedImage"
+                  style={{
+                    border: '10px solid lightgrey',
+                    borderRadius: '4px',
+                    height: 160,
+                    weidth: 160,
+                    objectFit: 'fit',
+                    display: 'flex',
+                  }}
+                />
+              )}
+              <Typography
+                variant="body2"
+                sx={{
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  textAlign: 'start',
+                  width: '1000px',
+                }}
+              >
+                {post.content}
+              </Typography>
+            </Stack>
           </>
-        )}
-
-        {post?.image && (
-          <img
-            src={post?.image}
-            alt="uploadedImage"
-            style={{
-              margin: 5,
-              padding: 10,
-              height: 160,
-              weidth: 160,
-              objectFit: 'fit',
-            }}
-          ></img>
         )}
       </Container>
       {/* render the comment section */}

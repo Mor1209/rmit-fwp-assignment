@@ -117,21 +117,26 @@ function AllPosts() {
                       padding: '10px',
                     }}
                   >
-                    <Button
-                      size="small"
-                      variant="contained"
-                      color="error"
-                      onClick={() => handleDeletePost(post.id)}
-                    >
-                      Delete
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      onClick={() => navigate(`/posts/edit/${post.id}`)}
-                    >
-                      Edit
-                    </Button>
+                    {user.userId === post.userId ? (
+                      <>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleDeletePost(post.id)}
+                        >
+                          Delete
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => navigate(`/posts/edit/${post.id}`)}
+                        >
+                          Edit
+                        </Button>
+                      </>
+                    ) : null}
+
                     <Button
                       size="small"
                       variant="contained"

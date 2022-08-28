@@ -10,7 +10,6 @@ import LandingPage from './pages/LandingPage'
 import Layout from './components/Layout/Layout'
 import AllPosts from './pages/posts/AllPosts'
 import CreatePost from './pages/posts/CreatePost'
-import UserPosts from './pages/posts/UserPosts'
 import Post from './pages/posts/Post'
 import EditPost from './pages/posts/EditPost'
 
@@ -27,7 +26,6 @@ function App() {
         <Route path="/posts/new" element={<CreatePost />} />
         <Route path="/post/:id" element={<Post />} />
         <Route path="/posts/edit/:id" element={<EditPost />} />
-        {/* <Route path="/posts/:userId" element={<UserPosts />} /> */}
         {isAuth ? (
           <Route path="/profile" element={<Profile />} />
         ) : (

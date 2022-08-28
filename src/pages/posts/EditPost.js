@@ -32,6 +32,7 @@ function EditPost() {
       id: oldPost.id,
       author: oldPost.author,
       image,
+      userId: oldPost.userId,
     }
 
     editPost(post)

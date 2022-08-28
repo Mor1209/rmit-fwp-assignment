@@ -11,7 +11,6 @@ function BannerImage({ url }) {
         backgroundSize: 'cover',
         minHeight: '30vh',
         height: '20rem',
-        // maxWidth: '100%',
       }}
     />
   )

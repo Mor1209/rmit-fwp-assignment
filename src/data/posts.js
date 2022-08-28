@@ -70,7 +70,7 @@ const deletePost = id => {
   // delete post data and relevant comments
 
   let posts = JSON.parse(localStorage.getItem(POSTS_KEY))
-  console.log(posts)
+
   if (posts === null) return false
 
   posts = posts.filter(post => post.id !== parseInt(id))
@@ -84,9 +84,12 @@ const deletePost = id => {
   return posts
 }
 
-const getUserPosts = userId => {
-  let posts = JSON.parse(localStorage.getItem(POSTS_KEY))
-  return posts.filter(post => post.userId === userId)
+const deletePostbyUserId = id => {
+  const posts = JSON.parse(localStorage.getItem(POSTS_KEY)).filter(
+    post => post.userId === id
+  )
+  posts.forEach(post => deletePost(post.id))
+  return posts
 }
 
 export {
@@ -97,4 +100,5 @@ export {
   createComment,
   deletePost,
   editPost,
+  deletePostbyUserId,
 }

@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 const MAX_FILE_SIZE = 55000000
-const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png']
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png', 'image/webp']
 
 const imageSchema = yup
   .object({
