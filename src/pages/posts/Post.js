@@ -2,6 +2,7 @@
 import { useParams } from 'react-router'
 import { useEffect, useState } from 'react'
 import { Container, Typography, Stack, capitalize } from '@mui/material'
+import capEveryWord from '../../helpers/capitalize'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
@@ -68,7 +69,7 @@ function Post() {
               sx={{ opacity: 0.7, fontStyle: 'italic' }}
               variant={'h7'}
             >
-              by <b>{capitalize(post.author)}</b>
+              by <b>{capEveryWord(post.author)}</b>
             </Typography>
             <Stack
               direction="row"
