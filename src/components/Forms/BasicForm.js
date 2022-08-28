@@ -33,7 +33,7 @@ const BasicForm = props => {
         </IconButton>
       )}
       <Box sx={{ padding: 6 }}>
-        <Typography component="h1" variant="h4" sx={{ mb: 2 }}>
+        <Typography component="h1" align="center" variant="h4" sx={{ mb: 2 }}>
           {props.formName}
         </Typography>
         {props.children}
@@ -51,6 +51,7 @@ const BasicForm = props => {
               />
             )
           })}
+          {props.inputFields}
           <Button
             type="submit"
             fullWidth
