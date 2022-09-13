@@ -1,6 +1,6 @@
 // This idea and some of it's code has been taken from the Week03.Lectorial.code/example10
 ///////////////////////////////////////////////////////////////////////////////////////////
-
+import { deletePostbyUserId } from './posts'
 const USERS_KEY = 'users'
 const USER_KEY = 'user'
 
@@ -10,17 +10,21 @@ const initUsers = () => {
   if (getUsers()) return
 
   // User data is hard-coded, passwords are in plain-text.
+  // cannot use at the moment without the registering
+  // the secret token
   const users = [
     {
       name: 'moritz',
       email: 'mohauptmann@gmail.com',
       password: '!Pp123456789',
+      userId: 1,
       created: '2022-08-14T01:29:24.478Z',
     },
     {
-      name: 'mingang',
-      email: 'minggang@gmail.com',
-      password: '!Pp123456789',
+      name: 'm',
+      email: 'm@gmail.com',
+      password: 'Qq!12345678',
+      userId: 2,
       created: '2022-08-14T01:29:24.478Z',
     },
   ]
@@ -30,17 +34,16 @@ const initUsers = () => {
 }
 
 const addUser = (name, email, password, secretkey) => {
-  console.log('addUser')
-  console.log(name)
-  console.log(email)
   name = name.toLowerCase()
   email = email.toLowerCase()
 
   if (userExists(email)) return
 
   const created = new Date().toISOString()
-  const user = { name, email, password, created, secretkey }
   const users = getUsers()
+  const userId = users.at(-1).userId + 1
+  const user = { name, email, password, created, secretkey, userId }
+
   users.push(user)
   setUsers(users)
 
@@ -78,6 +81,12 @@ const setUser = user => {
 
 const getUser = () => JSON.parse(localStorage.getItem(USER_KEY))
 
+const getUserById = userId => {
+  const users = getUsers()
+
+  return users.filter(user => user.userId === userId)[0]
+}
+
 const updateUser = (name, email, password) => {
   name = name.toLowerCase()
   email = email.toLowerCase()
@@ -85,7 +94,7 @@ const updateUser = (name, email, password) => {
 
   if (userExists(email) && user.email !== email) return
 
-  deleteUser()
+  deleteUser(true)
 
   const userUpdate = { ...user, name, email, password }
   const users = getUsers()
@@ -95,12 +104,15 @@ const updateUser = (name, email, password) => {
   return setUser(userUpdate)
 }
 
-const deleteUser = () => {
-  const { email } = getUser()
+const deleteUser = postsRemain => {
+  const { email, userId } = getUser()
   const users = getUsers()
 
   const usersUpdate = users.filter(user => user.email !== email)
 
+  if (!postsRemain) {
+    if (!deletePostbyUserId(userId)) return
+  }
   setUsers(usersUpdate)
 }
 
@@ -111,6 +123,7 @@ export {
   addUser,
   verifyUser,
   getUser,
+  getUserById,
   updateUser,
   removeUser,
   deleteUser,

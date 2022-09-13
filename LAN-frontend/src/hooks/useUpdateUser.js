@@ -14,6 +14,7 @@ export const useUpdateUser = () => {
       return
     }
 
+    // updating authContext by dispatching login
     dispatchAuth({
       type: 'LOGIN',
       user,

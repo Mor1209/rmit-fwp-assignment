@@ -7,6 +7,8 @@ const defaultAuthState = {
   user: {},
 }
 
+// Auth context for keeping user as state
+// so that local storage only needs to be read to initialize
 export const AuthContext = createContext({
   ...defaultAuthState,
   register: user => {},
@@ -29,6 +31,9 @@ export const authReducer = (state, action) => {
 
 export const AuthContextProvider = ({ children }) => {
   const user = getUser()
+
+  // initialize user, if no user in local storage or not verifable
+  // then initialize with defaultAuthState
   const initialState =
     user && verifyUser(user.email, user.password)
       ? { isAuth: true, user }

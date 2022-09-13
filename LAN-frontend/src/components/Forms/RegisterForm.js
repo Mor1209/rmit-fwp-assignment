@@ -8,6 +8,9 @@ import {
 import BasicForm from './BasicForm'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 
+// Multi-step form for user login
+// step1: getting user details
+// step2: verifying mfa token and saving secret
 export const RegisterForm = () => {
   const [step, setStep] = useState(1)
   const { validate, register, qr, secret } = useRegister()
@@ -24,14 +27,14 @@ export const RegisterForm = () => {
       setStep(2)
     }
   }
+
+  // Step2: user added to local storage upon successfull completion
   const onSubmit = data => {
     register(data.token)
   }
 
   const formValidation1 = useRegisterValidation(onStep1)
   const formValidation2 = useMfaValidation(onSubmit)
-  console.log('secret recieved:')
-  console.log(secret)
 
   return (
     <>

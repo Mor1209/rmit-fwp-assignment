@@ -1,7 +1,9 @@
 import { Button, Grid, Paper, Typography } from '@mui/material'
 import { Container } from '@mui/system'
 import { Link as RouterLink } from 'react-router-dom'
+
 function Footer() {
+  // links are currently placeholders and disabled
   const links = ['Terms', 'Privacy Policy', 'Contact']
   return (
     <footer>

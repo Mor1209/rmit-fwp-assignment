@@ -1,11 +1,12 @@
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-
-// ES6
 import * as yup from 'yup'
 import YupPassword from 'yup-password'
-YupPassword(yup) // extend yup
+YupPassword(yup)
 
+// yup validation schema for register and login
+// uses strong password(1x special char, 1x capital,
+// 1x small, 1x digit and an length of 8)
 const loginSchema = yup
   .object({
     email: yup.string().email().required(),
