@@ -1,9 +1,10 @@
 // This starter code is taken from the week08 practical
+
 'use strict'
 
 const express = require('express')
 const cors = require('cors')
-const { sequelize } = require('./models')
+// const { sequelize } = require('./models')
 
 // Database will be sync'ed in the background.
 // no need for sync since we use migration and sequilize-cli
