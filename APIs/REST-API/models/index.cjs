@@ -25,7 +25,7 @@ if (config.use_env_variable) {
 fs.readdirSync(__dirname)
   .filter(
     file =>
-      file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
+      file.indexOf('.') !== 0 && file !== basename && file.slice(-4) === '.cjs'
   )
   .forEach(file => {
     const model = require(path.join(__dirname, file))(
@@ -37,6 +37,7 @@ fs.readdirSync(__dirname)
 
 Object.keys(db).forEach(modelName => {
   if (db[modelName].associate) {
+    console.log(modelName)
     db[modelName].associate(db)
   }
 })
