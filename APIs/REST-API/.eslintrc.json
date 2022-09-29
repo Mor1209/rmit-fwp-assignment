@@ -28,6 +28,10 @@
       { "argsIgnorePattern": "req|res|next|val|models|Sequelize" }
     ],
     "strict": ["off", "gloabl"],
-    "import/extensions": ["error", "always", { "ignorePackages": true }]
+    "import/extensions": ["error", "always", { "ignorePackages": true }],
+    "node/no-unsupported-features/es-syntax": [
+      "error",
+      { "ignores": ["modules"] }
+    ]
   }
 }

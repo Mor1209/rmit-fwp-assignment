@@ -43,7 +43,6 @@ export default (err, req, res, next) => {
     errorDev(err, res)
   } else if (env === 'production') {
     let error = { ...err }
-    console.log(error)
     if (error.name === 'SequelizeUniqueConstraintError')
       error = handleSequelizeUniqueConstraintError(error)
     errorProd(error, res)
