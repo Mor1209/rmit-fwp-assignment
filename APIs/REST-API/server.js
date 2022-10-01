@@ -8,6 +8,7 @@ import cors from 'cors'
 import userRouter from './routes/user.routes.js'
 import errorController from './controllers/errorController.js'
 import postRouter from './routes/PostRoutes.js'
+import commentRouter from './routes/commentRoutes.js'
 // const { sequelize } = require('./models')
 
 process.on('unhandledRejection', err => {
@@ -41,6 +42,7 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' })
 })
 
+app.use('/api/comments', commentRouter)
 app.use('/api/posts', postRouter)
 
 // Add user routes.

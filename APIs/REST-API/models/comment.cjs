@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.User, { foreignKey: 'userId' })
-      this.hasMany(models.Comment)
+      this.belongsTo(models.Post, { foreignKey: 'postId' })
     }
   }
   Post.init(
@@ -20,14 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      title: {
-        type: DataTypes.STRING(32),
-        allowNull: false,
-      },
     },
     {
       sequelize,
-      modelName: 'Post',
+      modelName: 'Comment',
       timestamps: false,
       createdAt: false,
       updatedAt: false,
