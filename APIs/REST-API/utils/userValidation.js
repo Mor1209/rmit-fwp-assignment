@@ -8,7 +8,7 @@ YupPassword(yup)
 // 1x small, 1x digit and an length of 8)
 const nameSchema = yup
   .object({
-    name: yup.string().required(),
+    username: yup.string().min(3).required(),
   })
   .required()
 
@@ -26,4 +26,11 @@ export const registerSchema = loginSchema.concat(nameSchema)
 
 export const mfaSchema = yup
   .object({ token: yup.string().required() })
+  .required()
+
+export const updateSchema = yup
+  .object({
+    username: yup.string().min(3),
+    email: yup.string().email(),
+  })
   .required()
