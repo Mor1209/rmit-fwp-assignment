@@ -16,9 +16,6 @@ export const loginSchema = yup
   .object({
     email: yup.string().email().required(),
     password: yup.string().password().required(),
-    confirmPassword: yup
-      .string()
-      .oneOf([yup.ref('password'), null], 'passwords must match'),
   })
   .required()
 

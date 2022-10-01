@@ -26,12 +26,20 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      password_hash: {
+      password: {
         type: DataTypes.STRING(96),
         allowNull: false,
       },
     },
     {
+      defaultScope: {
+        attributes: { exclude: ['password'] },
+      },
+      scopes: {
+        withPassword: {
+          attributes: {},
+        },
+      },
       sequelize,
       modelName: 'User',
       timestamps: true,

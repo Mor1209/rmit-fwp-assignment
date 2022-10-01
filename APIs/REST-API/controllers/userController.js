@@ -25,7 +25,7 @@ const createUser = catchAsync(async (req, res, next) => {
 
   const user = await db.User.create({
     username: req.body.username,
-    password_hash: hash,
+    password: hash,
     email: req.body.email,
   })
 
