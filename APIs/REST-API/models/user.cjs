@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.Post, { onDelete: 'CASCADE', hooks: true })
-      this.hasMany(models.Comment)
+      this.hasMany(models.Comment, { onDelete: 'CASCADE', hooks: true })
     }
   }
   User.init(

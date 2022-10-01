@@ -97,7 +97,9 @@ const deleteUser = catchAsync(async (req, res, next) => {
       new AppError(`User with id: ${req.params.id} doesn't exist`, 404)
     )
 
-  await user.destroy()
+  const response = await user.destroy()
+
+  console.log(response)
 
   res.status(204).json({
     status: 'success',

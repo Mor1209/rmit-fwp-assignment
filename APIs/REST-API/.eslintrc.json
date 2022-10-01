@@ -17,10 +17,6 @@
         "endOfLine": "auto"
       }
     ],
-    "node/no-unsupported-features/es-syntax": [
-      "error",
-      { "ignores": ["modules"] }
-    ],
     "spaced-comment": "off",
     "no-console": "warn",
     "consistent-return": "off",
