@@ -10,19 +10,27 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.User)
+      this.belongsTo(models.User, { foreignKey: 'userId' })
+      // this.belongsTo(models.)
     }
   }
   Post.init(
     {
-      text: {
+      content: {
         type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      title: {
+        type: DataTypes.STRING(32),
         allowNull: false,
       },
     },
     {
       sequelize,
       modelName: 'Post',
+      timestamps: false,
+      createdAt: false,
+      updatedAt: false,
     }
   )
   return Post

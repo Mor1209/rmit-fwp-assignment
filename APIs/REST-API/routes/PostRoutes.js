@@ -5,12 +5,14 @@ import postController from '../controllers/PostController.js'
 
 const router = express.Router()
 // define api routes here
-router.get('/:id', postController.getPostById)
-
-router.get('/', postController.getAllPosts)
-
-router.post('/posts', postController.createPost)
-
-router.delete('/:id', postController.deletePost)
+router
+  .route('/:id')
+  .get(postController.getPostById)
+  .delete(postController.deletePost)
+  .patch(postController.updatePost)
+router
+  .route('/')
+  .get(postController.getAllPosts)
+  .post(postController.createPost)
 
 export default router
