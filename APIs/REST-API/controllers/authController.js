@@ -13,8 +13,32 @@ const signJwt = userId =>
     expiresIn: process.env.JWT_EXPIRES_IN,
   })
 
+const createTokenResponse = (user, res, statusCode) => {
+  const token = signJwt(user.id)
+
+  const cookieOptions = {
+    expiresIn: new Date(
+      Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  }
+
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
+
+  res.cookie('jwt', token, cookieOptions)
+
+  user.password = undefined
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user,
+    },
+  })
+}
+
 const register = catchAsync(async (req, res, next) => {
-  console.log('in register')
   // filter req.body to eliminate attacks with more fields than allowed ones
   const filteredReq = Object.fromEntries(
     Object.entries(req.body).filter(
@@ -22,7 +46,6 @@ const register = catchAsync(async (req, res, next) => {
     )
   )
 
-  console.log(filteredReq)
   if (!(await registerSchema.isValid(filteredReq)))
     return next(new AppError('User details not valid!', 400))
 
@@ -36,15 +59,7 @@ const register = catchAsync(async (req, res, next) => {
     email: filteredReq.email,
   })
 
-  const token = signJwt(user.id)
-
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user,
-    },
-  })
+  createTokenResponse(user, res, 201)
 })
 
 const login = catchAsync(async (req, res, next) => {
@@ -59,12 +74,7 @@ const login = catchAsync(async (req, res, next) => {
   if (!user || !(await argon2.verify(user.password, password)))
     return next(new AppError('Incorrect email or password', 401))
 
-  const token = signJwt(user.id)
-
-  res.status(201).json({
-    status: 'success',
-    token,
-  })
+  createTokenResponse(user, res, 200)
 })
 
 const protectedRoute = catchAsync(async (req, res, next) => {

@@ -5,6 +5,9 @@
 import * as dotenv from 'dotenv'
 import express from 'express'
 import cors from 'cors'
+import helmet from 'helmet'
+import xss from 'xss-clean'
+import hpp from 'hpp'
 import userRouter from './routes/user.routes.js'
 import errorController from './controllers/errorController.js'
 import postRouter from './routes/PostRoutes.js'
@@ -36,6 +39,16 @@ app.use(express.json())
 
 // Add CORS suport.
 app.use(cors())
+
+// Add helmet
+app.use(helmet())
+
+// Add xss protection
+app.use(xss())
+
+// Add parameter pollution protection
+// add whitelist if needed
+app.use(hpp())
 
 // Simple Hello World route.
 app.get('/', (req, res) => {
