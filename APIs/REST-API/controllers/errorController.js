@@ -5,6 +5,12 @@ const handleSequelizeUniqueConstraintError = err => {
   return new AppError(message, 400)
 }
 
+const handleJsonWebTokenError = () =>
+  new AppError('Invalid token, please login again!', 401)
+
+const handleTokenExpiredError = () =>
+  new AppError('Token expired, please login again!', 401)
+
 // more error information during development
 const errorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -45,6 +51,8 @@ export default (err, req, res, next) => {
     let error = { ...err }
     if (error.name === 'SequelizeUniqueConstraintError')
       error = handleSequelizeUniqueConstraintError(error)
+    if (error.name === 'JsonWebTokenError') error = handleJsonWebTokenError()
+    if (error.name === 'TokenExpiredError') error = handleTokenExpiredError()
     errorProd(error, res)
   }
 }

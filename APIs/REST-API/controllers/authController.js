@@ -1,5 +1,6 @@
 'use strict'
 
+import { promisify } from 'util'
 import jwt from 'jsonwebtoken'
 import argon2 from 'argon2'
 import db from '../models/index.cjs'
@@ -66,4 +67,30 @@ const login = catchAsync(async (req, res, next) => {
   })
 })
 
-export default { register, login }
+const protectedRoute = catchAsync(async (req, res, next) => {
+  let token
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1]
+  }
+
+  if (!token) {
+    return next(new AppError('Please login to access!'), 401)
+  }
+
+  // verify token is valid and not expired
+  const jwtIsValid = await promisify(jwt.verify)(token, process.env.JWT_SECRET)
+
+  // verify that user still exists
+  const user = await db.User.findByPk(jwtIsValid.userId)
+
+  if (!user) return next(new AppError(`User doesnt't exist anymore`, 401))
+
+  req.user = user
+  next()
+})
+
+export default { register, login, protectedRoute }

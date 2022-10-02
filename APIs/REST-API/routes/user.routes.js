@@ -11,7 +11,7 @@ router.post('/login', authController.login)
 
 router
   .route('/')
-  .get(userController.getAllUsers)
+  .get(authController.protectedRoute, userController.getAllUsers)
   .post(userController.createUser)
 
 router
