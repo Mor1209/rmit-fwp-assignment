@@ -88,7 +88,36 @@ const updateUser = catchAsync(async (req, res, next) => {
   })
 })
 
-// Not working yet! Needs to destroy comments and posts of user first
+const updateCurrentUser = catchAsync(async (req, res, next) => {
+  // filter req.body to eliminate attacks with more fields than allowed ones
+  const filteredUpdate = Object.fromEntries(
+    Object.entries(req.body).filter(
+      ([key]) => key === 'username' || key === 'email'
+    )
+  )
+
+  // get user
+  const user = await db.User.findByPk(req.user.id)
+
+  // check if fields are valid
+  if (
+    !(await updateSchema.isValid(filteredUpdate)) ||
+    Object.keys(filteredUpdate).length === 0
+  )
+    return next(new AppError('User details not valid!', 400))
+
+  user.set(filteredUpdate)
+
+  const response = await user.save()
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: response,
+    },
+  })
+})
+
 const deleteUser = catchAsync(async (req, res, next) => {
   const user = await db.User.findByPk(req.params.id)
 
@@ -97,9 +126,7 @@ const deleteUser = catchAsync(async (req, res, next) => {
       new AppError(`User with id: ${req.params.id} doesn't exist`, 404)
     )
 
-  const response = await user.destroy()
-
-  console.log(response)
+  await user.destroy()
 
   res.status(204).json({
     status: 'success',
@@ -107,4 +134,29 @@ const deleteUser = catchAsync(async (req, res, next) => {
   })
 })
 
-export default { getAllUsers, createUser, getUser, updateUser, deleteUser }
+const deleteCurrentUser = catchAsync(async (req, res, next) => {
+  // get user
+  const user = await db.User.findByPk(req.user.id)
+
+  if (!user)
+    return next(
+      new AppError(`User with id: ${req.params.id} doesn't exist`, 404)
+    )
+
+  await user.destroy()
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  })
+})
+
+export default {
+  getAllUsers,
+  createUser,
+  getUser,
+  updateUser,
+  updateCurrentUser,
+  deleteUser,
+  deleteCurrentUser,
+}

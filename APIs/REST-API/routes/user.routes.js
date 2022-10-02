@@ -10,14 +10,15 @@ router.post('/register', authController.register)
 router.post('/login', authController.login)
 
 router
-  .route('/')
-  .get(authController.protectedRoute, userController.getAllUsers)
-  .post(userController.createUser)
+  .route('/current')
+  .patch(authController.protectedRoute, userController.updateCurrentUser)
+  .delete(authController.protectedRoute, userController.deleteCurrentUser)
 
-router
-  .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser)
+router.route('/').get(authController.protectedRoute, userController.getAllUsers)
+// .post(userController.createUser)
+
+router.route('/:id').get(authController.protectedRoute, userController.getUser)
+// .patch(userController.updateUser)
+// .delete(userController.deleteUser)
 
 export default router
