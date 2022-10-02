@@ -8,21 +8,24 @@ import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
 import { createComment, getPostById } from '../../data/posts'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
+import { useQuery } from 'react-query'
 
 function Post() {
+  const API_PATH = 'http://localhost:4000/api'
   const params = useParams()
-  const [post, setPost] = useState(null)
+  // const [data, setPost] = useState(null)
   const [selectedComment, setSelectedComment] = useState(null)
   const [comments, setComments] = useState([])
   const { sendNotification } = useNotificationContext()
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading2, setLoading] = useState(false)
 
-  useEffect(() => {
-    // get both post and post's comments
-    const { post, comments } = getPostById(params.id)
-    setPost(post)
-    setComments(comments)
-  }, [])
+  const fetchAllPosts = async () => {
+    const response = await fetch(`${API_PATH}/posts/${params.id}`)
+    const r = await response.json()
+    return r.post
+  }
+
+  const { data } = useQuery('post', fetchAllPosts)
 
   const addComment = async (data, postId, parentId, userId, reset) => {
     setLoading(true)
@@ -57,19 +60,19 @@ function Post() {
         }}
         disableGutters
       >
-        <BannerImage url={post?.image} />
+        <BannerImage url={data?.image} />
         {/* render out post data and display image if any */}
-        {post && (
+        {data && (
           <>
             <Typography p={2} variant={'h3'}>
-              {capitalize(post.title)}
+              {capitalize(data.title)}
             </Typography>
 
             <Typography
               sx={{ opacity: 0.7, fontStyle: 'italic' }}
               variant={'h7'}
             >
-              by <b>{capEveryWord(post.author)}</b>
+              by <b>{capEveryWord(data.author)}</b>
             </Typography>
             <Stack
               direction="row"
@@ -79,9 +82,9 @@ function Post() {
               p={5}
             >
               {/* make the image on the left of the paragraph */}
-              {post?.image && (
+              {data?.image && (
                 <img
-                  src={post?.image}
+                  src={data?.image}
                   alt="uploadedImage"
                   style={{
                     border: '10px solid lightgrey',
@@ -102,7 +105,7 @@ function Post() {
                   width: '1000px',
                 }}
               >
-                {post.content}
+                {data.content}
               </Typography>
             </Stack>
           </>
@@ -130,9 +133,9 @@ function Post() {
         <CommentForm
           type={'comment'}
           submit={addComment}
-          postId={post?.id}
+          postId={data?.id}
           parentId={null}
-          loading={isLoading}
+          loading={isLoading2}
         />
 
         <hr />
@@ -147,9 +150,9 @@ function Post() {
                   selectedComment={selectedComment}
                   setSelectedComment={setSelectedComment}
                   addComment={addComment}
-                  postId={post?.id}
+                  postId={data?.id}
                   getReplies={getCommentReplies}
-                  loading={isLoading}
+                  loading={isLoading2}
                 />
               )
             return null

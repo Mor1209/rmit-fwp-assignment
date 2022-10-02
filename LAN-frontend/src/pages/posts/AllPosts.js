@@ -16,20 +16,23 @@ import { useEffect, useState } from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import cardImage from '../../assets/r.webp'
 import capitalize from '../../helpers/capitalize'
+import { useQuery } from 'react-query'
 
 function AllPosts() {
+  const API_PATH = 'http://localhost:4000/api'
   const [allPosts, setAllPosts] = useState()
   const [filteredPosts, setFilterPosts] = useState()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const user = getUser()
 
-  useEffect(() => {
-    // fetching for all posts
-    const posts = getAllPosts()
-    setAllPosts(posts)
-    setFilterPosts(posts)
-  }, [])
+  const fetchAllPosts = async () => {
+    const response = await fetch(`${API_PATH}/posts`)
+    const r = await response.json()
+    return r.posts
+  }
+
+  const { data } = useQuery('posts', fetchAllPosts)
 
   const handleDeletePost = id => {
     // delete a post
@@ -92,8 +95,8 @@ function AllPosts() {
         alignItems="flex-start"
       >
         {/* redner all the posts that's in localstroage */}
-        {filteredPosts &&
-          filteredPosts.map(post => {
+        {data &&
+          data.map(post => {
             return (
               <Grid item xs={4} key={post.id}>
                 <Card sx={{ maxWidth: 350 }}>

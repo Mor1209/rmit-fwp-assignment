@@ -7,7 +7,7 @@ const getPostById = async (req, res) => {
 
   try {
     const posts = await db.Post.findByPk(postId)
-    res.status(200).json({ posts: posts })
+    res.status(200).json({ post: posts })
   } catch (error) {
     res.status(404).json({ message: 'post not found' })
   }
@@ -16,6 +16,7 @@ const getPostById = async (req, res) => {
 const getAllPosts = async (req, res) => {
   try {
     const posts = await db.Post.findAll()
+    console.log(posts)
     res.status(200).json({ posts: posts })
   } catch (error) {
     res.status(404)
@@ -24,7 +25,6 @@ const getAllPosts = async (req, res) => {
 
 const createPost = async (req, res) => {
   const data = req.body.post
-
   try {
     await db.Post.create(data)
     res.status(201).json({ message: 'post created' })
