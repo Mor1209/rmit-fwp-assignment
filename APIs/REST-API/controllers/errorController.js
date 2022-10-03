@@ -44,11 +44,11 @@ export default (err, req, res, next) => {
   const env = process.env.NODE_ENV || 'development'
   err.statusCode = err.statusCode || 500
   err.status = err.status || 'error'
+  let error = { ...err }
 
   if (env === 'development') {
     errorDev(err, res)
   } else if (env === 'production') {
-    let error = { ...err }
     if (error.name === 'SequelizeUniqueConstraintError')
       error = handleSequelizeUniqueConstraintError(error)
     if (error.name === 'JsonWebTokenError') error = handleJsonWebTokenError()

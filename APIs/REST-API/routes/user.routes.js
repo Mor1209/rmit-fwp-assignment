@@ -11,6 +11,7 @@ router.post('/login', authController.login)
 
 router
   .route('/current')
+  .get(authController.protectedRoute, userController.getCurrentUser)
   .patch(authController.protectedRoute, userController.updateCurrentUser)
   .delete(authController.protectedRoute, userController.deleteCurrentUser)
 

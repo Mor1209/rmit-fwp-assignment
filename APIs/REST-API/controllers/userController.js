@@ -24,9 +24,9 @@ const createUser = catchAsync(async (req, res, next) => {
   const hash = await argon2.hash(req.body.password, { type: argon2.argon2id })
 
   const user = await db.User.create({
-    username: req.body.username,
+    username: req.body.username.toLowerCase(),
     password: hash,
-    email: req.body.email,
+    email: req.body.email.toLowerCase(),
   })
 
   res.status(201).json({
@@ -39,6 +39,23 @@ const createUser = catchAsync(async (req, res, next) => {
 
 const getUser = catchAsync(async (req, res, next) => {
   const user = await db.User.findByPk(req.params.id)
+
+  if (!user)
+    return next(
+      new AppError(`User with id: ${req.params.id} doesn't exist`, 404)
+    )
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user,
+    },
+  })
+})
+
+const getCurrentUser = catchAsync(async (req, res, next) => {
+  // get user
+  const user = await db.User.findByPk(req.user.id)
 
   if (!user)
     return next(
@@ -76,7 +93,10 @@ const updateUser = catchAsync(async (req, res, next) => {
   )
     return next(new AppError('User details not valid!', 400))
 
-  user.set(filteredUpdate)
+  user.set({
+    username: filteredUpdate.toLowerCase(),
+    email: filteredUpdate.toLowerCase(),
+  })
 
   const response = await user.save()
 
@@ -106,7 +126,10 @@ const updateCurrentUser = catchAsync(async (req, res, next) => {
   )
     return next(new AppError('User details not valid!', 400))
 
-  user.set(filteredUpdate)
+  user.set({
+    username: filteredUpdate.toLowerCase(),
+    email: filteredUpdate.toLowerCase(),
+  })
 
   const response = await user.save()
 
@@ -155,6 +178,7 @@ export default {
   getAllUsers,
   createUser,
   getUser,
+  getCurrentUser,
   updateUser,
   updateCurrentUser,
   deleteUser,

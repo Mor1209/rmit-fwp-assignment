@@ -13,7 +13,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 // step2: verifying mfa token and saving secret
 export const RegisterForm = () => {
   const [step, setStep] = useState(1)
-  const { validate, register, qr, secret } = useRegister()
+  // const [registerDetails, setRegisterDetails] = useState({})
+  const { mutate } = useRegister()
   const inputFields1 = [
     { label: 'Name', defaultValue: '' },
     { label: 'Email', defaultValue: '' },
@@ -23,14 +24,24 @@ export const RegisterForm = () => {
   const inputFields2 = [{ label: 'Token', defaultValue: '' }]
 
   const onStep1 = data => {
-    if (validate(data.name, data.email, data.password)) {
-      setStep(2)
+    const registerDetails = {
+      username: data.name,
+      email: data.email,
+      password: data.password,
     }
+
+    mutate(registerDetails)
+
+    // if (validate(data.name, data.email, data.password)) {
+    //   // removing step two for simplicity and adding register to step1
+    //   // setStep(2)
+
+    // }
   }
 
   // Step2: user added to local storage upon successfull completion
   const onSubmit = data => {
-    register(data.token)
+    // register(data.token)
   }
 
   const formValidation1 = useRegisterValidation(onStep1)
@@ -46,7 +57,7 @@ export const RegisterForm = () => {
           submitButtonName={'Next'}
         />
       )}
-      {step === 2 && (
+      {/* {step === 2 && (
         <>
           <BasicForm
             validation={formValidation2}
@@ -75,7 +86,7 @@ export const RegisterForm = () => {
             )}
           </BasicForm>
         </>
-      )}
+      )} */}
     </>
   )
 }

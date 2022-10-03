@@ -121,6 +121,7 @@ const removeUser = () => localStorage.removeItem(USER_KEY)
 export {
   initUsers,
   addUser,
+  setUser,
   verifyUser,
   getUser,
   getUserById,

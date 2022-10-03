@@ -5,23 +5,24 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { AuthContextProvider } from './contexts/AuthContext'
 import { BrowserRouter } from 'react-router-dom'
-import { initUsers } from './data/users'
 import { NotificationContextProvider } from './contexts/NotificationContext'
 import ScrollToTop from './helpers/ScrollToTop'
-import { initPosts } from './data/posts'
-initUsers()
-initPosts()
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthContextProvider>
-        <NotificationContextProvider>
-          <ScrollToTop />
-          <App />
-        </NotificationContextProvider>
-      </AuthContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContextProvider>
+          <NotificationContextProvider>
+            <ScrollToTop />
+            <App />
+          </NotificationContextProvider>
+        </AuthContextProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>
 )
