@@ -11,7 +11,7 @@ import { Typography } from '@mui/material'
 // step1: getting user details
 // step2: verifying mfa token
 export const LoginForm = () => {
-  const { validate, login } = useLogin()
+  const { mutate } = useLogin()
   const [step, setStep] = useState(1)
   const inputFields1 = [
     { label: 'Email', defaultValue: '' },
@@ -20,15 +20,22 @@ export const LoginForm = () => {
   const inputFields2 = [{ label: 'Token', defaultValue: '' }]
 
   const onStep1 = data => {
-    validate(data.email, data.password)
-    setStep(2)
+    const registerDetails = {
+      username: data.name,
+      email: data.email,
+      password: data.password,
+    }
+
+    mutate(registerDetails)
+    // validate(data.email, data.password)
+    // setStep(2)
   }
 
   // Step2: Adding user to local storage and context upon success
-  const onSubmit = data => login(data.token)
+  // const onSubmit = data => login(data.token)
 
   const formValidation1 = useLoginValidation(onStep1)
-  const formValidation2 = useMfaValidation(onSubmit)
+  // const formValidation2 = useMfaValidation(onSubmit)
 
   return (
     <>
@@ -40,7 +47,7 @@ export const LoginForm = () => {
           submitButtonName={'Next'}
         />
       )}
-      {step === 2 && (
+      {/* {step === 2 && (
         <>
           <BasicForm
             validation={formValidation2}
@@ -54,7 +61,7 @@ export const LoginForm = () => {
             </Typography>
           </BasicForm>
         </>
-      )}
+      )} */}
     </>
   )
 }

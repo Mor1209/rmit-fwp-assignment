@@ -3,6 +3,7 @@ import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
 import { capitalize } from '@mui/material'
+import capitalizeAll from '../helpers/capitalize'
 import { useEffect, useState } from 'react'
 import { useMutation, useQuery } from 'react-query'
 import axios from 'axios'
@@ -50,7 +51,7 @@ export const useRegister = registerDetails => {
       })
       sendNotification(
         'success',
-        `Welcome ${capitalize(user.username)} !`,
+        `Welcome ${capitalizeAll(user.username)} !`,
         false
       )
       navigate('/profile')
