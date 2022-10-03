@@ -16,7 +16,6 @@ const getPostById = async (req, res) => {
 const getAllPosts = async (req, res) => {
   try {
     const posts = await db.Post.findAll()
-    console.log(posts)
     res.status(200).json({ posts: posts })
   } catch (error) {
     res.status(404)
@@ -50,7 +49,7 @@ const updatePost = async (req, res) => {
     await db.Post.update(data, {
       where: { id: postId },
     })
-    res.status(204).json({ message: 'updated post' })
+    res.status(204)
   } catch (error) {
     res.status(400)
   }

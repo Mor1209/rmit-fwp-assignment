@@ -19,13 +19,13 @@ function Post() {
   const { sendNotification } = useNotificationContext()
   const [isLoading2, setLoading] = useState(false)
 
-  const fetchAllPosts = async () => {
+  const fetchPost = async () => {
     const response = await fetch(`${API_PATH}/posts/${params.id}`)
     const r = await response.json()
     return r.post
   }
 
-  const { data } = useQuery('post', fetchAllPosts)
+  const { data } = useQuery('post', fetchPost)
 
   const addComment = async (data, postId, parentId, userId, reset) => {
     setLoading(true)
