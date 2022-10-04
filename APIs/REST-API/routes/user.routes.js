@@ -6,8 +6,10 @@ import authController from '../controllers/authController.js'
 
 const router = express.Router()
 
+router.post('/register-mfa', authController.registerMfa)
 router.post('/register', authController.register)
 router.post('/login', authController.login)
+router.post('/validate-user', authController.validateUser)
 
 router
   .route('/current')

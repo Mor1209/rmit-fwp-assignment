@@ -30,10 +30,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(96),
         allowNull: false,
       },
+      mfaSecret: {
+        type: DataTypes.STRING(96),
+        allowNull: false,
+      },
     },
     {
       defaultScope: {
-        attributes: { exclude: ['password'] },
+        attributes: { exclude: ['password', 'mfaSecret'] },
       },
       scopes: {
         withPassword: {

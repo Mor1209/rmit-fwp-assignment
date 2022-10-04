@@ -23,6 +23,10 @@ module.exports = {
         type: Sequelize.STRING(96),
         allowNull: false,
       },
+      mfaSecret: {
+        type: Sequelize.STRING(96),
+        allowNull: false,
+      },
       createdAt: {
         type: 'TIMESTAMP',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),

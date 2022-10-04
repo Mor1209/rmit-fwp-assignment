@@ -22,7 +22,9 @@
     "hpp": "^0.2.3",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
+    "qrcode": "^1.5.1",
     "sequelize": "^6.23.1",
+    "speakeasy": "^2.0.0",
     "xss-clean": "^0.1.1",
     "yup": "^0.32.11",
     "yup-password": "^0.2.2"
