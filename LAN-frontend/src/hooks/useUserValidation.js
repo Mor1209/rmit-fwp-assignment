@@ -19,7 +19,7 @@ const loginSchema = yup
 
 const nameSchema = yup
   .object({
-    name: yup.string().required(),
+    username: yup.string().required(),
   })
   .required()
 

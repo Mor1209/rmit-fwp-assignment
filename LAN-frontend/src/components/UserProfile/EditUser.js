@@ -23,6 +23,23 @@ const EditUser = () => {
     setDeleteIsOpen(!deleteIsOpen)
   }
 
+  // const getCurrentUser = async () => {
+  //   const { data } = await axios.get(
+  //     'http://localhost:4000/rest-api/users/current',
+  //     {
+  //       withCredentials: true,
+  //       headers: {
+  //         'Access-Control-Allow-Origin': '*',
+  //         'Access-Control-Allow-Credentials': true,
+  //         'Content-Type': 'application/json;charset=UTF-8',
+  //       },
+  //     }
+  //   )
+  //   return data
+  // }
+
+  // const { data } = useQuery('user', getCurrentUser, { staleTime: 120000 })
+
   return (
     <>
       <Stack direction="row">

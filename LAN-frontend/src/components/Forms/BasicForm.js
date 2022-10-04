@@ -1,4 +1,5 @@
-import { Box, Typography, Button, IconButton } from '@mui/material'
+import { Box, Typography, IconButton } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
 import FormInputField from './FormInputField'
 import { ArrowBack } from '@mui/icons-material'
 
@@ -56,14 +57,15 @@ const BasicForm = props => {
             )
           })}
           {props.inputFields}
-          <Button
+          <LoadingButton
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            loading={props.isLoading}
           >
             {props.submitButtonName}
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
     </Box>

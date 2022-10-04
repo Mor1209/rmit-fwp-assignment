@@ -19,12 +19,17 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      password_hash: {
+      password: {
+        type: Sequelize.STRING(96),
+        allowNull: false,
+      },
+      mfaSecret: {
         type: Sequelize.STRING(96),
         allowNull: false,
       },
       createdAt: {
-        type: Sequelize.DATE,
+        type: 'TIMESTAMP',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         allowNull: false,
       },
     })

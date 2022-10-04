@@ -1,89 +1,94 @@
-import { addUser, userExists } from '../data/users'
 import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
-import capitalize from '../helpers/capitalize'
-import { useEffect, useState } from 'react'
-import * as qrcode from 'qrcode'
-const speakeasy = require('speakeasy')
+import { capitalize } from '@mui/material'
+import capitalizeAll from '../helpers/capitalize'
+import { useState } from 'react'
+import { useMutation } from 'react-query'
+import axios from 'axios'
+import { setUser } from '../data/users'
 
 // register functionality invoked from the register form
-export const useRegister = () => {
+export const useRegister = ({ setStep }) => {
   const { sendNotification } = useNotificationContext()
   const { dispatchAuth } = useAuthContext()
   const navigate = useNavigate()
 
-  const [registerDetails, setRegisterDetails] = useState({})
-  const [qr, setQr] = useState('')
-  const [secret, setSecret] = useState({})
+  const [qrCode, setQrCode] = useState('')
+  const [mfaSecret, setMfaSecret] = useState({})
+  const [userDetails, setUserDetails] = useState({})
 
-  useEffect(() => {
-    const getQr = async () => {
-      try {
-        // generating secret with speakeasy
-        const newSecret = speakeasy.generateSecret({ name: 'LoopAgileNow' })
-        setSecret(newSecret)
-        // translating mfa register link to qr code
-        // to be used in authenticator app to get token for user
-        const qrDataURL = await qrcode.toDataURL(newSecret.otpauth_url)
-        setQr(qrDataURL)
-      } catch (err) {
-        console.error(err)
+  const postRegisterMfa = async userData => {
+    setUserDetails(userData)
+    const { data } = await axios.post(
+      'http://localhost:4000/rest-api/users/register-mfa',
+      userData,
+      {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
       }
-    }
-
-    getQr()
-  }, [])
-
-  const register = token => {
-    const verified = speakeasy.totp.verify({
-      secret: secret.ascii,
-      encoding: 'ascii',
-      token,
-    })
-
-    if (!verified) {
-      sendNotification('error', 'Token is not valid !')
-      return
-    }
-
-    const user = addUser(
-      registerDetails.name,
-      registerDetails.email,
-      registerDetails.password,
-      secret.ascii,
-      token
     )
-
-    if (!user) {
-      sendNotification('error', 'User with email already exists !')
-      return
-    }
-
-    dispatchAuth({
-      type: 'REGISTER',
-      user,
-    })
-    sendNotification('success', `Welcome ${capitalize(user.name)} !`, false)
-    navigate('/profile')
+    return data
   }
 
-  const validate = (name, email, password) => {
-    const user = userExists(email)
-
-    if (user) {
-      sendNotification('error', 'User with email already exists !')
-      return
-    }
-
-    setRegisterDetails({
-      name,
-      email,
-      password,
-    })
-
-    return true
+  const postRegister = async userData => {
+    const updatedData = { ...userDetails, ...userData, mfaSecret }
+    setUserDetails(updatedData)
+    const { data } = await axios.post(
+      'http://localhost:4000/rest-api/users/register',
+      updatedData,
+      {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      }
+    )
+    return data
   }
 
-  return { register, validate, qr, secret, setRegisterDetails }
+  const registerMfaMutation = useMutation(['user'], postRegisterMfa, {
+    onError: error => {
+      sendNotification('error', capitalize(error.response.data.message))
+    },
+    onSuccess: res => {
+      setStep(2)
+      setMfaSecret(res.data.mfaSecret)
+      setQrCode(res.data.qrCode)
+    },
+  })
+
+  const registerMutation = useMutation(['user'], postRegister, {
+    onError: error => {
+      sendNotification('error', capitalize(error.response.data.message))
+    },
+    onSuccess: res => {
+      const user = res.data.user
+
+      setUser(user)
+      dispatchAuth({
+        type: 'REGISTER',
+        user,
+      })
+      sendNotification(
+        'success',
+        `Welcome ${capitalizeAll(user.username)} !`,
+        false
+      )
+      navigate('/profile')
+    },
+  })
+
+  return {
+    qrCode,
+    mfaSecret,
+    registerMutation,
+    registerMfaMutation,
+  }
 }
