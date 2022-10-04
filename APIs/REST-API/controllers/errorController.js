@@ -1,7 +1,7 @@
 import AppError from '../utils/appError.js'
 
 const handleSequelizeUniqueConstraintError = err => {
-  const message = `${err.errors[0].path} already exists!`
+  const message = `User with ${err.errors[0].path} already exists!`
   return new AppError(message, 400)
 }
 

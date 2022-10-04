@@ -30,6 +30,7 @@ const createTokenResponse = (user, res, statusCode) => {
   res.cookie('jwt', token, cookieOptions)
 
   user.password = undefined
+  user.mfaSecret = undefined
 
   res.status(statusCode).json({
     status: 'success',

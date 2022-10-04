@@ -87,20 +87,10 @@ const getUserById = userId => {
   return users.filter(user => user.userId === userId)[0]
 }
 
-const updateUser = (name, email, password) => {
-  email = email.toLowerCase()
-  const user = getUser()
+const updateUser = user => {
+  removeUser()
 
-  if (userExists(email) && user.email !== email) return
-
-  deleteUser(true)
-
-  const userUpdate = { ...user, name, email, password }
-  const users = getUsers()
-  users.push(userUpdate)
-  setUsers(users)
-
-  return setUser(userUpdate)
+  return setUser(user)
 }
 
 const deleteUser = postsRemain => {
