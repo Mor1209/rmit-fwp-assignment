@@ -1,29 +1,27 @@
-import { addUser, userExists } from '../data/users'
 import { useNotificationContext } from '../hooks/useNotificationContext'
 import { useAuthContext } from './useAuthContext'
 import { useNavigate } from 'react-router-dom'
 import { capitalize } from '@mui/material'
 import capitalizeAll from '../helpers/capitalize'
-import { useEffect, useState } from 'react'
-import { useMutation, useQuery } from 'react-query'
+import { useState } from 'react'
+import { useMutation } from 'react-query'
 import axios from 'axios'
 import { setUser } from '../data/users'
-// import * as qrcode from 'qrcode'
-// const speakeasy = require('speakeasy')
 
 // register functionality invoked from the register form
-export const useRegister = registerDetails => {
+export const useRegister = ({ setStep }) => {
   const { sendNotification } = useNotificationContext()
   const { dispatchAuth } = useAuthContext()
   const navigate = useNavigate()
 
-  // const [registerDetails, setRegisterDetails] = useState({})
-  // const [qr, setQr] = useState('')
-  // const [secret, setSecret] = useState({})
+  const [qrCode, setQrCode] = useState('')
+  const [mfaSecret, setMfaSecret] = useState({})
+  const [userDetails, setUserDetails] = useState({})
 
-  const postRegister = async userData => {
+  const postRegisterMfa = async userData => {
+    setUserDetails(userData)
     const { data } = await axios.post(
-      'http://localhost:4000/rest-api/users/register',
+      'http://localhost:4000/rest-api/users/register-mfa',
       userData,
       {
         withCredentials: true,
@@ -37,7 +35,36 @@ export const useRegister = registerDetails => {
     return data
   }
 
-  return useMutation(['user'], postRegister, {
+  const postRegister = async userData => {
+    const updatedData = { ...userDetails, ...userData, mfaSecret }
+    setUserDetails(updatedData)
+    const { data } = await axios.post(
+      'http://localhost:4000/rest-api/users/register',
+      updatedData,
+      {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      }
+    )
+    return data
+  }
+
+  const registerMfaMutation = useMutation(['user'], postRegisterMfa, {
+    onError: error => {
+      sendNotification('error', capitalize(error.response.data.message))
+    },
+    onSuccess: res => {
+      setStep(2)
+      setMfaSecret(res.data.mfaSecret)
+      setQrCode(res.data.qrCode)
+    },
+  })
+
+  const registerMutation = useMutation(['user'], postRegister, {
     onError: error => {
       sendNotification('error', capitalize(error.response.data.message))
     },
@@ -58,59 +85,10 @@ export const useRegister = registerDetails => {
     },
   })
 
-  // useEffect(() => {
-  //   const getQr = async () => {
-  //     try {
-  //       // generating secret with speakeasy
-  //       const newSecret = speakeasy.generateSecret({ name: 'LoopAgileNow' })
-  //       setSecret(newSecret)
-  //       // translating mfa register link to qr code
-  //       // to be used in authenticator app to get token for user
-  //       const qrDataURL = await qrcode.toDataURL(newSecret.otpauth_url)
-  //       setQr(qrDataURL)
-  //     } catch (err) {
-  //       console.error(err)
-  //     }
-  //   }
-
-  //   getQr()
-  // }, [])
-
-  // const verified = speakeasy.totp.verify({
-  //   secret: secret.ascii,
-  //   encoding: 'ascii',
-  //   token,
-  // })
-
-  // if (!verified) {
-  //   sendNotification('error', 'Token is not valid !')
-  //   return
-  // }
-
-  // const user = addUser(
-  //   registerDetails.name,
-  //   registerDetails.email,
-  //   registerDetails.password,
-  //   secret.ascii,
-  //   token
-  // )
-
-  // return { register, qr, secret, setRegisterDetails }
+  return {
+    qrCode,
+    mfaSecret,
+    registerMutation,
+    registerMfaMutation,
+  }
 }
-
-// const validate = (name, email, password) => {
-//   // const user = userExists(email)
-
-//   // if (user) {
-//   //   sendNotification('error', 'User with email already exists !')
-//   //   return
-//   // }
-
-//   setRegisterDetails({
-//     name,
-//     email,
-//     password,
-//   })
-
-//   return true
-// }

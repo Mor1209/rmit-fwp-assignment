@@ -88,7 +88,6 @@ const getUserById = userId => {
 }
 
 const updateUser = (name, email, password) => {
-  name = name.toLowerCase()
   email = email.toLowerCase()
   const user = getUser()
 
