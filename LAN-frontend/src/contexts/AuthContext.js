@@ -1,6 +1,6 @@
 import { createContext, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { verifyUser, getUser, removeUser } from '../data/users'
+import { getUser, removeUser } from '../data/users'
 
 const defaultAuthState = {
   isAuth: false,
@@ -34,10 +34,7 @@ export const AuthContextProvider = ({ children }) => {
 
   // initialize user, if no user in local storage or not verifable
   // then initialize with defaultAuthState
-  const initialState =
-    user && verifyUser(user.email, user.password)
-      ? { isAuth: true, user }
-      : defaultAuthState
+  const initialState = user ? { isAuth: true, user } : defaultAuthState
   const [authState, dispatchAuth] = useReducer(authReducer, initialState)
   const navigate = useNavigate()
 

@@ -94,8 +94,8 @@ const updateUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User details not valid!', 400))
 
   user.set({
-    username: filteredUpdate.toLowerCase(),
-    email: filteredUpdate.toLowerCase(),
+    username: filteredUpdate?.username || user.username,
+    email: filteredUpdate?.email.toLowerCase() || user.email,
   })
 
   const response = await user.save()
@@ -127,8 +127,8 @@ const updateCurrentUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User details not valid!', 400))
 
   user.set({
-    username: filteredUpdate.toLowerCase(),
-    email: filteredUpdate.toLowerCase(),
+    username: filteredUpdate?.username || user.username,
+    email: filteredUpdate?.email.toLowerCase() || user.email,
   })
 
   const response = await user.save()
@@ -161,10 +161,7 @@ const deleteCurrentUser = catchAsync(async (req, res, next) => {
   // get user
   const user = await db.User.findByPk(req.user.id)
 
-  if (!user)
-    return next(
-      new AppError(`User with id: ${req.params.id} doesn't exist`, 404)
-    )
+  if (!user) return next(new AppError(`User doesn't exist anymore`, 404))
 
   await user.destroy()
 
