@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.hasMany(models.Post, { onDelete: 'CASCADE', hooks: true })
+      this.hasMany(models.Comment, { onDelete: 'CASCADE', hooks: true })
     }
   }
   User.init(
@@ -25,12 +26,24 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      password_hash: {
+      password: {
+        type: DataTypes.STRING(96),
+        allowNull: false,
+      },
+      mfaSecret: {
         type: DataTypes.STRING(96),
         allowNull: false,
       },
     },
     {
+      defaultScope: {
+        attributes: { exclude: ['password', 'mfaSecret'] },
+      },
+      scopes: {
+        withPassword: {
+          attributes: {},
+        },
+      },
       sequelize,
       modelName: 'User',
       timestamps: true,

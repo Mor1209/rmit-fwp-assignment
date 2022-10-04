@@ -88,7 +88,6 @@ const getUserById = userId => {
 }
 
 const updateUser = (name, email, password) => {
-  name = name.toLowerCase()
   email = email.toLowerCase()
   const user = getUser()
 
@@ -121,6 +120,7 @@ const removeUser = () => localStorage.removeItem(USER_KEY)
 export {
   initUsers,
   addUser,
+  setUser,
   verifyUser,
   getUser,
   getUserById,

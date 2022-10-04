@@ -6,8 +6,7 @@ import capitalize from '../../helpers/capitalize'
 const UserProfileDetails = () => {
   const authCtx = useAuthContext()
 
-  const name = capitalize(authCtx.user.name)
-
+  const name = capitalize(authCtx.user.username)
   return (
     <Stack>
       <Typography
@@ -25,7 +24,7 @@ const UserProfileDetails = () => {
       <Typography textAlign="left" variant="body1" color="dimgray">
         Joined:{' '}
         {new Intl.DateTimeFormat('EN-AU').format(
-          new Date(authCtx.user.created)
+          new Date(authCtx.user.createdAt)
         )}
       </Typography>
     </Stack>
