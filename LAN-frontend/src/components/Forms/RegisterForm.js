@@ -13,25 +13,21 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 // step2: verifying mfa token and saving secret
 export const RegisterForm = () => {
   const [step, setStep] = useState(1)
-  const { validate, register, qr, secret } = useRegister()
+  const { registerMutation, registerMfaMutation, qrCode, mfaSecret } =
+    useRegister({ setStep })
+
   const inputFields1 = [
-    { label: 'Name', defaultValue: '' },
+    { label: 'Username', defaultValue: '' },
     { label: 'Email', defaultValue: '' },
     { label: 'Password', defaultValue: '' },
     { label: 'Confirm Password', defaultValue: '' },
   ]
   const inputFields2 = [{ label: 'Token', defaultValue: '' }]
 
-  const onStep1 = data => {
-    if (validate(data.name, data.email, data.password)) {
-      setStep(2)
-    }
-  }
+  const onStep1 = data => registerMfaMutation.mutate(data)
 
-  // Step2: user added to local storage upon successfull completion
-  const onSubmit = data => {
-    register(data.token)
-  }
+  // Step2: user added to db storage upon successfull completion
+  const onSubmit = data => registerMutation.mutate(data)
 
   const formValidation1 = useRegisterValidation(onStep1)
   const formValidation2 = useMfaValidation(onSubmit)
@@ -44,6 +40,7 @@ export const RegisterForm = () => {
           inputFieldLabels={inputFields1}
           formName={'Register'}
           submitButtonName={'Next'}
+          isLoading={registerMfaMutation.isLoading}
         />
       )}
       {step === 2 && (
@@ -54,18 +51,19 @@ export const RegisterForm = () => {
             formName={'Add MFA'}
             submitButtonName={'Register'}
             stepBackHandler={() => setStep(1)}
+            isLoading={registerMutation.isLoading}
           >
-            {qr && (
+            {qrCode && (
               <Box sx={{ pt: 2, pb: 3 }}>
                 <Typography variant="h6">Please scan QR code</Typography>
-                <img src={qr} alt="QR Code for authenticator app" />
+                <img src={qrCode} alt="QR Code for authenticator app" />
                 <Typography variant="h6" sx={{ pb: 1 }}>
                   OR
                 </Typography>
                 <Button
                   endIcon={<OpenInNewIcon />}
                   onClick={() => {
-                    window.open(secret.otpauth_url)
+                    window.open(mfaSecret.otpauthUrl)
                   }}
                   sx={{ textTransform: 'none', fontSize: 17 }}
                 >

@@ -19,11 +19,18 @@ const loginSchema = yup
 
 const nameSchema = yup
   .object({
-    name: yup.string().required(),
+    username: yup.string().min(3).required(),
   })
   .required()
 
 const registerSchema = loginSchema.concat(nameSchema)
+
+export const updateSchema = yup
+  .object({
+    username: yup.string().min(3),
+    email: yup.string().email(),
+  })
+  .required()
 
 const mfaSchema = yup.object({ token: yup.string().required() }).required()
 
@@ -44,6 +51,9 @@ export const useRegisterValidation = onSubmit =>
 
 export const useLoginValidation = onSubmit =>
   useUserValidation(loginSchema, onSubmit)
+
+export const useUpdateValidation = onSubmit =>
+  useUserValidation(updateSchema, onSubmit)
 
 export const useMfaValidation = onSubmit =>
   useUserValidation(mfaSchema, onSubmit)

@@ -2,21 +2,26 @@
 
 import express from 'express'
 import userController from '../controllers/userController.js'
-// import authController from '../controllers/authController'
+import authController from '../controllers/authController.js'
 
 const router = express.Router()
 
-// router.post('/register', authController.register)
+router.post('/register-mfa', authController.registerMfa)
+router.post('/register', authController.register)
+router.post('/login', authController.login)
+router.post('/validate-user', authController.validateUser)
 
 router
-  .route('/')
-  .get(userController.getAllUsers)
-  .post(userController.createUser)
+  .route('/current')
+  .get(authController.protectedRoute, userController.getCurrentUser)
+  .patch(authController.protectedRoute, userController.updateCurrentUser)
+  .delete(authController.protectedRoute, userController.deleteCurrentUser)
 
-router
-  .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser)
+router.route('/').get(authController.protectedRoute, userController.getAllUsers)
+// .post(userController.createUser)
+
+router.route('/:id').get(authController.protectedRoute, userController.getUser)
+// .patch(userController.updateUser)
+// .delete(userController.deleteUser)
 
 export default router

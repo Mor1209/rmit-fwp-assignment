@@ -1,9 +1,9 @@
 {
   "devDependencies": {
-    "eslint": "^8.2.0",
+    "eslint": "^8.24.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.0",
@@ -14,11 +14,20 @@
   },
   "dependencies": {
     "argon2": "^0.29.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "helmet": "^6.0.0",
+    "hpp": "^0.2.3",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
-    "sequelize": "^6.23.2"
+    "qrcode": "^1.5.1",
+    "sequelize": "^6.23.1",
+    "speakeasy": "^2.0.0",
+    "xss-clean": "^0.1.1",
+    "yup": "^0.32.11",
+    "yup-password": "^0.2.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

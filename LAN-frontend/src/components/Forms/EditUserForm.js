@@ -2,27 +2,23 @@ import React from 'react'
 import capitalize from '../../helpers/capitalize'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useUpdateUser } from '../../hooks/useUpdateUser'
-import { useRegisterValidation } from '../../hooks/useUserValidation'
+import { useUpdateValidation } from '../../hooks/useUserValidation'
 import BasicForm from './BasicForm'
 
 // Form for editing user details
 // default values are set from the current user
-const EditUserForm = props => {
+const EditUserForm = ({ handleToggle }) => {
   const { user } = useAuthContext()
-  const userName = capitalize(user.name)
+  const username = capitalize(user.username)
   const inputFields = [
-    { label: 'Name', defaultValue: userName },
+    { label: 'Username', defaultValue: username },
     { label: 'Email', defaultValue: user.email },
-    { label: 'Password', defaultValue: user.password },
-    { label: 'Confirm Password', defaultValue: user.password },
   ]
-  const { updateUserDetails } = useUpdateUser()
+  const { updateMutation } = useUpdateUser({ handleToggle })
   const onSubmit = data => {
-    if (updateUserDetails(data.name, data.email, data.password)) {
-      props.handleToggle()
-    }
+    updateMutation.mutate(data)
   }
-  const validation = useRegisterValidation(onSubmit)
+  const validation = useUpdateValidation(onSubmit)
 
   return (
     <BasicForm
@@ -30,6 +26,7 @@ const EditUserForm = props => {
       inputFieldLabels={inputFields}
       formName={'Edit'}
       submitButtonName="Edit"
+      isLoading={updateMutation.isLoading}
     />
   )
 }
