@@ -22,10 +22,10 @@ import { useQueryClient } from 'react-query'
 function AllPosts() {
   const queryClient = useQueryClient()
   const [allPosts, setAllPosts] = useState()
-  const [filteredPosts, setFilterPosts] = useState()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const { user } = useAuthContext()
+  const [filter, setFilter] = useState(false)
 
   const { mutate } = useMutation(deletePost, {
     onSuccess: data => {
@@ -38,21 +38,27 @@ function AllPosts() {
     },
   })
 
-  const { data } = useQuery('posts', fetchAllPosts)
-
+  const { data } = useQuery('posts', fetchAllPosts, {
+    enabled: !filter,
+  })
   return (
     <Container sx={{ height: '100%', marginBottom: 10 }}>
       <Typography variant="h3" color={'white'} fontWeight={'bold'}>
         All Posts
       </Typography>
+
       <Box m={1} display={'flex'} justifyContent={'space-between'}>
         {/* filter button that only displays posts made by the current logged in user */}
-        {filteredPosts === allPosts ? (
+        {filter === false ? (
           <Button
             variant="contained"
             sx={{ margin: 2, float: 'right' }}
             onClick={() => {
-              setFilterPosts(data.filter(post => post.userId === user.userId))
+              queryClient.setQueriesData(
+                'posts',
+                data.filter(post => post.userId === user.id)
+              )
+              setFilter(true)
             }}
           >
             My posts
@@ -62,7 +68,7 @@ function AllPosts() {
             variant="contained"
             sx={{ margin: 2, float: 'right' }}
             onClick={() => {
-              setFilterPosts(data)
+              setFilter(false)
             }}
           >
             All Posts
