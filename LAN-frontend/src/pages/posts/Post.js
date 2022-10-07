@@ -8,70 +8,30 @@ import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useQuery, useMutation } from 'react-query'
-import axios from 'axios'
+import { createComment, fetchPost, fetchComments } from '../../data/api'
+import { useQueryClient } from 'react-query'
 
 function Post() {
   const API_PATH = 'http://localhost:4000/api'
   const params = useParams()
-
-  // const [comments, setComments] = useState([])
+  const queryClient = useQueryClient()
   const [selectedComment, setSelectedComment] = useState(null)
   const { sendNotification } = useNotificationContext()
   const [isLoading2, setLoading] = useState(false)
 
-  const fetchPost = async () => {
-    const { data } = await axios.get(`${API_PATH}/posts/${params.id}`, {
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-    })
+  const { data: comments } = useQuery(['comments', params.id], () =>
+    fetchComments(params.id)
+  )
 
-    return data.post
-  }
-
-  const fetchComments = async () => {
-    const { data } = await axios.get(`${API_PATH}/comments/${params.id}`, {
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-    })
-    return data.comments
-  }
-
-  const { data: comments } = useQuery('comments', fetchComments, {
-    onSuccess: data => {
-      console.log(data)
-    },
-  })
-  const { data: post } = useQuery('post', fetchPost)
-
-  // console.log(comments)
-
-  const createComment = async comment => {
-    const { data } = await axios.post(
-      API_PATH + '/comments',
-      { comment: comment },
-      {
-        withCredentials: true,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-          'Content-Type': 'application/json;charset=UTF-8',
-        },
-      }
-    )
-    return data
-  }
+  const { data: post } = useQuery(['post', params.id], () =>
+    fetchPost(params.id)
+  )
 
   const { mutate } = useMutation(createComment, {
     onSuccess: data => {
       setLoading(false)
+      const comment = data.comment
+      queryClient.setQueriesData('comments', oldData => [...oldData, comment])
       sendNotification('success', 'comment created', false)
     },
     onError: () => {
@@ -90,9 +50,8 @@ function Post() {
       postId: postId,
       userId: userId,
     }
-    // console.log(newComment)
+
     mutate(newComment)
-    reset()
   }
 
   const getCommentReplies = id => {
@@ -191,11 +150,10 @@ function Post() {
         />
 
         <hr />
-        {console.log(comments)}
         {comments &&
           comments.map(comment => {
             // only render the root comments not replies
-            if (true)
+            if (comment.parentId === null)
               return (
                 <Comment
                   key={comment.id}

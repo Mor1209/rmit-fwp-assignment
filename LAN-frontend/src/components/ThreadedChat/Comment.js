@@ -16,20 +16,6 @@ function Comment(props) {
     getReplies,
     loading,
   } = props
-  const API_PATH = 'http://localhost:4000/api'
-
-  // const fetchComments = async () => {
-  //   const { data } = await axios.get(`${API_PATH}/comments/${comment.id}`, {
-  //     withCredentials: true,
-  //     headers: {
-  //       'Access-Control-Allow-Origin': '*',
-  //       'Access-Control-Allow-Credentials': true,
-  //       'Content-Type': 'application/json;charset=UTF-8',
-  //     },
-  //   })
-
-  //   return data.comments
-  // }
 
   const fetchUser = async () => {
     const { data } = await axios.get(
@@ -48,9 +34,6 @@ function Comment(props) {
   }
 
   const { data: user } = useQuery('currentUser', fetchUser)
-
-  // const { data: replies } = useQuery('replies', fetchComments)
-  // console.log(replies)
 
   const replies = getReplies(comment.id)
   const selected = selectedComment && selectedComment.id === comment.id

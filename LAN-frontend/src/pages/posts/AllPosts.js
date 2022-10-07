@@ -1,4 +1,3 @@
-import { deletePost } from '../../data/posts'
 import {
   Grid,
   Container,
@@ -10,7 +9,6 @@ import {
   Button,
   Box,
 } from '@mui/material'
-// import { getUser } from '../../data/users'
 import { useNavigate } from 'react-router'
 import { useState } from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
@@ -18,43 +16,22 @@ import cardImage from '../../assets/r.webp'
 import capitalize from '../../helpers/capitalize'
 import { useQuery, useMutation } from 'react-query'
 import { useAuthContext } from '../../hooks/useAuthContext'
-import axios from 'axios'
+import { fetchAllPosts, deletePost } from '../../data/api'
+import { useQueryClient } from 'react-query'
 
 function AllPosts() {
-  const API_PATH = 'http://localhost:4000/api'
+  const queryClient = useQueryClient()
   const [allPosts, setAllPosts] = useState()
   const [filteredPosts, setFilterPosts] = useState()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const { user } = useAuthContext()
 
-  const fetchAllPosts = async () => {
-    const { data } = await axios.get(`${API_PATH}/posts`, {
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-    })
-
-    return data.posts
-  }
-
-  const deletePost = async id => {
-    await axios.get(`${API_PATH}/posts/${id}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ post: data }),
-    })
-  }
-
   const { mutate } = useMutation(deletePost, {
     onSuccess: data => {
-      sendNotification('success', 'Post deleted', false)
+      const posts = data.posts
+      queryClient.setQueriesData('posts', posts)
+      sendNotification('success', 'comment created', false)
     },
     onError: () => {
       sendNotification('error', 'failed to delete post', false)
@@ -62,10 +39,6 @@ function AllPosts() {
   })
 
   const { data } = useQuery('posts', fetchAllPosts)
-
-  const handleDeletePost = id => {
-    mutate(id)
-  }
 
   return (
     <Container sx={{ height: '100%', marginBottom: 10 }}>
@@ -129,9 +102,7 @@ function AllPosts() {
                     <Typography gutterBottom variant="h5" component="div">
                       {capitalize(post.title)} by {capitalize(post.author)}
                     </Typography>
-                    {/* <Typography variant="body2" color="text.secondary"> */}
                     <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                    {/* </Typography> */}
                   </CardContent>
                   <CardActions
                     sx={{
@@ -148,7 +119,7 @@ function AllPosts() {
                           size="small"
                           variant="contained"
                           color="error"
-                          onClick={() => handleDeletePost(post.id)}
+                          onClick={() => mutate(parseInt(post.id))}
                         >
                           Delete
                         </Button>

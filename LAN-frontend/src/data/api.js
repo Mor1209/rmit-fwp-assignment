@@ -1,0 +1,55 @@
+import axios from 'axios'
+const API_PATH = 'http://localhost:4000/api'
+
+const API = axios.create({
+  baseURL: API_PATH,
+  withCredentials: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true,
+    'Content-Type': 'application/json;charset=UTF-8',
+  },
+})
+
+const fetchAllPosts = async () => {
+  const { data } = await API.get('/posts')
+  return data.posts
+}
+
+const deletePost = async id => {
+  const { data } = await API.delete(`/posts/${id}`)
+  return data
+}
+
+const createComment = async comment => {
+  const { data } = await API.post('/comments', { comment: comment })
+  return data
+}
+
+const fetchPost = async id => {
+  const { data } = await API.get(`/posts/${id}`)
+  return data.post
+}
+
+const fetchComments = async id => {
+  const { data } = await API.get(`/comments/${id}`)
+  return data.comments
+}
+
+const updatePost = async data => {
+  await API.patch(`posts/${data.id}`, { post: data })
+}
+
+const createPost = async post => {
+  const { data } = await API.post('/posts', { post: post })
+  return data
+}
+export {
+  fetchAllPosts,
+  deletePost,
+  createComment,
+  fetchPost,
+  fetchComments,
+  updatePost,
+  createPost,
+}

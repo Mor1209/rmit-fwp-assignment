@@ -40,22 +40,26 @@ const deletePost = async (req, res) => {
   const postId = req.params.id
   try {
     await db.Post.destroy({ where: { id: postId } })
-    res.status(204).json({ message: 'post deleted' })
+    const posts = await db.Post.findAll()
+    res.status(200).json({ message: 'post deleted', posts: posts })
   } catch (error) {
-    res.status(404)
+    res.status(424).json({ message: 'failed to delete post' })
   }
 }
 
 const updatePost = async (req, res) => {
   const postId = req.params.id
   const data = req.body.post
+
   try {
+    const content = data.content.replace(/&lt;/g, '<')
+    data.content = content
     await db.Post.update(data, {
       where: { id: postId },
     })
-    res.status(204)
+    res.status(204).json({ message: 'updated post' })
   } catch (error) {
-    res.status(400)
+    res.status(424).json({ message: 'failed to update post' })
   }
 }
 
