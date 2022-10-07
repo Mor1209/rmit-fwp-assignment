@@ -12,7 +12,6 @@ import { createComment, fetchPost, fetchComments } from '../../data/api'
 import { useQueryClient } from 'react-query'
 
 function Post() {
-  const API_PATH = 'http://localhost:4000/api'
   const params = useParams()
   const queryClient = useQueryClient()
   const [selectedComment, setSelectedComment] = useState(null)

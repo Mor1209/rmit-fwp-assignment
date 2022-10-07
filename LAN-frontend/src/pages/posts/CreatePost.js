@@ -1,7 +1,7 @@
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { imageUpload } from '../../firebase'
+// import { imageUpload } from '../../firebase'
 import PostForm from '../../components/Forms/PostForm'
 import { useMutation } from 'react-query'
 import { createPost } from '../../data/api'

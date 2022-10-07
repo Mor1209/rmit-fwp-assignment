@@ -21,7 +21,6 @@ import { useQueryClient } from 'react-query'
 
 function AllPosts() {
   const queryClient = useQueryClient()
-  const [allPosts, setAllPosts] = useState()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
   const { user } = useAuthContext()

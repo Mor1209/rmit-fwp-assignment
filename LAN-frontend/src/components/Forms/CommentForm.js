@@ -8,7 +8,6 @@ import {
 import { Box } from '@mui/system'
 import { useState } from 'react'
 import { useCommentValidation } from '../../hooks/usePostValidation'
-import FormInputField from './FormInputField'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'

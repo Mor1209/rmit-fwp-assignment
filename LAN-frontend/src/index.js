@@ -7,12 +7,8 @@ import { AuthContextProvider } from './contexts/AuthContext'
 import { BrowserRouter } from 'react-router-dom'
 import { NotificationContextProvider } from './contexts/NotificationContext'
 import ScrollToTop from './helpers/ScrollToTop'
-import { initPosts } from './data/posts'
-import { initUsers } from './data/users'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
-initUsers()
-initPosts()
 const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
