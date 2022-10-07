@@ -5,28 +5,36 @@ import { useNavigate } from 'react-router'
 import { imageUpload } from '../../firebase'
 import PostForm from '../../components/Forms/PostForm'
 import { useMutation } from 'react-query'
+import axios from 'axios'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 function CreatePost() {
   const { sendNotification } = useNotificationContext()
+  let { user } = useAuthContext()
+
   const API_PATH = 'http://localhost:4000/api'
   const [isLoading, setLoading] = useState(false)
-  const author = getUser()
+
   const navigate = useNavigate()
 
-  const createPost = async data => {
-    await fetch(`${API_PATH}/posts`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ post: data }),
-    })
+  const createPost = async post => {
+    const { data } = await axios.post(
+      API_PATH + '/posts',
+      { post: post },
+      {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      }
+    )
+    return data
   }
 
   const { mutate } = useMutation(createPost, {
     onSuccess: data => {
-      console.log(data)
       setLoading(false)
       sendNotification('success', 'Post created', false)
       navigate('/posts')
@@ -38,20 +46,19 @@ function CreatePost() {
   })
 
   const onSubmit = async data => {
-    // save the inputed data
     setLoading(true)
-    const url = await imageUpload(data.image[0])
+    // const url = await imageUpload(data.image[0])
 
-    if (url === 'error') {
-      sendNotification('error', 'Failed to Upload Image', false)
-      return
-    }
+    // if (url === 'error') {
+    //   sendNotification('error', 'Failed to Upload Image', false)
+    //   return
+    // }
 
     const post = {
       ...data,
-      image: url,
-      author: author.name,
-      userId: 'test',
+      image: null,
+      author: user.username,
+      userId: user.id,
     }
 
     mutate(post)

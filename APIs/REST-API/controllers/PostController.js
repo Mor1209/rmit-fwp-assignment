@@ -6,8 +6,8 @@ const getPostById = async (req, res) => {
   const postId = req.params.id
 
   try {
-    const posts = await db.Post.findByPk(postId)
-    res.status(200).json({ post: posts })
+    const post = await db.Post.findByPk(postId)
+    res.status(200).json({ post: post })
   } catch (error) {
     res.status(404).json({ message: 'post not found' })
   }
@@ -25,6 +25,10 @@ const getAllPosts = async (req, res) => {
 const createPost = async (req, res) => {
   const data = req.body.post
   try {
+    // not sure why the text automatically appended some characters when sending the data
+    // need to replace the characters to <
+    const content = data.content.replace(/&lt;/g, '<')
+    data.content = content
     await db.Post.create(data)
     res.status(201).json({ message: 'post created' })
   } catch (error) {

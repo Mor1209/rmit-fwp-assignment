@@ -1,45 +1,98 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from 'react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Container, Typography, Stack, capitalize } from '@mui/material'
 import capEveryWord from '../../helpers/capitalize'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
-import { createComment, getPostById } from '../../data/posts'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from 'react-query'
+import axios from 'axios'
 
 function Post() {
   const API_PATH = 'http://localhost:4000/api'
   const params = useParams()
-  // const [data, setPost] = useState(null)
+
+  // const [comments, setComments] = useState([])
   const [selectedComment, setSelectedComment] = useState(null)
-  const [comments, setComments] = useState([])
   const { sendNotification } = useNotificationContext()
   const [isLoading2, setLoading] = useState(false)
 
   const fetchPost = async () => {
-    const response = await fetch(`${API_PATH}/posts/${params.id}`)
-    const r = await response.json()
-    return r.post
+    const { data } = await axios.get(`${API_PATH}/posts/${params.id}`, {
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    })
+
+    return data.post
   }
 
-  const { data } = useQuery('post', fetchPost)
+  const fetchComments = async () => {
+    const { data } = await axios.get(`${API_PATH}/comments/${params.id}`, {
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    })
+    return data.comments
+  }
+
+  const { data: comments } = useQuery('comments', fetchComments, {
+    onSuccess: data => {
+      console.log(data)
+    },
+  })
+  const { data: post } = useQuery('post', fetchPost)
+
+  // console.log(comments)
+
+  const createComment = async comment => {
+    const { data } = await axios.post(
+      API_PATH + '/comments',
+      { comment: comment },
+      {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      }
+    )
+    return data
+  }
+
+  const { mutate } = useMutation(createComment, {
+    onSuccess: data => {
+      setLoading(false)
+      sendNotification('success', 'comment created', false)
+    },
+    onError: () => {
+      setLoading(false)
+      sendNotification('error', 'failed to create comment', false)
+    },
+  })
 
   const addComment = async (data, postId, parentId, userId, reset) => {
     setLoading(true)
-    const newComment = await createComment(data, postId, parentId, userId)
 
-    if (newComment === 'error') {
-      sendNotification('error', 'Failed to Upload Image', false)
-      return
+    const newComment = {
+      content: data.comment,
+      image: data.image,
+      parentId: parentId,
+      postId: postId,
+      userId: userId,
     }
-
-    setComments([...comments, newComment])
-    setSelectedComment(null)
+    // console.log(newComment)
+    mutate(newComment)
     reset()
-    setLoading(false)
   }
 
   const getCommentReplies = id => {
@@ -60,19 +113,19 @@ function Post() {
         }}
         disableGutters
       >
-        <BannerImage url={data?.image} />
+        <BannerImage url={post?.image} />
         {/* render out post data and display image if any */}
-        {data && (
+        {post && (
           <>
             <Typography p={2} variant={'h3'}>
-              {capitalize(data.title)}
+              {capitalize(post.title)}
             </Typography>
 
             <Typography
               sx={{ opacity: 0.7, fontStyle: 'italic' }}
               variant={'h7'}
             >
-              by <b>{capEveryWord(data.author)}</b>
+              by <b>{capEveryWord(post.author)}</b>
             </Typography>
             <Stack
               direction="row"
@@ -82,9 +135,9 @@ function Post() {
               p={5}
             >
               {/* make the image on the left of the paragraph */}
-              {data?.image && (
+              {post?.image && (
                 <img
-                  src={data?.image}
+                  src={post?.image}
                   alt="uploadedImage"
                   style={{
                     border: '10px solid lightgrey',
@@ -96,17 +149,16 @@ function Post() {
                   }}
                 />
               )}
-              <Typography
-                variant="body2"
-                sx={{
+
+              <div
+                dangerouslySetInnerHTML={{ __html: post.content }}
+                style={{
                   marginLeft: 'auto',
                   marginRight: 'auto',
                   textAlign: 'start',
                   width: '1000px',
                 }}
-              >
-                {data.content}
-              </Typography>
+              />
             </Stack>
           </>
         )}
@@ -133,16 +185,17 @@ function Post() {
         <CommentForm
           type={'comment'}
           submit={addComment}
-          postId={data?.id}
+          postId={post?.id}
           parentId={null}
           loading={isLoading2}
         />
 
         <hr />
+        {console.log(comments)}
         {comments &&
           comments.map(comment => {
             // only render the root comments not replies
-            if (comment.parentId === null)
+            if (true)
               return (
                 <Comment
                   key={comment.id}
@@ -150,7 +203,7 @@ function Post() {
                   selectedComment={selectedComment}
                   setSelectedComment={setSelectedComment}
                   addComment={addComment}
-                  postId={data?.id}
+                  postId={post?.id}
                   getReplies={getCommentReplies}
                   loading={isLoading2}
                 />

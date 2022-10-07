@@ -10,21 +10,46 @@ import { useState } from 'react'
 import { useCommentValidation } from '../../hooks/usePostValidation'
 import FormInputField from './FormInputField'
 import { useAuthContext } from '../../hooks/useAuthContext'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
+import { useEffect } from 'react'
 
 // Form for adding comments to posts
 function CommentForm({ type, submit, postId, parentId, loading }) {
   const { user } = useAuthContext()
-  const { errors, submitHandler, register, reset } = useCommentValidation()
+  const { errors, submitHandler, register, reset, setValue, watch } =
+    useCommentValidation()
 
   const onSubmit = data => {
-    submit(data, postId, parentId, user.userId, reset)
+    submit(data, postId, parentId, user.id, reset)
     setImage('')
   }
+
+  useEffect(() => {
+    register('comment')
+  }, [register])
+
+  const onCommentChange = currentValue => {
+    setValue('comment', currentValue)
+  }
+
+  const comment = watch('comment')
 
   const [image, setImage] = useState('')
   return (
     <Box component="form" onSubmit={submitHandler(onSubmit)}>
-      <FormInputField
+      <p className="Error" style={{ color: 'red' }}>
+        {errors.content && errors['content'].message}
+      </p>
+      <ReactQuill
+        theme="snow"
+        value={comment}
+        onChange={onCommentChange}
+        placeholder="Write down the content"
+        style={{ height: '180px', marginTop: '10px' }}
+      />
+
+      {/* <FormInputField
         id="comment"
         name="comment"
         register={register}
@@ -32,7 +57,7 @@ function CommentForm({ type, submit, postId, parentId, loading }) {
         placeholder="Write down your comment"
         multiline
         rows={5}
-      />
+      /> */}
 
       {/* display uploaded image under the form */}
       {image && (
@@ -53,7 +78,13 @@ function CommentForm({ type, submit, postId, parentId, loading }) {
         />
       )}
 
-      <Stack m={2} direction="row" justifyContent="space-between">
+      <Stack
+        mt={6}
+        ml={2}
+        mr={2}
+        direction="row"
+        justifyContent="space-between"
+      >
         <FormControl
           error={errors['image'] ? true : false}
           fullWidth

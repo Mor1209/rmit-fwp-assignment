@@ -1,4 +1,4 @@
-import { getAllPosts, deletePost } from '../../data/posts'
+import { deletePost } from '../../data/posts'
 import {
   Grid,
   Container,
@@ -10,13 +10,15 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { getUser } from '../../data/users'
+// import { getUser } from '../../data/users'
 import { useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import cardImage from '../../assets/r.webp'
 import capitalize from '../../helpers/capitalize'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation } from 'react-query'
+import { useAuthContext } from '../../hooks/useAuthContext'
+import axios from 'axios'
 
 function AllPosts() {
   const API_PATH = 'http://localhost:4000/api'
@@ -24,26 +26,45 @@ function AllPosts() {
   const [filteredPosts, setFilterPosts] = useState()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
-  const user = getUser()
+  const { user } = useAuthContext()
 
   const fetchAllPosts = async () => {
-    const response = await fetch(`${API_PATH}/posts`)
-    const r = await response.json()
-    return r.posts
+    const { data } = await axios.get(`${API_PATH}/posts`, {
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    })
+
+    return data.posts
   }
+
+  const deletePost = async id => {
+    await axios.get(`${API_PATH}/posts/${id}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ post: data }),
+    })
+  }
+
+  const { mutate } = useMutation(deletePost, {
+    onSuccess: data => {
+      sendNotification('success', 'Post deleted', false)
+    },
+    onError: () => {
+      sendNotification('error', 'failed to delete post', false)
+    },
+  })
 
   const { data } = useQuery('posts', fetchAllPosts)
 
   const handleDeletePost = id => {
-    // delete a post
-    const remainPosts = deletePost(id)
-    if (remainPosts === null) {
-      sendNotification('error', 'Unable to Delete Post', false)
-      return
-    }
-    setAllPosts(remainPosts)
-    setFilterPosts(remainPosts)
-    sendNotification('success', 'Post Delete', false)
+    mutate(id)
   }
 
   return (
@@ -58,9 +79,7 @@ function AllPosts() {
             variant="contained"
             sx={{ margin: 2, float: 'right' }}
             onClick={() => {
-              setFilterPosts(
-                allPosts.filter(post => post.userId === user.userId)
-              )
+              setFilterPosts(data.filter(post => post.userId === user.userId))
             }}
           >
             My posts
@@ -70,7 +89,7 @@ function AllPosts() {
             variant="contained"
             sx={{ margin: 2, float: 'right' }}
             onClick={() => {
-              setFilterPosts(allPosts)
+              setFilterPosts(data)
             }}
           >
             All Posts
@@ -110,9 +129,9 @@ function AllPosts() {
                     <Typography gutterBottom variant="h5" component="div">
                       {capitalize(post.title)} by {capitalize(post.author)}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {post.content}
-                    </Typography>
+                    {/* <Typography variant="body2" color="text.secondary"> */}
+                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                    {/* </Typography> */}
                   </CardContent>
                   <CardActions
                     sx={{
@@ -122,7 +141,8 @@ function AllPosts() {
                     }}
                   >
                     {/* only the author of the post can delete and edit the post */}
-                    {user.userId === post.userId ? (
+
+                    {user.id === post.userId ? (
                       <>
                         <Button
                           size="small"

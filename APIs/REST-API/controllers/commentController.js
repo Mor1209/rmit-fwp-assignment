@@ -6,17 +6,24 @@ const createComment = async (req, res) => {
   const data = req.body.comment
 
   try {
+    const content = data.content.replace(/&lt;/g, '<')
+    data.content = content
+
     await db.Comment.create(data)
     res.status(200).json({ message: 'comment created' })
   } catch (error) {
-    res.status(404).json({ message: 'comment not found' })
+    res.status(409).json({ message: 'failed to create comment' })
   }
 }
 
-const getComment = async (req, res) => {
+const getComments = async (req, res) => {
   const commentId = req.params.id
 
-  const comment = await db.Comment.findByPk(commentId)
-  res.status(200).json({ comment: comment })
+  try {
+    const comments = await db.Comment.findAll({ where: { postId: commentId } })
+    res.status(200).json({ comments: comments })
+  } catch (error) {
+    res.status(409).json({ message: 'failed to create comment' })
+  }
 }
-export default { createComment, getComment }
+export default { createComment, getComments }
