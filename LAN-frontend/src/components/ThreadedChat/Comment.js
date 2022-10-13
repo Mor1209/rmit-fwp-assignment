@@ -1,9 +1,13 @@
-import { Paper, Grid, Typography, Button } from '@mui/material'
+import { Paper, Grid, Typography, Button, IconButton } from '@mui/material'
 import CommentForm from '../Forms/CommentForm'
 import capitalize from '../../helpers/capitalize'
 import UserAvatar from '../UI/UserAvatar'
 import { useQuery } from 'react-query'
 import axios from 'axios'
+import ThumbDownIcon from '@mui/icons-material/ThumbDown'
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt'
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt'
 
 function Comment(props) {
   const {
@@ -63,7 +67,14 @@ function Comment(props) {
                     style={{ display: 'block', height: 100, width: 100 }}
                   />
                 )}
-
+                <Grid container justifyContent="flex-start">
+                  <IconButton>
+                    <ThumbUpIcon color="success" />
+                  </IconButton>
+                  <IconButton>
+                    <ThumbDownIcon />
+                  </IconButton>
+                </Grid>
                 <Button
                   onClick={() => {
                     setSelectedComment({ id: comment.id })

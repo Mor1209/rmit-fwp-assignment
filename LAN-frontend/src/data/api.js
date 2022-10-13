@@ -36,14 +36,37 @@ const fetchComments = async id => {
   return data.comments
 }
 
-const updatePost = async data => {
-  await API.patch(`posts/${data.id}`, { post: data })
+const updatePost = async post => {
+  const { data } = await API.patch(`/posts/${post.id}`, { post: post })
+  return data
 }
 
 const createPost = async post => {
   const { data } = await API.post('/posts', { post: post })
   return data
 }
+
+const createReaction = async reaction => {
+  const { data } = await API.post('/reactions', { reaction: reaction })
+  return data
+}
+
+const updateReaction = async reaction => {
+  const { data } = await API.patch('/reactions', { reaction: reaction })
+  return data
+}
+
+const getReaction = async (postId, userId) => {
+  const { data } = await API.get('/reactions', {
+    params: {
+      userId: userId,
+      postId: parseInt(postId),
+    },
+  })
+
+  return data.reaction
+}
+
 export {
   fetchAllPosts,
   deletePost,
@@ -52,4 +75,7 @@ export {
   fetchComments,
   updatePost,
   createPost,
+  createReaction,
+  updateReaction,
+  getReaction,
 }

@@ -1,22 +1,33 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from 'react-router'
 import { useState } from 'react'
-import { Container, Typography, Stack, capitalize } from '@mui/material'
+import { Container, Typography, Stack, capitalize, Grid } from '@mui/material'
 import capEveryWord from '../../helpers/capitalize'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useQuery, useMutation } from 'react-query'
-import { createComment, fetchPost, fetchComments } from '../../data/api'
+import {
+  createComment,
+  fetchPost,
+  fetchComments,
+  createReaction,
+  getReaction,
+  updateReaction,
+} from '../../data/api'
 import { useQueryClient } from 'react-query'
+import { useAuthContext } from '../../hooks/useAuthContext'
+
+import Reaction from '../../components/Reaction/Reaction'
 
 function Post() {
   const params = useParams()
+  const { user } = useAuthContext()
   const queryClient = useQueryClient()
   const [selectedComment, setSelectedComment] = useState(null)
   const { sendNotification } = useNotificationContext()
-  const [isLoading2, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
   const { data: comments } = useQuery(['comments', params.id], () =>
     fetchComments(params.id)
@@ -26,7 +37,30 @@ function Post() {
     fetchPost(params.id)
   )
 
-  const { mutate } = useMutation(createComment, {
+  const { mutate: reactionMutate } = useMutation(updateReaction, {
+    onSuccess: data => {
+      const newReaction = data.reaction
+      queryClient.setQueriesData('reaction', newReaction)
+    },
+    onError: () => {
+      setLoading(false)
+      sendNotification('error', 'failed to update reaction', false)
+    },
+  })
+
+  const { data: reaction } = useQuery(['reaction', (params.id, user.id)], () =>
+    getReaction(params.id, user.id)
+  )
+
+  const { mutate: addReaction } = useMutation(createReaction, {
+    onSuccess: data => {
+      const newReaction = data.reaction
+
+      queryClient.setQueriesData('reaction', newReaction)
+    },
+  })
+
+  const { mutate: commentMutate } = useMutation(createComment, {
     onSuccess: data => {
       setLoading(false)
       const comment = data.comment
@@ -50,11 +84,19 @@ function Post() {
       userId: userId,
     }
 
-    mutate(newComment)
+    commentMutate(newComment)
   }
 
   const getCommentReplies = id => {
     return comments.filter(comment => comment.parentId === id)
+  }
+
+  const reactionData = {
+    reaction: reaction,
+    addReaction: addReaction,
+    reactionMutate: reactionMutate,
+    userId: user.id,
+    postId: post?.id,
   }
 
   return (
@@ -78,7 +120,6 @@ function Post() {
             <Typography p={2} variant={'h3'}>
               {capitalize(post.title)}
             </Typography>
-
             <Typography
               sx={{ opacity: 0.7, fontStyle: 'italic' }}
               variant={'h7'}
@@ -118,6 +159,9 @@ function Post() {
                 }}
               />
             </Stack>
+            <Grid container justifyContent="flex-start" ml={5}>
+              <Reaction {...reactionData} />
+            </Grid>
           </>
         )}
       </Container>
@@ -145,7 +189,7 @@ function Post() {
           submit={addComment}
           postId={post?.id}
           parentId={null}
-          loading={isLoading2}
+          loading={isLoading}
         />
 
         <hr />
@@ -162,7 +206,7 @@ function Post() {
                   addComment={addComment}
                   postId={post?.id}
                   getReplies={getCommentReplies}
-                  loading={isLoading2}
+                  loading={isLoading}
                 />
               )
             return null

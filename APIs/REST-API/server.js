@@ -13,6 +13,8 @@ import userRouter from './routes/user.routes.js'
 import errorController from './controllers/errorController.js'
 import postRouter from './routes/PostRoutes.js'
 import commentRouter from './routes/commentRoutes.js'
+import reactionRouter from './routes/reactionRoutes.js'
+
 // const { sequelize } = require('./models')
 
 process.on('unhandledRejection', err => {
@@ -60,6 +62,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/comments', commentRouter)
 app.use('/api/posts', postRouter)
+app.use('/api/reactions', reactionRouter)
 
 // Add user routes.
 app.use('/rest-api/users', userRouter)
