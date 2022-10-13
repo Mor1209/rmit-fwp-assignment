@@ -48,15 +48,19 @@ function Post() {
     },
   })
 
-  const { data: reaction } = useQuery(['reaction', (params.id, user.id)], () =>
-    getReaction(params.id, user.id)
+  const { data: reaction } = useQuery(
+    ['reaction', (params.id, user.id, null)],
+    () => getReaction(params.id, user.id, null)
   )
 
   const { mutate: addReaction } = useMutation(createReaction, {
     onSuccess: data => {
       const newReaction = data.reaction
-
-      queryClient.setQueriesData('reaction', newReaction)
+      console.log(newReaction)
+      const q = {
+        ...newReaction,
+      }
+      queryClient.setQueriesData('reaction', q)
     },
   })
 
@@ -97,6 +101,7 @@ function Post() {
     reactionMutate: reactionMutate,
     userId: user.id,
     postId: post?.id,
+    commentId: null,
   }
 
   return (

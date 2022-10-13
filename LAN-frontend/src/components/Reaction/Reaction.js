@@ -20,107 +20,130 @@ function Reaction({
     commentId: commentId,
   }
 
-  if (reaction === null) {
-    buttons = (
-      <>
-        <IconButton
-          onClick={() =>
-            addReaction({
-              ...data,
-              reaction: 'like',
-            })
-          }
-        >
-          <ThumbUpOffAltIcon />
-        </IconButton>
-        <IconButton
-          onClick={() =>
-            addReaction({
-              ...data,
-              reaction: 'dislike',
-            })
-          }
-        >
-          <ThumbDownOffAltIcon />
-        </IconButton>
-      </>
-    )
-  } else if (reaction?.reaction === 'none') {
-    buttons = (
-      <>
-        <IconButton
-          onClick={() =>
-            reactionMutate({
-              ...data,
-              reaction: 'like',
-            })
-          }
-        >
-          <ThumbUpOffAltIcon />
-        </IconButton>
-        <IconButton
-          onClick={() =>
-            reactionMutate({
-              ...data,
-              reaction: 'dislike',
-            })
-          }
-        >
-          <ThumbDownOffAltIcon />
-        </IconButton>
-      </>
-    )
-  } else if (reaction?.reaction === 'like') {
-    buttons = (
-      <>
-        <IconButton
-          onClick={() =>
-            reactionMutate({
-              ...data,
-              reaction: 'none',
-            })
-          }
-        >
-          <ThumbUpIcon />
-        </IconButton>
-        <IconButton
-          onClick={() =>
-            reactionMutate({
-              ...data,
-              reaction: 'dislike',
-            })
-          }
-        >
-          <ThumbDownOffAltIcon />
-        </IconButton>
-      </>
-    )
-  } else if (reaction?.reaction === 'dislike') {
-    buttons = (
-      <>
-        <IconButton
-          onClick={() =>
-            reactionMutate({
-              ...data,
-              reaction: 'like',
-            })
-          }
-        >
-          <ThumbUpOffAltIcon />
-        </IconButton>
-        <IconButton
-          onClick={() =>
-            reactionMutate({
-              ...data,
-              reaction: 'none',
-            })
-          }
-        >
-          <ThumbDownIcon />
-        </IconButton>
-      </>
-    )
+  const initButtons = (
+    <>
+      <IconButton
+        onClick={() =>
+          addReaction({
+            ...data,
+            reaction: 'like',
+          })
+        }
+      >
+        <ThumbUpOffAltIcon />
+      </IconButton>
+      <IconButton
+        onClick={() =>
+          addReaction({
+            ...data,
+            reaction: 'dislike',
+          })
+        }
+      >
+        <ThumbDownOffAltIcon />
+      </IconButton>
+    </>
+  )
+
+  const noneButtons = (
+    <>
+      <IconButton
+        onClick={() =>
+          reactionMutate({
+            ...data,
+            reaction: 'like',
+          })
+        }
+      >
+        <ThumbUpOffAltIcon />
+      </IconButton>
+      <IconButton
+        onClick={() =>
+          reactionMutate({
+            ...data,
+            reaction: 'dislike',
+          })
+        }
+      >
+        <ThumbDownOffAltIcon />
+      </IconButton>
+    </>
+  )
+
+  const likeButtons = (
+    <>
+      <IconButton
+        onClick={() =>
+          reactionMutate({
+            ...data,
+            reaction: 'none',
+          })
+        }
+      >
+        <ThumbUpIcon />
+      </IconButton>
+      <IconButton
+        onClick={() =>
+          reactionMutate({
+            ...data,
+            reaction: 'dislike',
+          })
+        }
+      >
+        <ThumbDownOffAltIcon />
+      </IconButton>
+    </>
+  )
+
+  const dislikeButtons = (
+    <>
+      <IconButton
+        onClick={() =>
+          reactionMutate({
+            ...data,
+            reaction: 'like',
+          })
+        }
+      >
+        <ThumbUpOffAltIcon />
+      </IconButton>
+      <IconButton
+        onClick={() =>
+          reactionMutate({
+            ...data,
+            reaction: 'none',
+          })
+        }
+      >
+        <ThumbDownIcon />
+      </IconButton>
+    </>
+  )
+
+  const chooseButtons = (reaction, condition = true) => {
+    if (condition) {
+      if (reaction === 'none') {
+        buttons = noneButtons
+      } else if (reaction === 'like') {
+        buttons = likeButtons
+      } else if (reaction === 'dislike') {
+        buttons = dislikeButtons
+      }
+    } else {
+      buttons = noneButtons
+    }
   }
+
+  if (reaction === null) {
+    buttons = initButtons
+  } else {
+    if (reaction?.commentId === null) {
+      chooseButtons(reaction?.reaction)
+    } else {
+      chooseButtons(reaction?.reaction, reaction?.commentId === commentId)
+    }
+  }
+
   return buttons
 }
 

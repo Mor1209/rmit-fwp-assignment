@@ -56,11 +56,12 @@ const updateReaction = async reaction => {
   return data
 }
 
-const getReaction = async (postId, userId) => {
+const getReaction = async (postId, userId, commentId) => {
   const { data } = await API.get('/reactions', {
     params: {
       userId: userId,
       postId: parseInt(postId),
+      commentId: commentId,
     },
   })
 

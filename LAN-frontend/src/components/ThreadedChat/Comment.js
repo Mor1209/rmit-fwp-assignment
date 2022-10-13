@@ -1,13 +1,11 @@
-import { Paper, Grid, Typography, Button, IconButton } from '@mui/material'
+import { Paper, Grid, Typography, Button } from '@mui/material'
 import CommentForm from '../Forms/CommentForm'
 import capitalize from '../../helpers/capitalize'
 import UserAvatar from '../UI/UserAvatar'
-import { useQuery } from 'react-query'
 import axios from 'axios'
-import ThumbDownIcon from '@mui/icons-material/ThumbDown'
-import ThumbUpIcon from '@mui/icons-material/ThumbUp'
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt'
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt'
+import Reaction from '../Reaction/Reaction'
+import { createReaction, getReaction, updateReaction } from '../../data/api'
+import { useMutation, useQueryClient, useQuery } from 'react-query'
 
 function Comment(props) {
   const {
@@ -19,6 +17,34 @@ function Comment(props) {
     getReplies,
     loading,
   } = props
+  const queryClient = useQueryClient()
+
+  const { data: reaction } = useQuery(
+    [`commentReaction/${comment.id}`, (postId, comment.userId, comment.id)],
+    () => getReaction(postId, comment.userId, comment.id)
+  )
+
+  const { mutate: addReaction } = useMutation(createReaction, {
+    onSuccess: data => {
+      const newReaction = data.reaction
+      queryClient.setQueriesData(`commentReaction/${comment.id}`, newReaction)
+    },
+  })
+  const { mutate: reactionMutate } = useMutation(updateReaction, {
+    onSuccess: data => {
+      const newReaction = data.reaction
+      queryClient.setQueriesData(`commentReaction/${comment.id}`, newReaction)
+    },
+  })
+
+  const reactionData = {
+    reaction: reaction,
+    addReaction: addReaction,
+    reactionMutate: reactionMutate,
+    userId: comment.userId,
+    postId: postId,
+    commentId: comment.id,
+  }
 
   const fetchUser = async () => {
     const { data } = await axios.get(
@@ -68,12 +94,7 @@ function Comment(props) {
                   />
                 )}
                 <Grid container justifyContent="flex-start">
-                  <IconButton>
-                    <ThumbUpIcon color="success" />
-                  </IconButton>
-                  <IconButton>
-                    <ThumbDownIcon />
-                  </IconButton>
+                  <Reaction {...reactionData} />
                 </Grid>
                 <Button
                   onClick={() => {
