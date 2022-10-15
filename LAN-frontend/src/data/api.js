@@ -11,7 +11,24 @@ const API = axios.create({
   },
 })
 
-const fetchAllPosts = async () => {
+const dummyPosts = {
+  posts: [{
+    id: 1,
+    content: "<p>hello world my day</p>",
+    userId: 1,
+    title: 'hello world',
+    author: 'ming',
+    image: null
+  }]
+
+}
+
+
+const fetchAllPosts = async (test = false) => {
+  if (test) {
+    return dummyPosts.posts
+  }
+
   const { data } = await API.get('/posts')
   return data.posts
 }
