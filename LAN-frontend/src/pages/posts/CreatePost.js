@@ -1,39 +1,49 @@
-import { createPost } from '../../data/posts'
-import { getUser } from '../../data/users'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { imageUpload } from '../../firebase'
+// import { imageUpload } from '../../firebase'
 import PostForm from '../../components/Forms/PostForm'
+import { useMutation } from 'react-query'
+import { createPost } from '../../data/api'
+import { useAuthContext } from '../../hooks/useAuthContext'
 
 function CreatePost() {
   const { sendNotification } = useNotificationContext()
+  let { user } = useAuthContext()
 
   const [isLoading, setLoading] = useState(false)
-  const author = getUser()
+
   const navigate = useNavigate()
 
-  const onSubmit = async data => {
-    // save the inputed data
-    setLoading(true)
-    const url = await imageUpload(data.image[0])
+  const { mutate } = useMutation(createPost, {
+    onSuccess: data => {
+      setLoading(false)
+      sendNotification('success', 'Post created', false)
+      navigate('/posts')
+    },
+    onError: () => {
+      setLoading(false)
+      sendNotification('error', 'failed to create post', false)
+    },
+  })
 
-    if (url === 'error') {
-      sendNotification('error', 'Failed to Upload Image', false)
-      return
-    }
+  const onSubmit = async data => {
+    setLoading(true)
+    // const url = await imageUpload(data.image[0])
+
+    // if (url === 'error') {
+    //   sendNotification('error', 'Failed to Upload Image', false)
+    //   return
+    // }
 
     const post = {
       ...data,
-      image: url,
-      author: author.name,
-      userId: author.userId,
+      image: null,
+      author: user.username,
+      userId: user.id,
     }
 
-    createPost(post)
-    setLoading(false)
-    sendNotification('success', 'Post created', false)
-    navigate('/posts')
+    mutate(post)
   }
 
   return (

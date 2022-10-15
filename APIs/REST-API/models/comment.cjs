@@ -3,7 +3,7 @@
 const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
-  class Post extends Model {
+  class Comment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -14,11 +14,15 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Post, { foreignKey: 'postId' })
     }
   }
-  Post.init(
+  Comment.init(
     {
       content: {
         type: DataTypes.TEXT,
         allowNull: false,
+      },
+      parentId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
     },
     {
@@ -29,5 +33,5 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: false,
     }
   )
-  return Post
+  return Comment
 }

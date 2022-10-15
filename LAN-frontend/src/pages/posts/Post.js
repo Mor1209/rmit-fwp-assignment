@@ -1,42 +1,56 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useParams } from 'react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Container, Typography, Stack, capitalize } from '@mui/material'
 import capEveryWord from '../../helpers/capitalize'
 import BannerImage from '../../components/Layout/BannerImage'
 import Comment from '../../components/ThreadedChat/Comment'
 import CommentForm from '../../components/Forms/CommentForm'
-import { createComment, getPostById } from '../../data/posts'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
+import { useQuery, useMutation } from 'react-query'
+import { createComment, fetchPost, fetchComments } from '../../data/api'
+import { useQueryClient } from 'react-query'
 
 function Post() {
   const params = useParams()
-  const [post, setPost] = useState(null)
+  const queryClient = useQueryClient()
   const [selectedComment, setSelectedComment] = useState(null)
-  const [comments, setComments] = useState([])
   const { sendNotification } = useNotificationContext()
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading2, setLoading] = useState(false)
 
-  useEffect(() => {
-    // get both post and post's comments
-    const { post, comments } = getPostById(params.id)
-    setPost(post)
-    setComments(comments)
-  }, [])
+  const { data: comments } = useQuery(['comments', params.id], () =>
+    fetchComments(params.id)
+  )
+
+  const { data: post } = useQuery(['post', params.id], () =>
+    fetchPost(params.id)
+  )
+
+  const { mutate } = useMutation(createComment, {
+    onSuccess: data => {
+      setLoading(false)
+      const comment = data.comment
+      queryClient.setQueriesData('comments', oldData => [...oldData, comment])
+      sendNotification('success', 'comment created', false)
+    },
+    onError: () => {
+      setLoading(false)
+      sendNotification('error', 'failed to create comment', false)
+    },
+  })
 
   const addComment = async (data, postId, parentId, userId, reset) => {
     setLoading(true)
-    const newComment = await createComment(data, postId, parentId, userId)
 
-    if (newComment === 'error') {
-      sendNotification('error', 'Failed to Upload Image', false)
-      return
+    const newComment = {
+      content: data.comment,
+      image: data.image,
+      parentId: parentId,
+      postId: postId,
+      userId: userId,
     }
 
-    setComments([...comments, newComment])
-    setSelectedComment(null)
-    reset()
-    setLoading(false)
+    mutate(newComment)
   }
 
   const getCommentReplies = id => {
@@ -93,17 +107,16 @@ function Post() {
                   }}
                 />
               )}
-              <Typography
-                variant="body2"
-                sx={{
+
+              <div
+                dangerouslySetInnerHTML={{ __html: post.content }}
+                style={{
                   marginLeft: 'auto',
                   marginRight: 'auto',
                   textAlign: 'start',
                   width: '1000px',
                 }}
-              >
-                {post.content}
-              </Typography>
+              />
             </Stack>
           </>
         )}
@@ -132,7 +145,7 @@ function Post() {
           submit={addComment}
           postId={post?.id}
           parentId={null}
-          loading={isLoading}
+          loading={isLoading2}
         />
 
         <hr />
@@ -149,7 +162,7 @@ function Post() {
                   addComment={addComment}
                   postId={post?.id}
                   getReplies={getCommentReplies}
-                  loading={isLoading}
+                  loading={isLoading2}
                 />
               )
             return null

@@ -24,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(32),
         allowNull: false,
       },
+      image: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      author: {
+        type: DataTypes.STRING(30),
+        allowNull: false,
+      },
     },
     {
       sequelize,

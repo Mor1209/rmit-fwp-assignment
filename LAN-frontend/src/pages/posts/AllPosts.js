@@ -1,4 +1,3 @@
-import { getAllPosts, deletePost } from '../../data/posts'
 import {
   Grid,
   Container,
@@ -10,54 +9,55 @@ import {
   Button,
   Box,
 } from '@mui/material'
-import { getUser } from '../../data/users'
 import { useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import cardImage from '../../assets/r.webp'
 import capitalize from '../../helpers/capitalize'
+import { useQuery, useMutation } from 'react-query'
+import { useAuthContext } from '../../hooks/useAuthContext'
+import { fetchAllPosts, deletePost } from '../../data/api'
+import { useQueryClient } from 'react-query'
 
 function AllPosts() {
-  const [allPosts, setAllPosts] = useState()
-  const [filteredPosts, setFilterPosts] = useState()
+  const queryClient = useQueryClient()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
-  const user = getUser()
+  const { user } = useAuthContext()
+  const [filter, setFilter] = useState(false)
 
-  useEffect(() => {
-    // fetching for all posts
-    const posts = getAllPosts()
-    setAllPosts(posts)
-    setFilterPosts(posts)
-  }, [])
+  const { mutate } = useMutation(deletePost, {
+    onSuccess: data => {
+      const posts = data.posts
+      queryClient.setQueriesData('posts', posts)
+      sendNotification('success', 'comment created', false)
+    },
+    onError: () => {
+      sendNotification('error', 'failed to delete post', false)
+    },
+  })
 
-  const handleDeletePost = id => {
-    // delete a post
-    const remainPosts = deletePost(id)
-    if (remainPosts === null) {
-      sendNotification('error', 'Unable to Delete Post', false)
-      return
-    }
-    setAllPosts(remainPosts)
-    setFilterPosts(remainPosts)
-    sendNotification('success', 'Post Delete', false)
-  }
-
+  const { data } = useQuery('posts', fetchAllPosts, {
+    enabled: !filter,
+  })
   return (
     <Container sx={{ height: '100%', marginBottom: 10 }}>
       <Typography variant="h3" color={'white'} fontWeight={'bold'}>
         All Posts
       </Typography>
+
       <Box m={1} display={'flex'} justifyContent={'space-between'}>
         {/* filter button that only displays posts made by the current logged in user */}
-        {filteredPosts === allPosts ? (
+        {filter === false ? (
           <Button
             variant="contained"
             sx={{ margin: 2, float: 'right' }}
             onClick={() => {
-              setFilterPosts(
-                allPosts.filter(post => post.userId === user.userId)
+              queryClient.setQueriesData(
+                'posts',
+                data.filter(post => post.userId === user.id)
               )
+              setFilter(true)
             }}
           >
             My posts
@@ -67,7 +67,7 @@ function AllPosts() {
             variant="contained"
             sx={{ margin: 2, float: 'right' }}
             onClick={() => {
-              setFilterPosts(allPosts)
+              setFilter(false)
             }}
           >
             All Posts
@@ -92,8 +92,8 @@ function AllPosts() {
         alignItems="flex-start"
       >
         {/* redner all the posts that's in localstroage */}
-        {filteredPosts &&
-          filteredPosts.map(post => {
+        {data &&
+          data.map(post => {
             return (
               <Grid item xs={4} key={post.id}>
                 <Card sx={{ maxWidth: 350 }}>
@@ -107,9 +107,7 @@ function AllPosts() {
                     <Typography gutterBottom variant="h5" component="div">
                       {capitalize(post.title)} by {capitalize(post.author)}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {post.content}
-                    </Typography>
+                    <div dangerouslySetInnerHTML={{ __html: post.content }} />
                   </CardContent>
                   <CardActions
                     sx={{
@@ -119,13 +117,14 @@ function AllPosts() {
                     }}
                   >
                     {/* only the author of the post can delete and edit the post */}
-                    {user.userId === post.userId ? (
+
+                    {user.id === post.userId ? (
                       <>
                         <Button
                           size="small"
                           variant="contained"
                           color="error"
-                          onClick={() => handleDeletePost(post.id)}
+                          onClick={() => mutate(parseInt(post.id))}
                         >
                           Delete
                         </Button>
