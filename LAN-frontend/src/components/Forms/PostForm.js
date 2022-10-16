@@ -46,6 +46,7 @@ export default function CreatePostForm({
           <FormInputField
             id="title"
             name="title"
+            data-testid={'title'}
             register={register}
             errors={errors['title']}
             label="Title"
@@ -59,6 +60,8 @@ export default function CreatePostForm({
           <ReactQuill
             theme="snow"
             value={content}
+            role={'content'}
+            data-testid="custom-element"
             onChange={onPostContentChange}
             placeholder="Write down the content"
             style={{ height: '180px', marginTop: '10px' }}

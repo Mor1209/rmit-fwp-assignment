@@ -21,7 +21,7 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 
 import Reaction from '../../components/Reaction/Reaction'
 
-function Post() {
+function Post({ test = false }) {
   const params = useParams()
   const { user } = useAuthContext()
   const queryClient = useQueryClient()
@@ -34,7 +34,7 @@ function Post() {
   )
 
   const { data: post } = useQuery(['post', params.id], () =>
-    fetchPost(params.id)
+    fetchPost(params.id, test)
   )
 
   const { mutate: reactionMutate } = useMutation(updateReaction, {
@@ -50,17 +50,13 @@ function Post() {
 
   const { data: reaction } = useQuery(
     ['reaction', (params.id, user.id, null)],
-    () => getReaction(params.id, user.id, null)
+    () => getReaction(params.id, user.id, null, test)
   )
 
   const { mutate: addReaction } = useMutation(createReaction, {
     onSuccess: data => {
       const newReaction = data.reaction
-      console.log(newReaction)
-      const q = {
-        ...newReaction,
-      }
-      queryClient.setQueriesData('reaction', q)
+      queryClient.setQueriesData('reaction', newReaction)
     },
   })
 
@@ -165,7 +161,7 @@ function Post() {
               />
             </Stack>
             <Grid container justifyContent="flex-start" ml={5}>
-              <Reaction {...reactionData} />
+              <Reaction {...reactionData} test={test} />
             </Grid>
           </>
         )}

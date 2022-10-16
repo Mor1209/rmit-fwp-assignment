@@ -5,14 +5,14 @@ import db from '../models/index.cjs'
 const getPostById = async (req, res) => {
   const postId = req.params.id
 
-  try {
-    const post = await db.Post.findByPk(postId, {
-      include: db.Reaction,
-    })
-    res.status(200).json({ post: post })
-  } catch (error) {
-    res.status(404).json({ message: 'post not found' })
-  }
+  // try {
+  const post = await db.Post.findByPk(postId, {
+    include: db.Reaction,
+  })
+  res.status(200).json({ post: post })
+  // } catch (error) {
+  //   res.status(404).json({ message: 'post not found' })
+  // }
 }
 
 const getAllPosts = async (req, res) => {
@@ -31,6 +31,7 @@ const createPost = async (req, res) => {
     // need to replace the characters to <
     const content = data.content.replace(/&lt;/g, '<')
     data.content = content
+    await db.Post.create(data)
     res.status(201).json({ message: 'post created' })
   } catch (error) {
     res.status(424).json({ message: 'failed to create post' })

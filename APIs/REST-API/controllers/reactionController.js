@@ -19,7 +19,6 @@ const createReaction = async (req, res) => {
   try {
     const data = req.body.reaction
     const reaction = await db.Reaction.create(data)
-    console.log(reaction)
     res.status(201).json({ reaction: reaction })
   } catch (error) {
     res.status(409).json({ message: 'failed to update reaction' })

@@ -19,7 +19,7 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 import { fetchAllPosts, deletePost } from '../../data/api'
 import { useQueryClient } from 'react-query'
 
-function AllPosts({ test }) {
+function AllPosts({ test = false }) {
   const queryClient = useQueryClient()
   const { sendNotification } = useNotificationContext()
   const navigate = useNavigate()
@@ -37,7 +37,7 @@ function AllPosts({ test }) {
     },
   })
 
-  const { data } = useQuery('posts', () => fetchAllPosts(true), {
+  const { data } = useQuery('posts', () => fetchAllPosts(test), {
     enabled: !filter,
   })
   // console.log(data)

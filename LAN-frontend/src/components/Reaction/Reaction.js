@@ -11,6 +11,7 @@ function Reaction({
   commentId,
   userId,
   postId,
+  test = false,
 }) {
   let buttons = null
 
@@ -52,6 +53,7 @@ function Reaction({
           reactionMutate({
             ...data,
             reaction: 'like',
+            test,
           })
         }
       >
@@ -62,6 +64,7 @@ function Reaction({
           reactionMutate({
             ...data,
             reaction: 'dislike',
+            test,
           })
         }
       >
@@ -73,12 +76,14 @@ function Reaction({
   const likeButtons = (
     <>
       <IconButton
-        onClick={() =>
+        onClick={() => {
           reactionMutate({
             ...data,
             reaction: 'none',
+            test,
           })
-        }
+        }}
+        data-testid="liked-button"
       >
         <ThumbUpIcon />
       </IconButton>
@@ -87,8 +92,10 @@ function Reaction({
           reactionMutate({
             ...data,
             reaction: 'dislike',
+            test,
           })
         }
+        data-testid="dislike-button"
       >
         <ThumbDownOffAltIcon />
       </IconButton>

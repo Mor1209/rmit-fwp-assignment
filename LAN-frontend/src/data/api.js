@@ -11,22 +11,71 @@ const API = axios.create({
   },
 })
 
-const dummyPosts = {
-  posts: [{
-    id: 1,
-    content: "<p>hello world my day</p>",
-    userId: 1,
-    title: 'hello world',
-    author: 'ming',
-    image: null
-  }]
-
+const allPosts = {
+  posts: [
+    {
+      id: 1,
+      content: '<p>hello world my day</p>',
+      userId: 1,
+      title: 'hello world',
+      author: 'ming',
+      image: null,
+    },
+  ],
 }
 
+const singlePost = {
+  post: {
+    id: 1,
+    content: '<p>reactjs is the best</p>',
+    title: 'unit test',
+    image: null,
+    author: 'ming',
+    userId: 1,
+    UserId: 1,
+    Reactions: [
+      {
+        id: 1,
+        reaction: 'like',
+        CommentId: null,
+        PostId: 1,
+        postId: 1,
+        commentId: null,
+        userId: 1,
+        UserId: 1,
+      },
+    ],
+  },
+}
+const reaction = {
+  reaction: {
+    id: 1,
+    reaction: 'like',
+    CommentId: null,
+    PostId: 1,
+    postId: 1,
+    commentId: null,
+    userId: 1,
+    UserId: 1,
+  },
+}
+
+const updateReactionData = {
+  reaction: {
+    id: 1,
+    reaction: 'none',
+    CommentId: null,
+    PostId: 1,
+    postId: 1,
+    commentId: null,
+    userId: 1,
+    UserId: 1,
+  },
+}
 
 const fetchAllPosts = async (test = false) => {
   if (test) {
-    return dummyPosts.posts
+    return allPosts.posts
   }
 
   const { data } = await API.get('/posts')
@@ -43,7 +92,8 @@ const createComment = async comment => {
   return data
 }
 
-const fetchPost = async id => {
+const fetchPost = async (id, test) => {
+  if (test) return singlePost.post
   const { data } = await API.get(`/posts/${id}`)
   return data.post
 }
@@ -69,11 +119,15 @@ const createReaction = async reaction => {
 }
 
 const updateReaction = async reaction => {
+  if (reaction.test) return updateReactionData
   const { data } = await API.patch('/reactions', { reaction: reaction })
   return data
 }
 
-const getReaction = async (postId, userId, commentId) => {
+const getReaction = async (postId, userId, commentId, test = false) => {
+  if (test) {
+    return reaction.reaction
+  }
   const { data } = await API.get('/reactions', {
     params: {
       userId: userId,
