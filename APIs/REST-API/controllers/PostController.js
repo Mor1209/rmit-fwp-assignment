@@ -5,14 +5,14 @@ import db from '../models/index.cjs'
 const getPostById = async (req, res) => {
   const postId = req.params.id
 
-  // try {
-  const post = await db.Post.findByPk(postId, {
-    include: db.Reaction,
-  })
-  res.status(200).json({ post: post })
-  // } catch (error) {
-  //   res.status(404).json({ message: 'post not found' })
-  // }
+  try {
+    const post = await db.Post.findByPk(postId, {
+      include: db.Reaction,
+    })
+    res.status(200).json({ post: post })
+  } catch (error) {
+    res.status(404).json({ message: 'post not found' })
+  }
 }
 
 const getAllPosts = async (req, res) => {
