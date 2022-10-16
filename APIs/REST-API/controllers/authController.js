@@ -53,7 +53,6 @@ const register = catchAsync(async (req, res, next) => {
         key === 'token'
     )
   )
-  console.log(filteredReq)
 
   if (!(await registerSchema.isValid(filteredReq)))
     return next(new AppError('User details not valid!', 400))
@@ -132,7 +131,7 @@ const registerMfa = catchAsync(async (req, res, next) => {
 
 const login = catchAsync(async (req, res, next) => {
   // filter req.body to eliminate attacks with more fields than allowed ones
-  const { email, password } = req.body
+  const { email, password, token } = req.body
 
   if (!(await loginSchema.isValid({ email, password })))
     return next(new AppError('User details not valid!', 400))
@@ -141,6 +140,14 @@ const login = catchAsync(async (req, res, next) => {
 
   if (!user || !(await argon2.verify(user.password, password)))
     return next(new AppError('Incorrect email or password', 401))
+
+  const verified = speakeasy.totp.verify({
+    secret: user.mfaSecret,
+    encoding: 'ascii',
+    token: token,
+  })
+
+  if (!verified) return next(new AppError('Incorrect token', 400))
 
   createTokenResponse(user, res, 200)
 })
