@@ -40,19 +40,19 @@ function LandingPage() {
 
   return (
     <Container>
-      <Stack sx={{ color: 'white', height: '90vh' }} alignItems="center">
+      <Stack sx={{ color: 'white' }} alignItems="center">
         <Typography
           variant="h1"
           sx={{
             fontFamily: 'Georgia',
             color: 'white',
-            mt: '10vh',
-            pb: 5,
+            mt: '2vh',
+            pb: 2,
             fontSize: {
-              lg: 200,
-              md: 135,
-              sm: 120,
-              xs: 65,
+              lg: 160,
+              // md: 135,
+              // sm: 120,
+              // xs: 65,
             },
           }}
         >
@@ -112,7 +112,7 @@ function LandingPage() {
         alignItems="center"
         justifyContent={'space-around'}
         spacing={2}
-        marginTop={1}
+        // marginTop={1}
         marginBottom={5}
       >
         {/* sample popular posts for home page */}
