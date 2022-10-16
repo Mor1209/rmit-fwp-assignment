@@ -46,11 +46,20 @@ export const useValidation = schema => {
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   })
 
-  return { submitHandler: handleSubmit, errors, register, reset }
+  return {
+    submitHandler: handleSubmit,
+    errors,
+    register,
+    reset,
+    setValue,
+    watch,
+  }
 }
 
 export const usePostValidation = () => useValidation(postSchema)

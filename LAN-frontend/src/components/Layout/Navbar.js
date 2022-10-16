@@ -84,7 +84,7 @@ function Navbar() {
       <Box>
         <Tooltip title="User Menu" placement="bottom-end">
           <Button onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Typography color="white">{authCtx.user.name}</Typography>
+            <Typography color="white">{authCtx.user.username}</Typography>
             <ExpandMoreIcon sx={{ color: 'white' }} />
           </Button>
         </Tooltip>

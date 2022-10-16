@@ -6,9 +6,12 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 const UserAvatar = props => {
   const authCtx = useAuthContext()
 
-  let name = props.name
+  let name = props.username
   if (!name) {
-    name = authCtx.user.name
+    name = authCtx.user.username
+    if (props.test) {
+      name = props.testUser.username
+    }
   }
 
   const nameSplit = name.split(' ')

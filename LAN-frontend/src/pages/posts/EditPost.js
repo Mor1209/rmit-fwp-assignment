@@ -1,10 +1,11 @@
-import { editPost, getPostById } from '../../data/posts'
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { imageUpload } from '../../firebase'
 import PostForm from '../../components/Forms/PostForm'
 import { useParams } from 'react-router'
+import { useMutation, useQuery } from 'react-query'
+import { fetchPost, updatePost } from '../../data/api'
 
 function EditPost() {
   const params = useParams()
@@ -12,7 +13,22 @@ function EditPost() {
   const { sendNotification } = useNotificationContext()
   const [isLoading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const { post: oldPost } = getPostById(params.id)
+
+  const { data: oldPost } = useQuery(['postData', params.id], () =>
+    fetchPost(params.id)
+  )
+
+  const { mutate } = useMutation(updatePost, {
+    onSuccess: data => {
+      setLoading(false)
+      sendNotification('success', 'Post updated', false)
+      navigate('/posts')
+    },
+    onError: () => {
+      setLoading(false)
+      sendNotification('error', 'failed to update post', false)
+    },
+  })
 
   const onSubmit = async data => {
     setLoading(true)
@@ -35,10 +51,11 @@ function EditPost() {
       userId: oldPost.userId,
     }
 
-    editPost(post)
-    setLoading(false)
-    sendNotification('success', 'Post Updated', false)
-    navigate('/posts')
+    mutate(post)
+    // editPost(post)
+    // setLoading(false)
+    // sendNotification('success', 'Post Updated', false)
+    // navigate('/posts')
   }
 
   return (

@@ -2,11 +2,52 @@ import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import capitalize from '../../helpers/capitalize'
+import axios from 'axios'
+import { useQuery } from 'react-query'
+import { updateUser } from '../../data/users'
 
-const UserProfileDetails = () => {
-  const authCtx = useAuthContext()
+const UserProfileDetails = ({ test = false, testUser = null }) => {
+  let { user, dispatchAuth } = useAuthContext()
+  if (test) {
+    user = testUser
+  }
+  const getCurrentUser = async () => {
+    const { data } = await axios.get(
+      'http://localhost:4000/rest-api/users/current',
+      {
+        withCredentials: true,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      }
+    )
+    return data
+  }
 
-  const name = capitalize(authCtx.user.name)
+  // dont refetch for at least 2min
+  const res = useQuery('user', getCurrentUser, { staleTime: 120000 })
+
+  // update user if not up to date anymore,
+  // this could hapen if userdetails are change from a diffrent device for example
+  if (
+    res.isSuccess &&
+    (user.username !== res.data.data.user.username ||
+      user.email !== res.data.data.user.email)
+  ) {
+    user = res.data.data.user
+    if (test) user = localStorage.getItem('user')
+    console.log(user)
+    // updating authContext by dispatching login
+    dispatchAuth({
+      type: 'LOGIN',
+      user,
+    })
+    updateUser(res.data.data.user)
+  }
+
+  const name = capitalize(user.username)
 
   return (
     <Stack>
@@ -19,14 +60,12 @@ const UserProfileDetails = () => {
         {name}
       </Typography>
       <Typography textAlign="left" variant="body1" color="dimgray">
-        {authCtx.user.email}
+        {user.email}
       </Typography>
 
       <Typography textAlign="left" variant="body1" color="dimgray">
         Joined:{' '}
-        {new Intl.DateTimeFormat('EN-AU').format(
-          new Date(authCtx.user.created)
-        )}
+        {new Intl.DateTimeFormat('EN-AU').format(new Date(user.createdAt))}
       </Typography>
     </Stack>
   )
