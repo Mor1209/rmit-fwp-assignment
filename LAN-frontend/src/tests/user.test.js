@@ -9,11 +9,19 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
 import UserProfile from '../components/UserProfile/UserProfile'
+import UserAvatar from '../components/UI/UserAvatar'
+import capitalize from '../helpers/capitalize'
 
 const queryClient = new QueryClient()
 describe('User Tests', () => {
+  beforeEach(() => {})
   afterEach(() => cleanup())
-
+  const user = {
+    id: 2,
+    username: 'test',
+    email: 'test@gmail.com',
+    createdAt: '2022-10-16T06:16:56.000Z',
+  }
   it('user login form validation', async () => {
     // console.log(posts)
     render(
@@ -110,18 +118,32 @@ describe('User Tests', () => {
     ).not.toBeInTheDocument()
   }, 30000)
 
-  // it('render user profile page', async () => {
-  //   // console.log(posts)
-  //   render(
-  //     <QueryClientProvider client={queryClient}>
-  //       <Router>
-  //         <UserProfile test={true} />
-  //       </Router>
-  //     </QueryClientProvider>
-  //   )
+  it('render user profile page', async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <UserProfile testUser={user} test={true} />
+        </Router>
+      </QueryClientProvider>
+    )
 
-  //   // profile page should show their name and email
-  //   screen.getByText('Test')
-  //   screen.getByText('test@gmail.com')
-  // }, 30000)
+    // profile page should show the correct username and email
+    screen.getByText('Test')
+    screen.getByText('test@gmail.com')
+  }, 30000)
+
+  it('render correct user initials for user avar', async () => {
+    render(
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <UserAvatar testUser={user} test={true} />
+        </Router>
+      </QueryClientProvider>
+    )
+
+    const username = user.username
+
+    // find the capitalize of the first alphabet for username
+    screen.getByText(capitalize(username[0]))
+  }, 30000)
 })

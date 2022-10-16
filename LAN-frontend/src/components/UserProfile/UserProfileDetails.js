@@ -6,8 +6,11 @@ import axios from 'axios'
 import { useQuery } from 'react-query'
 import { updateUser } from '../../data/users'
 
-const UserProfileDetails = () => {
+const UserProfileDetails = ({ test = false, testUser = null }) => {
   let { user, dispatchAuth } = useAuthContext()
+  if (test) {
+    user = testUser
+  }
   const getCurrentUser = async () => {
     const { data } = await axios.get(
       'http://localhost:4000/rest-api/users/current',
@@ -34,6 +37,8 @@ const UserProfileDetails = () => {
       user.email !== res.data.data.user.email)
   ) {
     user = res.data.data.user
+    if (test) user = localStorage.getItem('user')
+    console.log(user)
     // updating authContext by dispatching login
     dispatchAuth({
       type: 'LOGIN',

@@ -4,7 +4,7 @@ import EditUser from './EditUser'
 import UserProfileDetails from './UserProfileDetails'
 
 // User Profile wrapper, which includes the edit user actions and user details
-const UserProfile = () => {
+const UserProfile = ({ test = false, testUser = null }) => {
   return (
     <Paper elevation={5} sx={{ overflow: 'hidden' }}>
       <Paper
@@ -24,7 +24,7 @@ const UserProfile = () => {
           justifyContent="space-between"
           sx={{ position: 'relative', top: 47, pl: 3, pr: 1 }}
         >
-          <UserAvatar size={140} border={3} />
+          <UserAvatar testUser={testUser} test={test} size={140} border={3} />
           <EditUser />
         </Stack>
       </Paper>
@@ -33,7 +33,7 @@ const UserProfile = () => {
         justifyContent="flex-start"
         sx={{ pl: 3, pr: 3, pb: 3 }}
       >
-        <UserProfileDetails />
+        <UserProfileDetails testUser={testUser} test={test} />
       </Stack>
     </Paper>
   )
