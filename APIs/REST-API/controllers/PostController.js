@@ -6,7 +6,9 @@ const getPostById = async (req, res) => {
   const postId = req.params.id
 
   try {
-    const post = await db.Post.findByPk(postId)
+    const post = await db.Post.findByPk(postId, {
+      include: db.Reaction,
+    })
     res.status(200).json({ post: post })
   } catch (error) {
     res.status(404).json({ message: 'post not found' })
@@ -23,8 +25,8 @@ const getAllPosts = async (req, res) => {
 }
 
 const createPost = async (req, res) => {
-  const data = req.body.post
   try {
+    const data = req.body.post
     // not sure why the text automatically appended some characters when sending the data
     // need to replace the characters to <
     const content = data.content.replace(/&lt;/g, '<')
@@ -48,19 +50,44 @@ const deletePost = async (req, res) => {
 }
 
 const updatePost = async (req, res) => {
-  const postId = req.params.id
-  const data = req.body.post
-
   try {
-    const content = data.content.replace(/&lt;/g, '<')
-    data.content = content
+    const postId = req.params.id
+    const data = req.body.post
+    if (data.content !== undefined) {
+      const content = data?.content.replace(/&lt;/g, '<')
+      data.content = content
+    }
+
     await db.Post.update(data, {
       where: { id: postId },
     })
-    res.status(204).json({ message: 'updated post' })
+    const post = await db.Post.findByPk(data.id)
+    res.status(201).json({ post: post })
   } catch (error) {
     res.status(424).json({ message: 'failed to update post' })
   }
 }
 
-export default { getAllPosts, getPostById, createPost, deletePost, updatePost }
+const updateReaction = async (req, res) => {
+  try {
+    const postId = req.params.id
+    const data = req.body.reaction
+
+    await db.Reaction.update(data, {
+      where: { postId: postId },
+    })
+    const reaction = await db.Reaction.findAll({ where: { postId: postId } })
+    res.status(200).json({ reaction: reaction })
+  } catch (error) {
+    res.status(409).json({ message: 'failed to update reaction' })
+  }
+}
+
+export default {
+  getAllPosts,
+  getPostById,
+  createPost,
+  deletePost,
+  updatePost,
+  updateReaction,
+}

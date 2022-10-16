@@ -1,7 +1,7 @@
 import { useNotificationContext } from '../../hooks/useNotificationContext'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-// import { imageUpload } from '../../firebase'
+import { imageUpload } from '../../firebase'
 import PostForm from '../../components/Forms/PostForm'
 import { useMutation } from 'react-query'
 import { createPost } from '../../data/api'
@@ -29,16 +29,16 @@ function CreatePost() {
 
   const onSubmit = async data => {
     setLoading(true)
-    // const url = await imageUpload(data.image[0])
+    const url = await imageUpload(data.image[0])
 
-    // if (url === 'error') {
-    //   sendNotification('error', 'Failed to Upload Image', false)
-    //   return
-    // }
+    if (url === 'error') {
+      sendNotification('error', 'Failed to Upload Image', false)
+      return
+    }
 
     const post = {
       ...data,
-      image: null,
+      image: url,
       author: user.username,
       userId: user.id,
     }

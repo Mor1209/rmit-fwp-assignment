@@ -9,6 +9,9 @@ const UserAvatar = props => {
   let name = props.username
   if (!name) {
     name = authCtx.user.username
+    if (props.test) {
+      name = props.testUser.username
+    }
   }
 
   const nameSplit = name.split(' ')
