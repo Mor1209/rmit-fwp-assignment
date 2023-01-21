@@ -11,6 +11,41 @@ module.exports = {
      */
 
     return [
+      queryInterface.createTable('Comments', {
+        id: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          type: Sequelize.INTEGER,
+        },
+
+        content: {
+          type: Sequelize.TEXT,
+          allowNull: false,
+        },
+        parentId: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
+        },
+
+        userId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Users',
+            key: 'id',
+          },
+          allowNull: false,
+        },
+
+        postId: {
+          type: Sequelize.INTEGER,
+          references: {
+            model: 'Posts',
+            key: 'id',
+          },
+          allowNull: false,
+        },
+      }),
       queryInterface.createTable('Reactions', {
         id: {
           allowNull: false,
@@ -45,41 +80,6 @@ module.exports = {
             key: 'id',
           },
           allowNull: true,
-        },
-      }),
-      queryInterface.createTable('Comments', {
-        id: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.INTEGER,
-        },
-
-        content: {
-          type: Sequelize.TEXT,
-          allowNull: false,
-        },
-        parentId: {
-          type: Sequelize.INTEGER,
-          allowNull: true,
-        },
-
-        userId: {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Users',
-            key: 'id',
-          },
-          allowNull: false,
-        },
-
-        postId: {
-          type: Sequelize.INTEGER,
-          references: {
-            model: 'Posts',
-            key: 'id',
-          },
-          allowNull: false,
         },
       }),
     ]
