@@ -13,7 +13,7 @@ const UserProfileDetails = ({ test = false, testUser = null }) => {
   }
   const getCurrentUser = async () => {
     const { data } = await axios.get(
-      'http://localhost:4000/rest-api/users/current',
+      `${process.env.REST_API_URL}/users/current`,
       {
         withCredentials: true,
         headers: {

@@ -11,7 +11,7 @@ export const useUpdateUser = ({ handleToggle }) => {
 
   const patchUserUpdate = async userData => {
     const { data } = await axios.patch(
-      'http://localhost:4000/rest-api/users/current',
+      `${process.env.REST_API_URL}/users/current`,
       userData,
       {
         withCredentials: true,
@@ -27,7 +27,7 @@ export const useUpdateUser = ({ handleToggle }) => {
 
   const deleteUser = async () => {
     const { data } = await axios.delete(
-      'http://localhost:4000/rest-api/users/current',
+      `${process.env.REST_API_URL}/users/current`,
       {
         withCredentials: true,
         headers: {

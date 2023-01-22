@@ -21,7 +21,7 @@ export const useRegister = ({ setStep }) => {
   const postRegisterMfa = async userData => {
     setUserDetails(userData)
     const { data } = await axios.post(
-      'http://localhost:4000/rest-api/users/register-mfa',
+      `${process.env.REST_API_URL}/users/register-mfa`,
       userData,
       {
         withCredentials: true,
@@ -39,7 +39,7 @@ export const useRegister = ({ setStep }) => {
     const updatedData = { ...userDetails, ...userData, mfaSecret }
     setUserDetails(updatedData)
     const { data } = await axios.post(
-      'http://localhost:4000/rest-api/users/register',
+      `${process.env.REST_API_URL}/users/register`,
       updatedData,
       {
         withCredentials: true,

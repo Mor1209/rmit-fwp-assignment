@@ -1,5 +1,5 @@
 import axios from 'axios'
-const API_PATH = 'http://localhost:4000/api'
+const API_PATH = process.env.REST_API_URL
 
 const API = axios.create({
   baseURL: API_PATH,

@@ -60,12 +60,12 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' })
 })
 
-app.use('/api/comments', commentRouter)
-app.use('/api/posts', postRouter)
-app.use('/api/reactions', reactionRouter)
+app.use('/comments', commentRouter)
+app.use('/posts', postRouter)
+app.use('/reactions', reactionRouter)
 
 // Add user routes.
-app.use('/rest-api/users', userRouter)
+app.use('/users', userRouter)
 
 // All other routes result in 404
 app.all('*', (req, res, next) => {

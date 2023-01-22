@@ -48,7 +48,7 @@ function Comment(props) {
 
   const fetchUser = async () => {
     const { data } = await axios.get(
-      `http://localhost:4000/rest-api/users/${comment.userId}`,
+      `${process.env.REST_API_URL}/users/${comment.userId}`,
       {
         withCredentials: true,
         headers: {
