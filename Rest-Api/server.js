@@ -41,7 +41,12 @@ const app = express()
 app.use(express.json())
 
 // Add CORS suport.
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
+app.use(
+  cors({
+    credentials: true,
+    origin: ['http://localhost:3000', process.env.FRONT_END_URL],
+  })
+)
 
 // Add helmet
 app.use(helmet())
