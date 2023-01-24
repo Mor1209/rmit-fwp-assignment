@@ -18,7 +18,7 @@ export const useLogin = ({ setStep }) => {
   const postValidateUser = async userData => {
     setUserDetails(userData)
     const { data } = await axios.post(
-      `${process.env.REST_API_URL}/users/validate-user`,
+      `${process.env.REACT_APP_REST_API_URL}/users/validate-user`,
       userData,
       {
         withCredentials: true,
@@ -36,7 +36,7 @@ export const useLogin = ({ setStep }) => {
     const updatedData = { ...userDetails, ...userData }
     setUserDetails(updatedData)
     const { data } = await axios.post(
-      `${process.env.REST_API_URL}/users/login`,
+      `${process.env.REACT_APP_REST_API_URL}/users/login`,
       updatedData,
       {
         withCredentials: true,

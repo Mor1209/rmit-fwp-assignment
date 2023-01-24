@@ -48,7 +48,7 @@ function Comment(props) {
 
   const fetchUser = async () => {
     const { data } = await axios.get(
-      `${process.env.REST_API_URL}/users/${comment.userId}`,
+      `${process.env.REACT_APP_REST_API_URL}/users/${comment.userId}`,
       {
         withCredentials: true,
         headers: {

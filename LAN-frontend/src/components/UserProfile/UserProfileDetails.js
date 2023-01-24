@@ -13,7 +13,7 @@ const UserProfileDetails = ({ test = false, testUser = null }) => {
   }
   const getCurrentUser = async () => {
     const { data } = await axios.get(
-      `${process.env.REST_API_URL}/users/current`,
+      `${process.env.REACT_APP_REST_API_URL}/users/current`,
       {
         withCredentials: true,
         headers: {
