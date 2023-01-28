@@ -10,13 +10,13 @@ import { v4 as uuidv4 } from 'uuid'
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyAjtVNecXK8-1rosRhhG7jt5NMqyxZaApk',
-  authDomain: 'rmit-fwp.firebaseapp.com',
-  projectId: 'rmit-fwp',
-  storageBucket: 'rmit-fwp.appspot.com',
-  messagingSenderId: '11572819295',
-  appId: '1:11572819295:web:ff51d008949b33e586f2ea',
-  measurementId: 'G-14CNC03BHY',
+  apiKey: 'AIzaSyCgT0hPcp09XFXT-N1hR8yHiOITSJ6qWOA',
+  authDomain: 'rmit-fwp-project.firebaseapp.com',
+  projectId: 'rmit-fwp-project',
+  storageBucket: 'rmit-fwp-project.appspot.com',
+  messagingSenderId: '198577859655',
+  appId: '1:198577859655:web:4e4f2bac4a5148c4eed562',
+  measurementId: 'G-P935CXSSR6',
 }
 
 // Initialize Firebase
