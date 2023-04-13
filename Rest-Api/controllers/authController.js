@@ -21,11 +21,11 @@ const createTokenResponse = (user, res, statusCode) => {
 
   const cookieOptions = {
     expires: new Date(Date.now() + +process.env.JWT_EXPIRES_IN),
-    sameSite: 'None',
+    sameSite: 'Strict',
     httpOnly: true,
   }
 
-  if (process.env.NODE_ENV !== 'production') cookieOptions.secure = true
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
 
   res.cookie('jwt', token, cookieOptions)
 
