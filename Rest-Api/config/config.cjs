@@ -8,7 +8,6 @@ module.exports = {
     port: process.env.MYSQLPORT,
     host: process.env.MYSQLHOST,
     dialect: 'mysql',
-    dialectModule: 'mysql2',
   },
   test: {
     username: 'root',
@@ -16,7 +15,6 @@ module.exports = {
     database: 'database_test',
     host: '127.0.0.1',
     dialect: 'mysql',
-    dialectModule: 'mysql2',
   },
   production: {
     username: 'root',
@@ -24,6 +22,5 @@ module.exports = {
     database: 'database_production',
     host: '127.0.0.1',
     dialect: 'mysql',
-    dialectModule: 'mysql2',
   },
 }
