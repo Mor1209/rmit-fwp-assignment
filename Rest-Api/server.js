@@ -52,7 +52,7 @@ app.use(
 app.use(helmet())
 
 // Add xss protection
-app.use(xss())
+// app.use(xss())
 
 // Add parameter pollution protection
 // add whitelist if needed
